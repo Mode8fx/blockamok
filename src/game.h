@@ -19,8 +19,8 @@ typedef struct Point {
   float z;
 } Point;
 
-typedef struct {
-} Block;
+//typedef struct {
+//} Block;
 
 typedef Point* Cube;
 

@@ -18,7 +18,7 @@ const int BACKGROUND_R = 15;
 const int BACKGROUND_G = 255;
 const int BACKGROUND_B = 155;
 
-int TRANSFORMED_FRONT_I = FRONT * 5;
+//int TRANSFORMED_FRONT_I = FRONT * 5;
 
 SDL_Point transformedCube[CUBE_FACE_N * 5];
 
