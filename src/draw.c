@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 #include "./game.h"
-#include "./math.h"
+#include "./math_custom.h"
 
 const int UP = 0;
 const int DOWN = 1;

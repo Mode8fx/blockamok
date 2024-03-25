@@ -7,7 +7,7 @@
 
 #include "./draw.h"
 #include "./game.h"
-#include "./math.h"
+#include "./math_custom.h"
 
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;

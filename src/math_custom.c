@@ -1,4 +1,4 @@
-#include "./math.h"
+#include "./math_custom.h"
 
 #include <math.h>
 #include <stdio.h>

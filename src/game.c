@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <math.h>
 
-#include "./math.h"
+#include "./math_custom.h"
 
 const float PLAYER_INITIAL_SPEED = 100;
 const float BASE_TURN_SPEED = 30;
