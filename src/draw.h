@@ -2,10 +2,11 @@
 
 #include "./game.h"
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 1920
+#define HEIGHT 1080
 
-extern float sizeMult, widthMult, heightMult;
+extern float sizeMult;
+extern float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
 extern int MINSCREEN;
 
 void draw(SDL_Renderer *renderer);

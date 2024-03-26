@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "./math_custom.h"
+#include "./draw.h"
 
 const float PLAYER_INITIAL_SPEED = 100;
 const float BASE_TURN_SPEED = 30;
@@ -155,7 +156,8 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 
       middleX = fabs(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) / 2);
       middleY = fabs(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) / 2);
-      if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5) {
+      if (cubes[i][0].z < 2 && middleX < cubeCollisionCompareX && middleY < cubeCollisionCompareY) {
+      //if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5) {
         return 1;
       }
     }

@@ -32,6 +32,8 @@ static void init() {
   MINSCREEN = min(WIDTH, HEIGHT);
   widthMult = min((float)HEIGHT / WIDTH, 1);
   heightMult = min((float)WIDTH / HEIGHT, 1);
+  cubeCollisionCompareX = 0.5 / heightMult;
+  cubeCollisionCompareY = 0.5 / widthMult;
   srand(time(NULL));
   TTF_Init();
   gameInit(cubes, &cubesLength);

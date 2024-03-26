@@ -9,7 +9,9 @@
 #include "./math_custom.h"
 
 float sizeMult = (float)HEIGHT / 1000;
-float widthMult, heightMult;
+SDL_Rect scoreRect = { 0, -HEIGHT / 100, 72 * HEIGHT / 1000, 50 * HEIGHT / 1000 };
+SDL_Rect gameOverRect = { WIDTH / 2 - (600 * HEIGHT / 1000) / 2, HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10, 600 * HEIGHT / 1000, 150 * HEIGHT / 1000 };
+float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
 int MINSCREEN;
 
 const int UP = 0;
@@ -256,11 +258,7 @@ void drawSpeedText(SDL_Renderer *renderer) {
   sprintf(score, "%d", (int)playerSpeed);
   surfaceMessage = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  Message_rect.x = 0;
-  Message_rect.y = -HEIGHT / 100;
-  Message_rect.w = 72 * sizeMult;
-  Message_rect.h = 50 * sizeMult;
-  SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+  SDL_RenderCopy(renderer, Message, NULL, &scoreRect);
 }
 
 void drawGameOverText(SDL_Renderer *renderer) {
@@ -274,9 +272,5 @@ void drawGameOverText(SDL_Renderer *renderer) {
   }
   surfaceMessage = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  Message_rect.w = 600 * sizeMult;
-  Message_rect.h = 150 * sizeMult;
-  Message_rect.x = WIDTH / 2 - Message_rect.w / 2;
-  Message_rect.y = HEIGHT / 2 - Message_rect.h / 2 - 10;
-  SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+  SDL_RenderCopy(renderer, Message, NULL, &gameOverRect);
 }
