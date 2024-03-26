@@ -8,6 +8,8 @@
 #include "./game.h"
 #include "./math_custom.h"
 
+int heightMult = HEIGHT / 1000;
+
 const int UP = 0;
 const int DOWN = 1;
 const int LEFT = 2;
@@ -237,24 +239,37 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 }
 
 void drawSpeedText(SDL_Renderer *renderer) {
-  if (Sans == NULL) {
-    Sans = TTF_OpenFont("Mono.ttf", 42);
+  if (surfaceMessage != NULL) {
+    SDL_FreeSurface(surfaceMessage);
+    surfaceMessage = NULL;
+  }
+  if (Message != NULL) {
+    SDL_DestroyTexture(Message);
+    Message = NULL;
   }
   sprintf(score, "%d", (int)playerSpeed);
   surfaceMessage = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
   Message_rect.x = 0;
   Message_rect.y = -10;
-  Message_rect.w = 24 * 3;
-  Message_rect.h = 50;
+  Message_rect.w = 72 * heightMult;
+  Message_rect.h = 50 * heightMult;
   SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
 }
 
 void drawGameOverText(SDL_Renderer *renderer) {
+  if (surfaceMessage != NULL) {
+    SDL_FreeSurface(surfaceMessage);
+    surfaceMessage = NULL;
+  }
+  if (Message != NULL) {
+    SDL_DestroyTexture(Message);
+    Message = NULL;
+  }
   surfaceMessage = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  Message_rect.w = 600;
-  Message_rect.h = 150;
+  Message_rect.w = 600 * heightMult;
+  Message_rect.h = 150 * heightMult;
   Message_rect.x = WIDTH / 2 - Message_rect.w / 2;
   Message_rect.y = HEIGHT / 2 - Message_rect.h / 2 - 10;
   SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
