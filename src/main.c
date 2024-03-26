@@ -23,7 +23,7 @@ double deltaTime = 0;
 int cubesLength = 0;
 Cube cubes[1000];
 
-void init() {
+static void init() {
   SDL_Init(SDL_INIT_EVERYTHING);
   window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -34,7 +34,7 @@ void init() {
   gameInit(cubes, &cubesLength);
 }
 
-void gameLoop() {
+static void gameLoop() {
   SDL_PollEvent(&e);
   if (!gameOver) {
     gameOver = gameFrame(deltaTime, cubes, &cubesLength);
