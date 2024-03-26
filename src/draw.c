@@ -8,7 +8,7 @@
 #include "./game.h"
 #include "./math_custom.h"
 
-int heightMult = HEIGHT / 1000;
+float heightMult = (float)HEIGHT / 1000;
 
 const int UP = 0;
 const int DOWN = 1;
@@ -254,7 +254,7 @@ void drawSpeedText(SDL_Renderer *renderer) {
   surfaceMessage = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
   Message_rect.x = 0;
-  Message_rect.y = -10;
+  Message_rect.y = -HEIGHT / 100;
   Message_rect.w = 72 * heightMult;
   Message_rect.h = 50 * heightMult;
   SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
