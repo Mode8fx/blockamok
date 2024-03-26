@@ -8,7 +8,9 @@
 #include "./game.h"
 #include "./math_custom.h"
 
-float heightMult = (float)HEIGHT / 1000;
+float sizeMult = (float)HEIGHT / 1000;
+float widthMult, heightMult;
+int MINSCREEN;
 
 const int UP = 0;
 const int DOWN = 1;
@@ -94,11 +96,11 @@ void draw(SDL_Renderer *renderer) {
 }
 
 static float screenX(float x) {
-  return x * WIDTH + WIDTH / 2;
+  return x * widthMult * WIDTH + WIDTH / 2;
 }
 
 static float screenY(float y) {
-  return y * HEIGHT + HEIGHT / 2;
+  return y * heightMult * HEIGHT + HEIGHT / 2;
 }
 
 static bool isPointOutsideFront(int f, int frontI) {
@@ -137,6 +139,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     transCubeI = f * 5;  // The way our transformed cube is defined, a face has 5 corners (last one connects back to the firt one)
     for (p = 0; p < 4; p++) {
       point = cube[orgCubeI + p];
+      // Changing sPoint.x and sPoint.y can change the "angle" at which you fall, if it looks like you're shifting too much in one direction
       sPoint.x = screenX(transform3Dto2D(point.x, point.z));
       sPoint.y = screenY(transform3Dto2D(point.y, point.z));
       transformedCube[transCubeI + p] = sPoint;
@@ -255,8 +258,8 @@ void drawSpeedText(SDL_Renderer *renderer) {
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
   Message_rect.x = 0;
   Message_rect.y = -HEIGHT / 100;
-  Message_rect.w = 72 * heightMult;
-  Message_rect.h = 50 * heightMult;
+  Message_rect.w = 72 * sizeMult;
+  Message_rect.h = 50 * sizeMult;
   SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
 }
 
@@ -271,8 +274,8 @@ void drawGameOverText(SDL_Renderer *renderer) {
   }
   surfaceMessage = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  Message_rect.w = 600 * heightMult;
-  Message_rect.h = 150 * heightMult;
+  Message_rect.w = 600 * sizeMult;
+  Message_rect.h = 150 * sizeMult;
   Message_rect.x = WIDTH / 2 - Message_rect.w / 2;
   Message_rect.y = HEIGHT / 2 - Message_rect.h / 2 - 10;
   SDL_RenderCopy(renderer, Message, NULL, &Message_rect);

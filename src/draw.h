@@ -5,7 +5,8 @@
 #define WIDTH 1000
 #define HEIGHT 1000
 
-extern float heightMult;
+extern float sizeMult, widthMult, heightMult;
+extern int MINSCREEN;
 
 void draw(SDL_Renderer *renderer);
 
