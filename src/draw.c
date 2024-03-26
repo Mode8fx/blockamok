@@ -239,6 +239,9 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 }
 
 void drawSpeedText(SDL_Renderer *renderer) {
+  if (Sans == NULL) {
+    Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
+  }
   if (surfaceMessage != NULL) {
     SDL_FreeSurface(surfaceMessage);
     surfaceMessage = NULL;
