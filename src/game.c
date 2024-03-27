@@ -5,6 +5,7 @@
 
 #include "./math_custom.h"
 #include "./draw.h"
+#include "./input.h"
 
 const float PLAYER_INITIAL_SPEED = 100;
 const float BASE_TURN_SPEED = 30;
@@ -120,24 +121,23 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 
   cubesRemoved = 0;
 
-  const Uint8 *keyState = SDL_GetKeyboardState(NULL);
-
   xDiff = 0;
   yDiff = 0;
-  if (keyState[SDL_SCANCODE_W]) {
+  const Uint8* keyState = SDL_GetKeyboardState(NULL);
+  if (dirHeld(INPUT_UP) || keyState[SDL_SCANCODE_W] || keyState[SDL_SCANCODE_UP]) {
     yDiff = +turnSpeed;
   }
-  if (keyState[SDL_SCANCODE_S]) {
+  if (dirHeld(INPUT_DOWN) || keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN]) {
     yDiff = -turnSpeed;
   }
-  if (keyState[SDL_SCANCODE_A]) {
+  if (dirHeld(INPUT_LEFT) || keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) {
     xDiff = +turnSpeed;
   }
-  if (keyState[SDL_SCANCODE_D]) {
+  if (dirHeld(INPUT_RIGHT) || keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) {
     xDiff = -turnSpeed;
   }
   zSpeed = -speed;
-  if (keyState[SDL_SCANCODE_LSHIFT]) {
+  if (buttonPressed(INPUT_A) || keyState[SDL_SCANCODE_LSHIFT]) {
     zSpeed *= 3;
   }
 

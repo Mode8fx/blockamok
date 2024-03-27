@@ -8,12 +8,11 @@
 #include "./draw.h"
 #include "./game.h"
 #include "./math_custom.h"
+#include "./input.h"
 
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
-SDL_Event e;
-bool quit = false;
 bool gameOver = false;
 
 Uint64 now = 0;
@@ -36,16 +35,13 @@ static void init() {
   cubeCollisionCompareY = 0.5 / widthMult;
   srand(time(NULL));
   TTF_Init();
+  controllerInit();
   gameInit(cubes, &cubesLength);
 }
 
 static void gameLoop() {
-  SDL_PollEvent(&e);
   if (!gameOver) {
     gameOver = gameFrame(deltaTime, cubes, &cubesLength);
-  }
-  if (e.type == SDL_QUIT) {
-    quit = true;
   }
 }
 
@@ -55,7 +51,9 @@ int main(int arg, char *argv[]) {
   while (!quit) {
     last = now;
     now = SDL_GetTicks();
+    deltaTime = (double)((now - last)) / 12000;
 
+    handlePlayerInput();
     gameLoop();
 
     draw(renderer);
@@ -67,9 +65,10 @@ int main(int arg, char *argv[]) {
       drawGameOverText(renderer);
     }
 
-    SDL_RenderPresent(renderer);
+    controllerAxis_leftStickX_last = controllerAxis_leftStickX;
+    controllerAxis_leftStickY_last = controllerAxis_leftStickY;
 
-    deltaTime = (double)((now - last)) / 12000;
+    SDL_RenderPresent(renderer);
   }
 
   return 0;
