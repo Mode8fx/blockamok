@@ -15,6 +15,13 @@ Sint16 controllerAxis_leftStickY_last;
 Uint32 keyInputs;
 Uint8  dirInputs;
 Uint32 heldDirs;
+#if defined(WII)
+Uint32 wii_keysDown;
+Uint32 wii_keysUp;
+#elif defined(GAMECUBE)
+Uint32 gc_keysDown;
+Uint32 gc_keysUp;
+#endif
 
 double timer_buttonHold;
 double timer_buttonHold_repeater;
