@@ -61,12 +61,12 @@ void gameInit(Cube cubes[], int *cubesLength) {
   }
 }
 
-static void removeCube(Cube cubes[], int i) {
+void removeCube(Cube cubes[], int i) {
   free(cubes[i]);
   cubes[i] = NULL;
 }
 
-static void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN) {
+void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN) {
   if (removedN == 0) {
     return;
   }

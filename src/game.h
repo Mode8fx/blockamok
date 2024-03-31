@@ -8,6 +8,7 @@
 #define FRONT_I 16        // 4 * 4
 
 extern float playerSpeed;
+extern int i;
 
 typedef struct {
   float z;
@@ -27,5 +28,7 @@ typedef Point* Cube;
 int gameFrame(float deltaTime, Cube cubes[], int* cubesLength);
 
 void gameInit(Cube cubes[], int* cubesLength);
+void removeCube(Cube cubes[], int i);
+void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN);
 
 Cube newCube(Point c, float s);

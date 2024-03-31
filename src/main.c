@@ -22,20 +22,30 @@ double deltaTime = 0;
 int cubesLength = 0;
 Cube cubes[1000];
 
+static void prepareGame() {
+  gameOver = false;
+  for (i = 0; i < cubesLength; i++) {
+    removeCube(cubes, i);
+  }
+  rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
+  cubesLength = 0;
+  srand(time(NULL));
+  gameInit(cubes, &cubesLength);
+}
+
 static void init() {
   SDL_Init(SDL_INIT_EVERYTHING);
   window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+  TTF_Init();
+  controllerInit();
   widthMult = min((float)HEIGHT / WIDTH, 1);
   heightMult = min((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5 / heightMult;
   cubeCollisionCompareY = 0.5 / widthMult;
-  srand(time(NULL));
-  TTF_Init();
-  controllerInit();
-  gameInit(cubes, &cubesLength);
+  prepareGame();
 }
 
 static void gameLoop() {
@@ -61,6 +71,9 @@ int main(int arg, char *argv[]) {
 
     drawSpeedText(renderer);
     if (gameOver) {
+      if (buttonPressed(INPUT_START)) {
+        prepareGame();
+      }
       drawGameOverText(renderer);
     }
 
