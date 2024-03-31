@@ -28,7 +28,6 @@ static void init() {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-  MINSCREEN = min(WIDTH, HEIGHT);
   widthMult = min((float)HEIGHT / WIDTH, 1);
   heightMult = min((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5 / heightMult;

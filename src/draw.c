@@ -12,7 +12,6 @@ float sizeMult = (float)HEIGHT / 1000;
 SDL_Rect scoreRect = { 0, -HEIGHT / 100, 72 * HEIGHT / 1000, 50 * HEIGHT / 1000 };
 SDL_Rect gameOverRect = { WIDTH / 2 - (600 * HEIGHT / 1000) / 2, HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10, 600 * HEIGHT / 1000, 150 * HEIGHT / 1000 };
 float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
-int MINSCREEN;
 
 const int UP = 0;
 const int DOWN = 1;

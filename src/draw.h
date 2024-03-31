@@ -2,12 +2,21 @@
 
 #include "./game.h"
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 1000
+#define HEIGHT 1000
+
+#if WIDTH > HEIGHT
+#define LARGER_ASPECT_RATIO  ((float)WIDTH / HEIGHT)
+#define SMALLER_ASPECT_RATIO ((float)HEIGHT / WIDTH)
+#define MINSCREEN HEIGHT
+#else
+#define LARGER_ASPECT_RATIO  ((float)HEIGHT / WIDTH)
+#define SMALLER_ASPECT_RATIO ((float)WIDTH / HEIGHT)
+#define MINSCREEN WIDTH
+#endif
 
 extern float sizeMult;
 extern float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
-extern int MINSCREEN;
 
 void draw(SDL_Renderer *renderer);
 
