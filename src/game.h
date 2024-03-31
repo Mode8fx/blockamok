@@ -8,6 +8,7 @@
 #define FRONT_I 16        // 4 * 4
 
 extern float playerSpeed;
+extern Uint64 gameStartTime;
 extern int i;
 
 typedef struct {

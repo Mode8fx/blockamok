@@ -17,6 +17,7 @@ bool gameOver = false;
 
 Uint64 now = 0;
 Uint64 last = 0;
+Uint64 gameStartTime = 0;
 double deltaTime = 0;
 
 int cubesLength = 0;
@@ -29,6 +30,7 @@ static void prepareGame() {
   }
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
+  gameStartTime = SDL_GetTicks();
   srand(time(NULL));
   gameInit(cubes, &cubesLength);
 }
