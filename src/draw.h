@@ -24,6 +24,8 @@ void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength);
 
 void drawCube(SDL_Renderer *renderer, Cube cube);
 
+void drawTitleScreenText(SDL_Renderer *renderer);
+
 void drawSpeedText(SDL_Renderer *renderer);
 
 void drawGameOverText(SDL_Renderer *renderer);

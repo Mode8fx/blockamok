@@ -11,6 +11,7 @@
 float sizeMult = (float)HEIGHT / 1000;
 SDL_Rect scoreRect = { 0, -HEIGHT / 100, 72 * HEIGHT / 1000, 50 * HEIGHT / 1000 };
 SDL_Rect gameOverRect = { WIDTH / 2 - (600 * HEIGHT / 1000) / 2, HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10, 600 * HEIGHT / 1000, 150 * HEIGHT / 1000 };
+SDL_Rect titleScreenRect = { WIDTH / 2 - (600 * HEIGHT / 1000) / 2, HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10, 600 * HEIGHT / 1000, 150 * HEIGHT / 1000 };
 float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
 
 const int UP = 0;
@@ -242,10 +243,24 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
   }
 }
 
-void drawSpeedText(SDL_Renderer *renderer) {
+void drawTitleScreenText(SDL_Renderer* renderer) {
   if (Sans == NULL) {
     Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
   }
+  if (surfaceMessage != NULL) {
+    SDL_FreeSurface(surfaceMessage);
+    surfaceMessage = NULL;
+  }
+  if (Message != NULL) {
+    SDL_DestroyTexture(Message);
+    Message = NULL;
+  }
+  surfaceMessage = TTF_RenderText_Solid(Sans, "Blockamok", TEXT_COLOR);
+  Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+  SDL_RenderCopy(renderer, Message, NULL, &titleScreenRect);
+}
+
+void drawSpeedText(SDL_Renderer *renderer) {
   if (surfaceMessage != NULL) {
     SDL_FreeSurface(surfaceMessage);
     surfaceMessage = NULL;

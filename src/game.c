@@ -158,7 +158,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
       middleY = fabs(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) / 2);
       //if (cubes[i][0].z < 2 && middleX < cubeCollisionCompareX && middleY < cubeCollisionCompareY && (SDL_GetTicks() - gameStartTime) > 1000) {
       if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5 && (SDL_GetTicks() - gameStartTime) > 1000) {
-        return 1;
+        return GAME_STATE_GAME_OVER;
       }
     }
   }
@@ -169,7 +169,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 
   qsort(cubes, *cubesLength, sizeof(Cube *), compareSize);
 
-  return 0;
+  return GAME_STATE_PLAYING;
 }
 
 Cube newCube(Point c, float s) {

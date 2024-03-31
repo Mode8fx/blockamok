@@ -13,7 +13,7 @@
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
-bool gameOver = false;
+Sint8 gameState = GAME_STATE_TITLE_SCREEN;
 
 Uint64 now = 0;
 Uint64 last = 0;
@@ -24,7 +24,6 @@ int cubesLength = 0;
 Cube cubes[1000];
 
 static void prepareGame() {
-  gameOver = false;
   for (i = 0; i < cubesLength; i++) {
     removeCube(cubes, i);
   }
@@ -51,13 +50,16 @@ static void init() {
 }
 
 static void gameLoop() {
-  if (!gameOver) {
-    gameOver = gameFrame(deltaTime, cubes, &cubesLength);
+  if (gameState != GAME_STATE_GAME_OVER) {
+    gameState = gameFrame(deltaTime, cubes, &cubesLength);
   }
 }
 
 int main(int arg, char *argv[]) {
   init();
+  // Call once at the start for initial render
+  gameFrame(deltaTime, cubes, &cubesLength);
+  draw(renderer);
 
   while (!quit) {
     last = now;
@@ -65,18 +67,32 @@ int main(int arg, char *argv[]) {
     deltaTime = (double)((now - last)) / 12000;
 
     handlePlayerInput();
-    gameLoop();
 
-    draw(renderer);
-
-    drawCubes(renderer, cubes, cubesLength);
-
-    drawSpeedText(renderer);
-    if (gameOver) {
-      if (buttonPressed(INPUT_START)) {
-        prepareGame();
-      }
-      drawGameOverText(renderer);
+    switch (gameState) {
+      case GAME_STATE_TITLE_SCREEN:
+        if (buttonPressed(INPUT_START)) {
+          gameState = GAME_STATE_PLAYING;
+        }
+        draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawTitleScreenText(renderer);
+        break;
+      case GAME_STATE_PLAYING:
+        gameLoop();
+        draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawSpeedText(renderer);
+        break;
+      case GAME_STATE_GAME_OVER:
+        draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawSpeedText(renderer);
+        drawGameOverText(renderer);
+        if (buttonPressed(INPUT_START)) {
+          prepareGame();
+          gameState = GAME_STATE_PLAYING;
+        }
+        break;
     }
 
     controllerAxis_leftStickX_last = controllerAxis_leftStickX;

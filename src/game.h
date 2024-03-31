@@ -7,6 +7,10 @@
 #define CUBE_POINTS_N 20  // 5 * 4
 #define FRONT_I 16        // 4 * 4
 
+#define GAME_STATE_TITLE_SCREEN 0
+#define GAME_STATE_PLAYING 1
+#define GAME_STATE_GAME_OVER 2
+
 extern float playerSpeed;
 extern Uint64 gameStartTime;
 extern int i;
