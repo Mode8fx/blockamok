@@ -10,6 +10,7 @@
 #define GAME_STATE_TITLE_SCREEN 0
 #define GAME_STATE_PLAYING 1
 #define GAME_STATE_GAME_OVER 2
+#define GAME_STATE_PAUSED 3
 
 extern float playerSpeed;
 extern Uint64 gameStartTime;

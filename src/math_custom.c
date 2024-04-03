@@ -6,8 +6,6 @@
 
 #define M_PI 3.14159265358979323846
 
-float HALF_FOV_ANGLE_RADIANS = ((ADJUSTED_FOV / 180.0) * M_PI) / 2;
-
 float transform3Dto2D(float xy, float z) {
   return xy / ((z)*tan(HALF_FOV_ANGLE_RADIANS));
 }

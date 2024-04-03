@@ -14,7 +14,6 @@ const int CUBE_AMOUNT = 600;
 
 const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 
-const float MAX_DEPTH = 150 * LARGER_ASPECT_RATIO;
 const float BOUNDS_X = 12;
 const float BOUNDS_Y = 12;
 const float SPEED_INCREASE = 350;

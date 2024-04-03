@@ -8,10 +8,18 @@
 #include "./game.h"
 #include "./math_custom.h"
 
-float sizeMult = (float)HEIGHT / 1000;
-SDL_Rect scoreRect = { 0, -HEIGHT / 100, 72 * HEIGHT / 1000, 50 * HEIGHT / 1000 };
-SDL_Rect gameOverRect = { WIDTH / 2 - (600 * HEIGHT / 1000) / 2, HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10, 600 * HEIGHT / 1000, 150 * HEIGHT / 1000 };
-SDL_Rect titleScreenRect = { WIDTH / 2 - (600 * HEIGHT / 1000) / 2, HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10, 600 * HEIGHT / 1000, 150 * HEIGHT / 1000 };
+float LARGER_ASPECT_RATIO;
+float SMALLER_ASPECT_RATIO;
+int MINSCREEN;
+
+float MAX_DEPTH;
+float HALF_FOV_ANGLE_RADIANS;
+
+float sizeMult;
+SDL_Rect scoreRect;
+SDL_Rect gameOverRect;
+SDL_Rect titleScreenRect;
+SDL_Rect pausedRect;
 float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
 
 const int UP = 0;
@@ -66,6 +74,38 @@ char score[10];
 SDL_Surface *surfaceMessage;
 SDL_Texture *Message;
 SDL_Rect Message_rect;
+
+void setScalingVals() {
+  if (WIDTH >= HEIGHT) {
+    LARGER_ASPECT_RATIO = ((float)WIDTH / HEIGHT);
+    SMALLER_ASPECT_RATIO = ((float)HEIGHT / WIDTH);
+    MINSCREEN = HEIGHT;
+  } else {
+    LARGER_ASPECT_RATIO = ((float)HEIGHT / WIDTH);
+    SMALLER_ASPECT_RATIO = ((float)WIDTH / HEIGHT);
+    MINSCREEN = WIDTH;
+  }
+  sizeMult = (float)HEIGHT / 1000;
+  scoreRect.x = 0;
+  scoreRect.y = -HEIGHT / 100;
+  scoreRect.w = 72 * HEIGHT / 1000;
+  scoreRect.h = 50 * HEIGHT / 1000;
+  gameOverRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
+  gameOverRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
+  gameOverRect.w = 600 * HEIGHT / 1000;
+  gameOverRect.h = 150 * HEIGHT / 1000;
+  titleScreenRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
+  titleScreenRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
+  titleScreenRect.w = 600 * HEIGHT / 1000;
+  titleScreenRect.h = 150 * HEIGHT / 1000;
+  pausedRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
+  pausedRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
+  pausedRect.w = 600 * HEIGHT / 1000;
+  pausedRect.h = 150 * HEIGHT / 1000;
+
+  MAX_DEPTH = 150 * LARGER_ASPECT_RATIO;
+  HALF_FOV_ANGLE_RADIANS = ((ADJUSTED_FOV / 180.0) * M_PI) / 2;
+}
 
 static void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
   triangle[0].position = trianglePoints[0];
@@ -287,4 +327,18 @@ void drawGameOverText(SDL_Renderer *renderer) {
   surfaceMessage = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
   SDL_RenderCopy(renderer, Message, NULL, &gameOverRect);
+}
+
+void drawPausedText(SDL_Renderer *renderer) {
+  if (surfaceMessage != NULL) {
+    SDL_FreeSurface(surfaceMessage);
+    surfaceMessage = NULL;
+  }
+  if (Message != NULL) {
+    SDL_DestroyTexture(Message);
+    Message = NULL;
+  }
+  surfaceMessage = TTF_RenderText_Solid(Sans, "PAUSED", TEXT_COLOR);
+  Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+  SDL_RenderCopy(renderer, Message, NULL, &pausedRect);
 }

@@ -36,9 +36,13 @@ static void prepareGame() {
 
 static void init() {
   SDL_Init(SDL_INIT_EVERYTHING);
+#if !defined(SDL1)
+  SDL_GetCurrentDisplayMode(0, &DM);
+#endif
   window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
+  setScalingVals();
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   TTF_Init();
   controllerInit();
@@ -79,9 +83,21 @@ int main(int arg, char *argv[]) {
         break;
       case GAME_STATE_PLAYING:
         gameLoop();
+        if (buttonPressed(INPUT_START)) {
+          gameState = GAME_STATE_PAUSED;
+        }
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawSpeedText(renderer);
+        break;
+      case GAME_STATE_PAUSED:
+        draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawSpeedText(renderer);
+        drawPausedText(renderer);
+        if (buttonPressed(INPUT_START)) {
+          gameState = GAME_STATE_PLAYING;
+        }
         break;
       case GAME_STATE_GAME_OVER:
         draw(renderer);

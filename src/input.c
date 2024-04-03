@@ -15,13 +15,8 @@ Sint16 controllerAxis_leftStickY_last;
 Uint32 keyInputs;
 Uint8  dirInputs;
 Uint32 heldDirs;
-#if defined(WII)
-Uint32 wii_keysDown;
-Uint32 wii_keysUp;
-#elif defined(GAMECUBE)
-Uint32 gc_keysDown;
-Uint32 gc_keysUp;
-#endif
+Uint32 keysDown;
+Uint32 keysUp;
 
 double timer_buttonHold;
 double timer_buttonHold_repeater;
@@ -125,19 +120,19 @@ inline static void handleButtonUp_PSP() {
 
 #elif defined(GAMECUBE)
 inline static void gc_mapDir(Uint32 gcInput, Uint32 output) {
-	if (gc_keysDown & gcInput) {
+	if (keysDown & gcInput) {
 		dirInputs |= output;
 	}
-	else if (gc_keysUp & gcInput) {
+	else if (keysUp & gcInput) {
 		dirInputs |= output << 1;
 	}
 }
 
 inline static void gc_mapButton(Uint32 gcInput, Uint32 output) {
-	if (gc_keysDown & gcInput) {
+	if (keysDown & gcInput) {
 		keyInputs |= output;
 	}
-	else if (gc_keysUp & gcInput) {
+	else if (keysUp & gcInput) {
 		keyInputs &= ~output;
 	}
 }
@@ -164,55 +159,55 @@ inline static void handleGCButtons() {
 
 #elif defined(WII)
 inline static void wii_mapWiimoteDir(Uint32 wiimoteInput, Uint32 output) {
-	if (wii_keysDown & wiimoteInput) {
+	if (keysDown & wiimoteInput) {
 		dirInputs |= output;
 	}
-	else if (wii_keysUp & wiimoteInput) {
+	else if (keysUp & wiimoteInput) {
 		dirInputs |= output << 1;
 	}
 }
 
 inline static void wii_mapWiimoteButton(Uint32 wiimoteInput, Uint32 output) {
-	if (wii_keysDown & wiimoteInput) {
+	if (keysDown & wiimoteInput) {
 		keyInputs |= output;
 	}
-	else if (wii_keysUp & wiimoteInput) {
+	else if (keysUp & wiimoteInput) {
 		keyInputs &= ~output;
 	}
 }
 
 inline static void wii_mapWiiCCDir(Uint32 ccInput, Uint32 output) {
-	if (wii_keysDown & ccInput) {
+	if (keysDown & ccInput) {
 		dirInputs |= output;
 	}
-	else if (wii_keysUp & ccInput) {
+	else if (keysUp & ccInput) {
 		dirInputs |= output << 1;
 	}
 }
 
 inline static void wii_mapWiiCCButton(Uint32 ccInput, Uint32 output) {
-	if (wii_keysDown & ccInput) {
+	if (keysDown & ccInput) {
 		keyInputs |= output;
 	}
-	else if (wii_keysUp & ccInput) {
+	else if (keysUp & ccInput) {
 		keyInputs &= ~output;
 	}
 }
 
 inline static void wii_mapGCDir(Uint32 gcInput, Uint32 output) {
-	if (wii_keysDown & gcInput) {
+	if (keysDown & gcInput) {
 		dirInputs |= output;
 	}
-	else if (wii_keysUp & gcInput) {
+	else if (keysUp & gcInput) {
 		dirInputs |= output << 1;
 	}
 }
 
 inline static void wii_mapGCButton(Uint32 gcInput, Uint32 output) {
-	if (wii_keysDown & gcInput) {
+	if (keysDown & gcInput) {
 		keyInputs |= output;
 	}
-	else if (wii_keysUp & gcInput) {
+	else if (keysUp & gcInput) {
 		keyInputs &= ~output;
 	}
 }
@@ -497,19 +492,19 @@ void handlePlayerInput() {
 	}
 #elif defined(GAMECUBE)
 	PAD_ScanPads();
-	gc_keysDown = PAD_ButtonsDown(0);
-	gc_keysUp = PAD_ButtonsUp(0);
+	keysDown = PAD_ButtonsDown(0);
+	keysUp = PAD_ButtonsUp(0);
 	handleGCButtons();
 #elif defined(WII)
 	WPAD_ScanPads();
-	wii_keysDown = WPAD_ButtonsDown(0);
-	wii_keysUp = WPAD_ButtonsUp(0);
+	keysDown = WPAD_ButtonsDown(0);
+	keysUp = WPAD_ButtonsUp(0);
 	handleWiimoteButtons();
 	handleWiiCCButtons();
 
 	PAD_ScanPads();
-	wii_keysDown = PAD_ButtonsDown(0);
-	wii_keysUp = PAD_ButtonsUp(0);
+	keysDown = PAD_ButtonsDown(0);
+	keysUp = PAD_ButtonsUp(0);
 	handleWiiGCButtons();
 
 	controllerAxis_leftStickX = PAD_StickX(0) * 256;
