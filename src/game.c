@@ -18,6 +18,7 @@ const float BOUNDS_X = 12;
 const float BOUNDS_Y = 12;
 const float SPEED_INCREASE = 350;
 const Sint8 SPEED_UP_MULT = 3;
+const Uint16 MAX_SPEED = 1500;
 
 const float CUBE_SIZE = 0.5;
 
@@ -104,7 +105,10 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 
   bool speedingUp = (keyHeld(INPUT_A));
 
-  playerSpeed += deltaTime * (SPEED_INCREASE + (speedingUp * SPEED_UP_MULT));
+  playerSpeed += deltaTime * SPEED_INCREASE * (speedingUp ? 3 : 1);
+  if (playerSpeed > MAX_SPEED) {
+    playerSpeed = MAX_SPEED;
+  }
 
   float speed = playerSpeed * deltaTime;
   float turnSpeed = (BASE_TURN_SPEED + playerSpeed / 50) * deltaTime;

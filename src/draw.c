@@ -133,7 +133,7 @@ void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
   }
 }
 
-static float fadeTowards(float current, float target, float amount) {
+static inline float fadeTowards(float current, float target, float amount) {
   if (current == target) {
     return current;
   }
@@ -255,7 +255,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
   }
 }
 
-inline void initStaticMessages(SDL_Renderer *renderer) {
+void initStaticMessages(SDL_Renderer *renderer) {
   Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
 
   message_titlescreen_surface = TTF_RenderText_Solid(Sans, "Blockamok", TEXT_COLOR);
