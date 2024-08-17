@@ -17,10 +17,12 @@ const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 const float BOUNDS_X = 12;
 const float BOUNDS_Y = 12;
 const float SPEED_INCREASE = 350;
+const Sint8 SPEED_UP_MULT = 3;
 
 const float CUBE_SIZE = 0.5;
 
 float playerSpeed;
+bool speedingUp;
 
 Point point;
 Cube cube, cube1, cube2;
@@ -113,16 +115,18 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
     addNewCube(cubes, cubesLength);
   }
 
+  const Uint8* keyState = SDL_GetKeyboardState(NULL);
+  speedingUp = (buttonPressed(INPUT_A) || keyState[SDL_SCANCODE_LSHIFT]);
+
+  playerSpeed += deltaTime * (SPEED_INCREASE + (speedingUp * SPEED_UP_MULT));
+
   speed = playerSpeed * deltaTime;
   turnSpeed = (BASE_TURN_SPEED + playerSpeed / 50) * deltaTime;
-
-  playerSpeed += deltaTime * SPEED_INCREASE;
 
   cubesRemoved = 0;
 
   xDiff = 0;
   yDiff = 0;
-  const Uint8* keyState = SDL_GetKeyboardState(NULL);
   if (dirHeld(INPUT_UP) || keyState[SDL_SCANCODE_W] || keyState[SDL_SCANCODE_UP]) {
     yDiff = +turnSpeed;
   }
@@ -136,8 +140,8 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
     xDiff = -turnSpeed;
   }
   zSpeed = -speed;
-  if (buttonPressed(INPUT_A) || keyState[SDL_SCANCODE_LSHIFT]) {
-    zSpeed *= 3;
+  if (speedingUp) {
+    zSpeed *= SPEED_UP_MULT;
   }
 
   for (i = 0; i < (*cubesLength); i++) {
@@ -161,6 +165,8 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
       }
     }
   }
+
+	scoreVal -= zSpeed; // zSpeed is negative
 
   rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
 

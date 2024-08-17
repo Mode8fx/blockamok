@@ -75,6 +75,7 @@ int main(int arg, char *argv[]) {
     switch (gameState) {
       case GAME_STATE_TITLE_SCREEN:
         if (buttonPressed(INPUT_START)) {
+          scoreVal = 0;
           gameState = GAME_STATE_PLAYING;
         }
         draw(renderer);

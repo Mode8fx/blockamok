@@ -15,6 +15,7 @@
 extern float playerSpeed;
 extern Uint64 gameStartTime;
 extern int i;
+extern double scoreVal;
 
 typedef struct {
   float z;

@@ -21,6 +21,7 @@ SDL_Rect gameOverRect;
 SDL_Rect titleScreenRect;
 SDL_Rect pausedRect;
 float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
+double scoreVal;
 
 const int UP = 0;
 const int DOWN = 1;
@@ -309,8 +310,14 @@ void drawSpeedText(SDL_Renderer *renderer) {
     SDL_DestroyTexture(Message);
     Message = NULL;
   }
-  sprintf(score, "%d", (int)playerSpeed);
+  sprintf(score, "%d", (int)scoreVal);
   surfaceMessage = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
+
+  // Adjust the position of the scoreRect to center the text
+  scoreRect.x = (WIDTH - surfaceMessage->w) / 2;
+  scoreRect.w = surfaceMessage->w;
+  scoreRect.h = surfaceMessage->h;
+
   Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
   SDL_RenderCopy(renderer, Message, NULL, &scoreRect);
 }
