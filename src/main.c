@@ -106,7 +106,8 @@ int main(int arg, char *argv[]) {
         drawGameOverText(renderer);
         if (buttonPressed(INPUT_START)) {
           prepareGame();
-          gameState = GAME_STATE_PLAYING;
+          gameFrame(deltaTime, cubes, &cubesLength);
+          gameState = GAME_STATE_TITLE_SCREEN;
         }
         break;
     }
