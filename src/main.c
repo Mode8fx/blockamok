@@ -24,7 +24,7 @@ int cubesLength = 0;
 Cube cubes[1000];
 
 static void prepareGame() {
-  for (i = 0; i < cubesLength; i++) {
+  for (int i = 0; i < cubesLength; i++) {
     removeCube(cubes, i);
   }
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);

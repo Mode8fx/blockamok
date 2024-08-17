@@ -20,14 +20,9 @@ SDL_DisplayMode DM;
 #define HEIGHT 1000
 #endif
 
-extern float LARGET_ASPECT_RATIO;
-extern float SMALLER_ASPECT_RATIO;
-extern int MINSCREEN;
-
 extern float MAX_DEPTH;
 extern float HALF_FOV_ANGLE_RADIANS;
 
-extern float sizeMult;
 extern float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
 
 void setScalingVals();

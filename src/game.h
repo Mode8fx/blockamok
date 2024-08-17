@@ -12,9 +12,7 @@
 #define GAME_STATE_GAME_OVER 2
 #define GAME_STATE_PAUSED 3
 
-extern float playerSpeed;
 extern Uint64 gameStartTime;
-extern int i;
 extern double scoreVal;
 
 typedef struct {
