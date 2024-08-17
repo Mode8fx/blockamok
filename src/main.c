@@ -70,11 +70,18 @@ int main(int arg, char *argv[]) {
     now = SDL_GetTicks();
     deltaTime = (double)((now - last)) / 12000;
 
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+        quit = true;
+      }
+    }
+
     handlePlayerInput();
 
     switch (gameState) {
       case GAME_STATE_TITLE_SCREEN:
-        if (buttonPressed(INPUT_START)) {
+        if (keyPressed(INPUT_START)) {
           scoreVal = 0;
           gameState = GAME_STATE_PLAYING;
         }
@@ -84,7 +91,7 @@ int main(int arg, char *argv[]) {
         break;
       case GAME_STATE_PLAYING:
         gameLoop();
-        if (buttonPressed(INPUT_START)) {
+        if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PAUSED;
         }
         draw(renderer);
@@ -96,7 +103,7 @@ int main(int arg, char *argv[]) {
         drawCubes(renderer, cubes, cubesLength);
         drawSpeedText(renderer);
         drawPausedText(renderer);
-        if (buttonPressed(INPUT_START)) {
+        if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PLAYING;
         }
         break;
@@ -105,7 +112,7 @@ int main(int arg, char *argv[]) {
         drawCubes(renderer, cubes, cubesLength);
         drawSpeedText(renderer);
         drawGameOverText(renderer);
-        if (buttonPressed(INPUT_START)) {
+        if (keyPressed(INPUT_START)) {
           prepareGame();
           gameFrame(deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;

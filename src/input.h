@@ -12,39 +12,53 @@ extern SDL_GameController *controller;
 #endif
 
 /* General Input */
-extern SDL_Event event;
 extern Sint16 controllerAxis_leftStickX;
 extern Sint16 controllerAxis_leftStickX_last;
 extern Sint16 controllerAxis_leftStickY;
 extern Sint16 controllerAxis_leftStickY_last;
-extern Uint32 keyInputs;
-extern Uint8  dirInputs;
-extern Uint32 heldDirs;
+extern Sint16 controllerAxis_rightStickX;
+extern Sint16 controllerAxis_rightStickX_last;
+extern Sint16 controllerAxis_rightStickY;
+extern Sint16 controllerAxis_rightStickY_last;
+extern Uint32 pressedKeys;
+extern Uint32 releasedKeys;
+extern Uint32 heldKeys;
+extern Uint32 heldKeys_last;
 
 extern bool quit;
 
-#define INPUT_UP     1
-#define INPUT_DOWN   2
-#define INPUT_LEFT   4
-#define INPUT_RIGHT  8
-#define INPUT_A      16
-#define INPUT_L      32
-#define INPUT_R      64
-#define INPUT_START  128
-#define INPUT_SELECT 256
+#define INPUT_UP     (1 << 0)
+#define INPUT_DOWN   (1 << 1)
+#define INPUT_LEFT   (1 << 2)
+#define INPUT_RIGHT  (1 << 3)
+#define INPUT_A      (1 << 4)
+#define INPUT_B      (1 << 5)
+#define INPUT_X      (1 << 6)
+#define INPUT_Y      (1 << 7)
+#define INPUT_L      (1 << 8)
+#define INPUT_R      (1 << 9)
+#define INPUT_ZL     (1 << 10)
+#define INPUT_ZR     (1 << 11)
+#define INPUT_START  (1 << 12)
+#define INPUT_SELECT (1 << 13)
 
-#define STICK_DEADZONE 13107
+#define STICK_DEADZONE 3277
+#define TRIGGER_DEADZONE 26215
 
-#define LEFT_PRESSED    1
-#define LEFT_DEPRESSED  2
-#define RIGHT_PRESSED   4
-#define RIGHT_DEPRESSED 8
-#define UP_PRESSED      16
-#define UP_DEPRESSED    32
-#define DOWN_PRESSED    64
-#define DOWN_DEPRESSED  128
+#define LEFT_PRESSED    (1 << 0)
+#define LEFT_DEPRESSED  (1 << 1)
+#define RIGHT_PRESSED   (1 << 2)
+#define RIGHT_DEPRESSED (1 << 3)
+#define UP_PRESSED      (1 << 4)
+#define UP_DEPRESSED    (1 << 5)
+#define DOWN_PRESSED    (1 << 6)
+#define DOWN_DEPRESSED  (1 << 7)
 
-extern bool buttonPressed(Uint32);
-extern bool dirHeld(Uint32);
-extern void handlePlayerInput();
+extern bool keyPressed(Uint32);
+extern bool keyHeld(Uint32);
 extern void controllerInit();
+extern void handlePlayerInput();
+extern void handleAllCurrentInputs();
+extern void updateChangedKeys();
+extern void handleHoldTimer_execute();
+extern void updateLastKeys();

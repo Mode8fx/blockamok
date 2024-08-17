@@ -115,8 +115,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
     addNewCube(cubes, cubesLength);
   }
 
-  const Uint8* keyState = SDL_GetKeyboardState(NULL);
-  speedingUp = (buttonPressed(INPUT_A) || keyState[SDL_SCANCODE_LSHIFT]);
+  speedingUp = (keyHeld(INPUT_A));
 
   playerSpeed += deltaTime * (SPEED_INCREASE + (speedingUp * SPEED_UP_MULT));
 
@@ -127,16 +126,16 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 
   xDiff = 0;
   yDiff = 0;
-  if (dirHeld(INPUT_UP) || keyState[SDL_SCANCODE_W] || keyState[SDL_SCANCODE_UP]) {
+  if (keyHeld(INPUT_UP)) {
     yDiff = +turnSpeed;
   }
-  if (dirHeld(INPUT_DOWN) || keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN]) {
+  if (keyHeld(INPUT_DOWN)) {
     yDiff = -turnSpeed;
   }
-  if (dirHeld(INPUT_LEFT) || keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) {
+  if (keyHeld(INPUT_LEFT)) {
     xDiff = +turnSpeed;
   }
-  if (dirHeld(INPUT_RIGHT) || keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) {
+  if (keyHeld(INPUT_RIGHT)) {
     xDiff = -turnSpeed;
   }
   zSpeed = -speed;
