@@ -42,6 +42,12 @@ SDL_Color emptyBackgroundTriangle = {.r = 255, .b = 255, .g = 255, .a = 0};
 
 TTF_Font *Sans = NULL;
 SDL_Color TEXT_COLOR = {0, 0, 0};
+SDL_Surface *message_titlescreen_surface;
+SDL_Texture *message_titlescreen_texture;
+SDL_Surface *message_gameover_surface;
+SDL_Texture *message_gameover_texture;
+SDL_Surface *message_paused_surface;
+SDL_Texture *message_paused_texture;
 
 SDL_Vertex triangle[3];
 SDL_FPoint triangle1Points[3][2];
@@ -71,10 +77,6 @@ SDL_Vertex triangle2[3];
 SDL_Point linePoints[5];
 
 char score[10];
-
-SDL_Surface *surfaceMessage;
-SDL_Texture *Message;
-SDL_Rect Message_rect;
 
 void setScalingVals() {
   if (WIDTH >= HEIGHT) {
@@ -284,68 +286,39 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
   }
 }
 
-void drawTitleScreenText(SDL_Renderer* renderer) {
-  if (Sans == NULL) {
-    Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
-  }
-  if (surfaceMessage != NULL) {
-    SDL_FreeSurface(surfaceMessage);
-    surfaceMessage = NULL;
-  }
-  if (Message != NULL) {
-    SDL_DestroyTexture(Message);
-    Message = NULL;
-  }
-  surfaceMessage = TTF_RenderText_Solid(Sans, "Blockamok", TEXT_COLOR);
-  Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  SDL_RenderCopy(renderer, Message, NULL, &titleScreenRect);
+inline void initStaticMessages(SDL_Renderer *renderer) {
+  Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
+  message_titlescreen_surface = TTF_RenderText_Solid(Sans, "Blockamok", TEXT_COLOR);
+  message_titlescreen_texture = SDL_CreateTextureFromSurface(renderer, message_titlescreen_surface);
+  message_gameover_surface = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
+  message_gameover_texture = SDL_CreateTextureFromSurface(renderer, message_gameover_surface);
+  message_paused_surface = TTF_RenderText_Solid(Sans, "PAUSED", TEXT_COLOR);
+  message_paused_texture = SDL_CreateTextureFromSurface(renderer, message_paused_surface);
 }
 
-void drawSpeedText(SDL_Renderer *renderer) {
-  if (surfaceMessage != NULL) {
-    SDL_FreeSurface(surfaceMessage);
-    surfaceMessage = NULL;
-  }
-  if (Message != NULL) {
-    SDL_DestroyTexture(Message);
-    Message = NULL;
-  }
+inline void drawTitleScreenText(SDL_Renderer *renderer) {
+  SDL_RenderCopy(renderer, message_titlescreen_texture, NULL, &titleScreenRect);
+}
+
+inline void drawScoreText(SDL_Renderer *renderer) {
   sprintf(score, "%d", (int)scoreVal);
-  surfaceMessage = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
+  SDL_Surface *message_score_surface = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
 
   // Adjust the position of the scoreRect to center the text
-  scoreRect.x = (WIDTH - surfaceMessage->w) / 2;
-  scoreRect.w = surfaceMessage->w;
-  scoreRect.h = surfaceMessage->h;
+  scoreRect.x = (WIDTH - message_score_surface->w) / 2;
+  scoreRect.w = message_score_surface->w;
+  scoreRect.h = message_score_surface->h;
 
-  Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  SDL_RenderCopy(renderer, Message, NULL, &scoreRect);
+  SDL_Texture *message_score_texture = SDL_CreateTextureFromSurface(renderer, message_score_surface);
+  SDL_RenderCopy(renderer, message_score_texture, NULL, &scoreRect);
+  SDL_FreeSurface(message_score_surface);
+  SDL_DestroyTexture(message_score_texture);
 }
 
-void drawGameOverText(SDL_Renderer *renderer) {
-  if (surfaceMessage != NULL) {
-    SDL_FreeSurface(surfaceMessage);
-    surfaceMessage = NULL;
-  }
-  if (Message != NULL) {
-    SDL_DestroyTexture(Message);
-    Message = NULL;
-  }
-  surfaceMessage = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
-  Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  SDL_RenderCopy(renderer, Message, NULL, &gameOverRect);
+inline void drawGameOverText(SDL_Renderer *renderer) {
+  SDL_RenderCopy(renderer, message_gameover_texture, NULL, &gameOverRect);
 }
 
-void drawPausedText(SDL_Renderer *renderer) {
-  if (surfaceMessage != NULL) {
-    SDL_FreeSurface(surfaceMessage);
-    surfaceMessage = NULL;
-  }
-  if (Message != NULL) {
-    SDL_DestroyTexture(Message);
-    Message = NULL;
-  }
-  surfaceMessage = TTF_RenderText_Solid(Sans, "PAUSED", TEXT_COLOR);
-  Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-  SDL_RenderCopy(renderer, Message, NULL, &pausedRect);
+inline void drawPausedText(SDL_Renderer *renderer) {
+  SDL_RenderCopy(renderer, message_paused_texture, NULL, &pausedRect);
 }

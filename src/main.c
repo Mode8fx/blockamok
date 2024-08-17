@@ -45,6 +45,7 @@ static void init() {
   setScalingVals();
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   TTF_Init();
+  initStaticMessages(renderer);
   controllerInit();
   widthMult = min((float)HEIGHT / WIDTH, 1);
   heightMult = min((float)WIDTH / HEIGHT, 1);
@@ -96,12 +97,12 @@ int main(int arg, char *argv[]) {
         }
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
-        drawSpeedText(renderer);
+        drawScoreText(renderer);
         break;
       case GAME_STATE_PAUSED:
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
-        drawSpeedText(renderer);
+        drawScoreText(renderer);
         drawPausedText(renderer);
         if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PLAYING;
@@ -110,7 +111,7 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_GAME_OVER:
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
-        drawSpeedText(renderer);
+        drawScoreText(renderer);
         drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {
           prepareGame();

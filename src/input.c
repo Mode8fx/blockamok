@@ -88,7 +88,6 @@ inline void handlePlayerInput() {
 	handleHoldTimer_prepare();
 	handleHoldTimer_execute();
 	updateLastKeys();
-	printf("%u\n", heldKeys);
 }
 
 void controllerInit() {
@@ -109,7 +108,6 @@ void controllerInit() {
 #if !(defined(PSP) || defined(GAMECUBE) || defined(WII))
 static inline void mapInputToVar_SDL2(Uint16 varBtn, Sint32 inputBtn) {
 	if (SDL_GameControllerGetButton(controller, inputBtn)) {
-		printf("BUTTON PRESSED\n");
 		heldKeys |= varBtn;
 	}
 }
