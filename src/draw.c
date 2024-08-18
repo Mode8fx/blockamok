@@ -47,8 +47,6 @@ SDL_Texture *message_paused_texture;
 SDL_Vertex triangle[3];
 
 int faceOrder[5];
-SDL_FPoint triable1Points[3][2];
-SDL_FPoint triable2Points[3][2];
 SDL_Vertex triangle1[3];
 SDL_Vertex triangle2[3];
 
@@ -186,20 +184,6 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
   for (int f = 2; f < 5; f++) {
     int cubeI = faceOrder[f] * 5;
 
-    triable1Points[0]->x = transformedCube[cubeI + 0].x;
-    triable1Points[0]->y = transformedCube[cubeI + 0].y;
-    triable1Points[1]->x = transformedCube[cubeI + 1].x;
-    triable1Points[1]->y = transformedCube[cubeI + 1].y;
-    triable1Points[2]->x = transformedCube[cubeI + 2].x;
-    triable1Points[2]->y = transformedCube[cubeI + 2].y;
-
-    triable2Points[0]->x = transformedCube[cubeI + 2].x;
-    triable2Points[0]->y = transformedCube[cubeI + 2].y;
-    triable2Points[1]->x = transformedCube[cubeI + 3].x;
-    triable2Points[1]->y = transformedCube[cubeI + 3].y;
-    triable2Points[2]->x = transformedCube[cubeI + 4].x;
-    triable2Points[2]->y = transformedCube[cubeI + 4].y;
-
     SDL_Color color, c;
     if (f == FRONT) {
       c.r = 200;
@@ -228,19 +212,19 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     triangle2[1].color = color;
     triangle2[2].color = color;
 
-    triangle1[0].position.x = triable1Points[0]->x;
-    triangle1[0].position.y = triable1Points[0]->y;
-    triangle1[1].position.x = triable1Points[1]->x;
-    triangle1[1].position.y = triable1Points[1]->y;
-    triangle1[2].position.x = triable1Points[2]->x;
-    triangle1[2].position.y = triable1Points[2]->y;
+    triangle1[0].position.x = transformedCube[cubeI + 0].x;
+    triangle1[0].position.y = transformedCube[cubeI + 0].y;
+    triangle1[1].position.x = transformedCube[cubeI + 1].x;
+    triangle1[1].position.y = transformedCube[cubeI + 1].y;
+    triangle1[2].position.x = transformedCube[cubeI + 2].x;
+    triangle1[2].position.y = transformedCube[cubeI + 2].y;
 
-    triangle2[0].position.x = triable2Points[0]->x;
-    triangle2[0].position.y = triable2Points[0]->y;
-    triangle2[1].position.x = triable2Points[1]->x;
-    triangle2[1].position.y = triable2Points[1]->y;
-    triangle2[2].position.x = triable2Points[2]->x;
-    triangle2[2].position.y = triable2Points[2]->y;
+    triangle2[0].position.x = transformedCube[cubeI + 2].x;
+    triangle2[0].position.y = transformedCube[cubeI + 2].y;
+    triangle2[1].position.x = transformedCube[cubeI + 3].x;
+    triangle2[1].position.y = transformedCube[cubeI + 3].y;
+    triangle2[2].position.x = transformedCube[cubeI + 4].x;
+    triangle2[2].position.y = transformedCube[cubeI + 4].y;
 
     SDL_Point linePoints[] = {
       transformedCube[cubeI + 0],
