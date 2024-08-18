@@ -45,8 +45,6 @@ SDL_Surface *message_paused_surface;
 SDL_Texture *message_paused_texture;
 
 SDL_Vertex triangle[3];
-SDL_FPoint triangle1Points[3][2];
-SDL_FPoint triangle2Points[3][2];
 
 int faceOrder[5];
 SDL_FPoint triable1Points[3][2];
@@ -55,6 +53,13 @@ SDL_Vertex triangle1[3];
 SDL_Vertex triangle2[3];
 
 char score[10];
+
+const float HEIGHT_DOUBLE = HEIGHT * 2.0f;
+const float HEIGHT_HALF = HEIGHT * 0.5f;
+const float HEIGHT_NEG = -HEIGHT;
+const float WIDTH_DOUBLE = WIDTH * 2.0f;
+const float WIDTH_HALF = WIDTH * 0.5f;
+const float WIDTH_NEG = -WIDTH;
 
 void setScalingVals() {
   float largerAspectRatio;
@@ -83,30 +88,28 @@ static void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePo
 
 void draw(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B, 255);
-  triangle1Points[0]->x = -WIDTH;
-  triangle1Points[0]->y = HEIGHT / 2;
-  triangle1Points[1]->x = WIDTH / 2;
-  triangle1Points[1]->y = -HEIGHT;
-  triangle1Points[2]->x = WIDTH * 2;
-  triangle1Points[2]->y = HEIGHT / 2;
-  triangle2Points[0]->x = -WIDTH;
-  triangle2Points[0]->y = HEIGHT / 2;
-  triangle2Points[1]->x = WIDTH / 2;
-  triangle2Points[1]->y = HEIGHT * 2;
-  triangle2Points[2]->x = WIDTH * 2;
-  triangle2Points[2]->y = HEIGHT / 2;
+  SDL_FPoint triangle1Points[3][2] = {
+		{WIDTH_NEG, HEIGHT_HALF},
+		{WIDTH_HALF, HEIGHT_NEG},
+		{WIDTH_DOUBLE, HEIGHT_HALF}
+  };
+  SDL_FPoint triangle2Points[3][2] = {
+    {WIDTH_NEG, HEIGHT_HALF},
+    {WIDTH_HALF, HEIGHT_DOUBLE},
+    {WIDTH_DOUBLE, HEIGHT_HALF}
+  };
 
   SDL_RenderClear(renderer);
-  drawBackgroundTriangle(renderer, triangle1Points);
-  drawBackgroundTriangle(renderer, triangle2Points);
+  drawBackgroundTriangle(renderer, *triangle1Points);
+  drawBackgroundTriangle(renderer, *triangle2Points);
 }
 
 static inline float screenX(float x) {
-  return x * widthMult * WIDTH + WIDTH / 2;
+  return x * widthMult * WIDTH + WIDTH_HALF;
 }
 
 static inline float screenY(float y) {
-  return y * heightMult * HEIGHT + HEIGHT / 2;
+  return y * heightMult * HEIGHT + HEIGHT_HALF;
 }
 
 static bool isPointOutsideFront(int f, int frontI) {
@@ -137,7 +140,7 @@ static inline float fadeTowards(float current, float target, float amount) {
   if (current == target) {
     return current;
   }
-  float toDiff = fabs((current - target) * amount);
+  float toDiff = fabsf((current - target) * amount);
   if (current > target) {
     return current - toDiff;
   } else {
@@ -213,8 +216,8 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     float min = 150;
     float max = 190;
 
-    float z = (cube[(cubeI / 5) * 4].z) + fabs(cube[(cubeI / 5) * 4].x) * 7 + fabs(cube[(cubeI / 5) * 4].y) * 7;
-    float fadeAmount = z < min ? 0 : fmin((z - min) / (max - min), 1);
+    float z = (cube[(cubeI / 5) * 4].z) + fabsf(cube[(cubeI / 5) * 4].x) * 7 + fabsf(cube[(cubeI / 5) * 4].y) * 7;
+    float fadeAmount = z < min ? 0 : fminf((z - min) / (max - min), 1);
 
     color.a = fadeTowards(255, 0, fadeAmount);
 
@@ -249,7 +252,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     SDL_RenderGeometry(renderer, NULL, triangle1, 3, NULL, 0);
     SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
-    fadeAmount = fmin(fadeAmount * 1.5, 1);
+    fadeAmount = fminf(fadeAmount * 1.5, 1);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, fadeTowards(255, 0, fadeAmount));
     SDL_RenderDrawLines(renderer, linePoints, 5);
   }

@@ -13,7 +13,7 @@
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
-Sint8 gameState = GAME_STATE_TITLE_SCREEN;
+int gameState = GAME_STATE_TITLE_SCREEN;
 
 Uint64 now = 0;
 Uint64 last = 0;
@@ -49,21 +49,21 @@ static void init() {
   controllerInit();
   widthMult = min((float)HEIGHT / WIDTH, 1);
   heightMult = min((float)WIDTH / HEIGHT, 1);
-  cubeCollisionCompareX = 0.5 / heightMult;
-  cubeCollisionCompareY = 0.5 / widthMult;
+  cubeCollisionCompareX = 0.5f / heightMult;
+  cubeCollisionCompareY = 0.5f / widthMult;
   prepareGame();
 }
 
 static void gameLoop() {
   if (gameState != GAME_STATE_GAME_OVER) {
-    gameState = gameFrame(deltaTime, cubes, &cubesLength);
+    gameState = gameFrame((float)deltaTime, cubes, &cubesLength);
   }
 }
 
 int main(int arg, char *argv[]) {
   init();
   // Call once at the start for initial render
-  gameFrame(deltaTime, cubes, &cubesLength);
+  gameFrame((float)deltaTime, cubes, &cubesLength);
   draw(renderer);
 
   while (!quit) {
@@ -115,7 +115,7 @@ int main(int arg, char *argv[]) {
         drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {
           prepareGame();
-          gameFrame(deltaTime, cubes, &cubesLength);
+          gameFrame((float)deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         break;

@@ -147,8 +147,8 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
         cubes[i][p].z += zSpeed;
       }
 
-      float middleX = fabs(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) / 2);
-      float middleY = fabs(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) / 2);
+      float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
+      float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f);
       //if (cubes[i][0].z < 2 && middleX < cubeCollisionCompareX && middleY < cubeCollisionCompareY && (SDL_GetTicks() - gameStartTime) > 1000) {
       if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5 && (SDL_GetTicks() - gameStartTime) > 1000) {
         return GAME_STATE_GAME_OVER;
@@ -168,7 +168,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 }
 
 Cube newCube(Point c, float s) {
-  float half = s / 2.0;
+  float half = s * 0.5f;
 
   Cube cubeAddr = malloc(cubeMemSize);
 

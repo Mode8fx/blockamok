@@ -103,13 +103,13 @@ static inline void applyStickZones(Stick *stick) {
 		stick->x = 0;
 	}
 	else if (abs(stick->x) > stick->fullZone) {
-		stick->x = copysign(32767, stick->x);
+		stick->x = (stick->x < 0) ? -32767 : 32767;
 	}
 	if (abs(stick->y) < stick->deadZone) {
 		stick->y = 0;
 	}
 	else if (abs(stick->y) > stick->fullZone) {
-		stick->y = copysign(32767, stick->y);
+		stick->y = (stick->y < 0) ? -32767 : 32767;
 	}
 }
 
