@@ -43,6 +43,7 @@ extern bool quit;
 #define INPUT_SELECT (1 << 13)
 
 #define STICK_DEADZONE 3277
+#define STICK_FULLZONE 31129
 #define TRIGGER_DEADZONE 26215
 
 #define LEFT_PRESSED    (1 << 0)

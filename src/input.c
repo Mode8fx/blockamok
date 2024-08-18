@@ -129,11 +129,27 @@ static inline void mapInputToVar_GeneralConsole(Uint32 heldButtons, Uint16 varBt
 }
 #endif
 
-static inline void applyStickDeadzones() {
-	if (abs(controllerAxis_leftStickX) < STICK_DEADZONE) controllerAxis_leftStickX = 0;
-	if (abs(controllerAxis_leftStickY) < STICK_DEADZONE) controllerAxis_leftStickY = 0;
-	if (abs(controllerAxis_rightStickX) < STICK_DEADZONE) controllerAxis_rightStickX = 0;
-	if (abs(controllerAxis_rightStickY) < STICK_DEADZONE) controllerAxis_rightStickY = 0;
+static inline void applyStickZones() {
+	if (abs(controllerAxis_leftStickX) < STICK_DEADZONE) {
+		controllerAxis_leftStickX = 0;
+	} else if (abs(controllerAxis_leftStickX) > STICK_FULLZONE) {
+		controllerAxis_leftStickX = copysign(32767, controllerAxis_leftStickX);
+	}
+	if (abs(controllerAxis_leftStickY) < STICK_DEADZONE) {
+		controllerAxis_leftStickY = 0;
+	} else if (abs(controllerAxis_leftStickY) > STICK_FULLZONE) {
+		controllerAxis_leftStickY = copysign(32767, controllerAxis_leftStickY);
+	}
+	if (abs(controllerAxis_rightStickX) < STICK_DEADZONE) {
+		controllerAxis_rightStickX = 0;
+	} else if (abs(controllerAxis_rightStickX) > STICK_FULLZONE) {
+		controllerAxis_rightStickX = copysign(32767, controllerAxis_rightStickX);
+	}
+	if (abs(controllerAxis_rightStickY) < STICK_DEADZONE) {
+		controllerAxis_rightStickY = 0;
+	} else if (abs(controllerAxis_rightStickY) > STICK_FULLZONE) {
+		controllerAxis_rightStickY = copysign(32767, controllerAxis_rightStickY);
+	}
 }
 
 static void mapStickToVar() {
@@ -180,7 +196,7 @@ static void handleAllCurrentInputs() {
 	controllerAxis_leftStickY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
 	controllerAxis_rightStickX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
 	controllerAxis_rightStickY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
-	applyStickDeadzones();
+	applyStickZones();
 #endif
 
 #if defined(PC) || defined(ANDROID)
@@ -225,7 +241,7 @@ static void handleAllCurrentInputs() {
 	controllerAxis_leftStickY = PAD_StickY(0) * -256;
 	controllerAxis_rightStickX = PAD_SubStickX(0) * 256;
 	controllerAxis_rightStickY = PAD_SubStickY(0) * -256;
-	applyStickDeadzones();
+	applyStickZones();
 #endif
 
 #if defined(WII)
@@ -268,7 +284,7 @@ static void handleAllCurrentInputs() {
 	if (controllerAxis_rightStickY == 0) {
 		controllerAxis_rightStickY = WPAD_Stick(WPAD_CHAN_0, 1, 1) * -256;
 	}
-	applyStickDeadzones();
+	applyStickZones();
 #endif
 
 #if defined(PSP)
@@ -289,7 +305,7 @@ static void handleAllCurrentInputs() {
 
 	controllerAxis_leftStickX = (pad.Lx - 128) * 256;
 	controllerAxis_leftStickY = (pad.Ly - 128) * 256;
-	applyStickDeadzones();
+	applyStickZones();
 #endif
 
 	mapStickToVar();
