@@ -44,6 +44,8 @@ extern bool quit;
 
 #define STICK_DEADZONE 3277
 #define STICK_FULLZONE 31129
+//#define STICK_THRESHOLD 16384
+#define STICK_THRESHOLD 0
 #define TRIGGER_DEADZONE 26215
 
 #define LEFT_PRESSED    (1 << 0)
@@ -63,3 +65,4 @@ extern void handleAllCurrentInputs();
 extern void updateChangedKeys();
 extern void handleHoldTimer_execute();
 extern void updateLastKeys();
+extern inline void gameSpecificInputBehavior();

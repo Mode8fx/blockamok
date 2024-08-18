@@ -35,6 +35,42 @@ inline bool keyHeld(Uint32 key) {
 	return (heldKeys & key);
 }
 
+inline bool keyReleased(Uint32 key) {
+	return (releasedKeys & key);
+}
+
+inline bool stickHeld_Up(Sint16 stickAxis) {
+	return stickAxis < -STICK_THRESHOLD;
+}
+
+inline bool stickHeld_Down(Sint16 stickAxis) {
+	return stickAxis > STICK_THRESHOLD;
+}
+
+inline bool stickHeld_Left(Sint16 stickAxis) {
+	return stickAxis < -STICK_THRESHOLD;
+}
+
+inline bool stickHeld_Right(Sint16 stickAxis) {
+	return stickAxis > STICK_THRESHOLD;
+}
+
+inline bool dirHeld_Up() {
+	return keyHeld(INPUT_UP) || stickHeld_Up(controllerAxis_leftStickY);
+}
+
+inline bool dirHeld_Down() {
+	return keyHeld(INPUT_DOWN) || stickHeld_Down(controllerAxis_leftStickY);
+}
+
+inline bool dirHeld_Left() {
+	return keyHeld(INPUT_LEFT) || stickHeld_Left(controllerAxis_leftStickX);
+}
+
+inline bool dirHeld_Right() {
+	return keyHeld(INPUT_RIGHT) || stickHeld_Right(controllerAxis_leftStickX);
+}
+
 static inline void handleHoldTimer_prepare() {
 	// If any direction is held, continue timer; otherwise, reset it
 	if (heldKeys & 0x0F) {
@@ -56,16 +92,16 @@ static inline void handleHoldTimer_execute() {
 	if (timer_buttonHold > REPEATER_FIRST_DELAY) {
 		timer_buttonHold_repeater += deltaTime;
 		if (timer_buttonHold_repeater >= REPEATER_INTERVAL) {
-			if (keyHeld(INPUT_UP)) {
+			if (dirHeld_Up()) {
 				pressedKeys |= INPUT_UP;
 			}
-			if (keyHeld(INPUT_DOWN)) {
+			if (dirHeld_Down()) {
 				pressedKeys |= INPUT_DOWN;
 			}
-			if (keyHeld(INPUT_LEFT)) {
+			if (dirHeld_Left()) {
 				pressedKeys |= INPUT_LEFT;
 			}
-			if (keyHeld(INPUT_RIGHT)) {
+			if (dirHeld_Right()) {
 				pressedKeys |= INPUT_RIGHT;
 			}
 			timer_buttonHold_repeater -= REPEATER_INTERVAL;
@@ -153,18 +189,10 @@ static inline void applyStickZones() {
 }
 
 static void mapStickToVar() {
-	if (controllerAxis_leftStickX < 0) {
-		heldKeys |= INPUT_LEFT;
-	}
-	if (controllerAxis_leftStickX > 0) {
-		heldKeys |= INPUT_RIGHT;
-	}
-	if (controllerAxis_leftStickY < 0) {
-		heldKeys |= INPUT_UP;
-	}
-	if (controllerAxis_leftStickY > 0) {
-		heldKeys |= INPUT_DOWN;
-	}
+	heldKeys |= (controllerAxis_leftStickX < 0) ? INPUT_LEFT : 0;
+	heldKeys |= (controllerAxis_leftStickX > 0) ? INPUT_RIGHT : 0;
+	heldKeys |= (controllerAxis_leftStickY < 0) ? INPUT_UP : 0;
+	heldKeys |= (controllerAxis_leftStickY > 0) ? INPUT_DOWN : 0;
 }
 
 
@@ -308,5 +336,15 @@ static void handleAllCurrentInputs() {
 	applyStickZones();
 #endif
 
-	mapStickToVar();
+	gameSpecificInputBehavior();
+}
+
+
+
+////////////////////////////
+// Game-Specific Behavior //
+////////////////////////////
+
+static inline void gameSpecificInputBehavior() {
+	//mapStickToVar();
 }

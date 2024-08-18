@@ -117,16 +117,16 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
 
   float xDiff = 0;
   float yDiff = 0;
-  if (keyHeld(INPUT_UP)) {
+  if (dirHeld_Up()) {
     yDiff = +turnSpeed;
   }
-  if (keyHeld(INPUT_DOWN)) {
+  if (dirHeld_Down()) {
     yDiff = -turnSpeed;
   }
-  if (keyHeld(INPUT_LEFT)) {
+  if (dirHeld_Left()) {
     xDiff = +turnSpeed;
   }
-  if (keyHeld(INPUT_RIGHT)) {
+  if (dirHeld_Right()) {
     xDiff = -turnSpeed;
   }
   float zSpeed = -speed;
