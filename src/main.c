@@ -23,6 +23,8 @@ double deltaTime = 0;
 int cubesLength = 0;
 Cube cubes[1000];
 
+double scoreVal;
+
 static void prepareGame() {
   for (int i = 0; i < cubesLength; i++) {
     removeCube(cubes, i);

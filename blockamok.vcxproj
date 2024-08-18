@@ -148,12 +148,14 @@
     <ClCompile Include="src\input.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\math_custom.c" />
+    <ClCompile Include="src\text.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\math_custom.h" />
+    <ClInclude Include="src\text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,5 @@
 #include "./draw.h"
 
-#include <SDL.h>
-#include <SDL_ttf.h>
 #include <math.h>
 #include <stdbool.h>
 
@@ -11,12 +9,6 @@
 float MAX_DEPTH;
 float HALF_FOV_ANGLE_RADIANS;
 float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
-
-SDL_Rect scoreRect;
-SDL_Rect gameOverRect;
-SDL_Rect titleScreenRect;
-SDL_Rect pausedRect;
-double scoreVal;
 
 const int UP = 0;
 const int DOWN = 1;
@@ -35,22 +27,11 @@ SDL_Point transformedCube[CUBE_FACE_N * 5];
 const SDL_Color darkBackgroundTriangle = {.r = 0, .b = 0, .g = 0, .a = 250 / 3};
 const SDL_Color emptyBackgroundTriangle = {.r = 255, .b = 255, .g = 255, .a = 0};
 
-TTF_Font *Sans = NULL;
-SDL_Color TEXT_COLOR = {0, 0, 0};
-SDL_Surface *message_titlescreen_surface;
-SDL_Texture *message_titlescreen_texture;
-SDL_Surface *message_gameover_surface;
-SDL_Texture *message_gameover_texture;
-SDL_Surface *message_paused_surface;
-SDL_Texture *message_paused_texture;
-
 SDL_Vertex triangle[3];
 
 int faceOrder[5];
 SDL_Vertex triangle1[3];
 SDL_Vertex triangle2[3];
-
-char score[10];
 
 const float HEIGHT_DOUBLE = HEIGHT * 2.0f;
 const float HEIGHT_HALF = HEIGHT * 0.5f;
@@ -212,19 +193,19 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     triangle2[1].color = color;
     triangle2[2].color = color;
 
-    triangle1[0].position.x = transformedCube[cubeI + 0].x;
-    triangle1[0].position.y = transformedCube[cubeI + 0].y;
-    triangle1[1].position.x = transformedCube[cubeI + 1].x;
-    triangle1[1].position.y = transformedCube[cubeI + 1].y;
-    triangle1[2].position.x = transformedCube[cubeI + 2].x;
-    triangle1[2].position.y = transformedCube[cubeI + 2].y;
+    triangle1[0].position.x = (float)transformedCube[cubeI + 0].x;
+    triangle1[0].position.y = (float)transformedCube[cubeI + 0].y;
+    triangle1[1].position.x = (float)transformedCube[cubeI + 1].x;
+    triangle1[1].position.y = (float)transformedCube[cubeI + 1].y;
+    triangle1[2].position.x = (float)transformedCube[cubeI + 2].x;
+    triangle1[2].position.y = (float)transformedCube[cubeI + 2].y;
 
-    triangle2[0].position.x = transformedCube[cubeI + 2].x;
-    triangle2[0].position.y = transformedCube[cubeI + 2].y;
-    triangle2[1].position.x = transformedCube[cubeI + 3].x;
-    triangle2[1].position.y = transformedCube[cubeI + 3].y;
-    triangle2[2].position.x = transformedCube[cubeI + 4].x;
-    triangle2[2].position.y = transformedCube[cubeI + 4].y;
+    triangle2[0].position.x = (float)transformedCube[cubeI + 2].x;
+    triangle2[0].position.y = (float)transformedCube[cubeI + 2].y;
+    triangle2[1].position.x = (float)transformedCube[cubeI + 3].x;
+    triangle2[1].position.y = (float)transformedCube[cubeI + 3].y;
+    triangle2[2].position.x = (float)transformedCube[cubeI + 4].x;
+    triangle2[2].position.y = (float)transformedCube[cubeI + 4].y;
 
     SDL_Point linePoints[] = {
       transformedCube[cubeI + 0],
@@ -240,61 +221,4 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, fadeTowards(255, 0, fadeAmount));
     SDL_RenderDrawLines(renderer, linePoints, 5);
   }
-}
-
-void initStaticMessages(SDL_Renderer *renderer) {
-  Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
-
-  message_titlescreen_surface = TTF_RenderText_Solid(Sans, "Blockamok", TEXT_COLOR);
-  message_titlescreen_texture = SDL_CreateTextureFromSurface(renderer, message_titlescreen_surface);
-  titleScreenRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
-  titleScreenRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
-  titleScreenRect.w = 600 * HEIGHT / 1000;
-  titleScreenRect.h = 150 * HEIGHT / 1000;
-
-  scoreRect.x = 0;
-  scoreRect.y = -HEIGHT / 100;
-  scoreRect.w = 72 * HEIGHT / 1000;
-  scoreRect.h = 50 * HEIGHT / 1000;
-
-  message_gameover_surface = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
-  message_gameover_texture = SDL_CreateTextureFromSurface(renderer, message_gameover_surface);
-  gameOverRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
-  gameOverRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
-  gameOverRect.w = 600 * HEIGHT / 1000;
-  gameOverRect.h = 150 * HEIGHT / 1000;
-
-  message_paused_surface = TTF_RenderText_Solid(Sans, "PAUSED", TEXT_COLOR);
-  message_paused_texture = SDL_CreateTextureFromSurface(renderer, message_paused_surface);
-  pausedRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
-  pausedRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
-  pausedRect.w = 600 * HEIGHT / 1000;
-  pausedRect.h = 150 * HEIGHT / 1000;
-}
-
-inline void drawTitleScreenText(SDL_Renderer *renderer) {
-  SDL_RenderCopy(renderer, message_titlescreen_texture, NULL, &titleScreenRect);
-}
-
-inline void drawScoreText(SDL_Renderer *renderer) {
-  sprintf(score, "%d", (int)scoreVal);
-  SDL_Surface *message_score_surface = TTF_RenderText_Solid(Sans, score, TEXT_COLOR);
-
-  // Adjust the position of the scoreRect to center the text
-  scoreRect.x = (WIDTH - message_score_surface->w) / 2;
-  scoreRect.w = message_score_surface->w;
-  scoreRect.h = message_score_surface->h;
-
-  SDL_Texture *message_score_texture = SDL_CreateTextureFromSurface(renderer, message_score_surface);
-  SDL_RenderCopy(renderer, message_score_texture, NULL, &scoreRect);
-  SDL_FreeSurface(message_score_surface);
-  SDL_DestroyTexture(message_score_texture);
-}
-
-inline void drawGameOverText(SDL_Renderer *renderer) {
-  SDL_RenderCopy(renderer, message_gameover_texture, NULL, &gameOverRect);
-}
-
-inline void drawPausedText(SDL_Renderer *renderer) {
-  SDL_RenderCopy(renderer, message_paused_texture, NULL, &pausedRect);
 }
