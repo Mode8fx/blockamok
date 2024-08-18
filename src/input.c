@@ -6,15 +6,13 @@ SDL_Joystick *controller = NULL;
 SDL_GameController *controller = NULL;
 #endif
 
-/* General Input */
-Sint16 controllerAxis_leftStickX;
-Sint16 controllerAxis_leftStickX_last;
-Sint16 controllerAxis_leftStickY;
-Sint16 controllerAxis_leftStickY_last;
-Sint16 controllerAxis_rightStickX;
-Sint16 controllerAxis_rightStickX_last;
-Sint16 controllerAxis_rightStickY;
-Sint16 controllerAxis_rightStickY_last;
+Stick leftStick = {
+	0, 0, 0, 0, STICK_DEADZONE, STICK_FULLZONE, STICK_THRESHOLD
+};
+Stick rightStick = {
+	0, 0, 0, 0, STICK_DEADZONE, STICK_FULLZONE, STICK_THRESHOLD
+};
+
 Uint32 pressedKeys;
 Uint32 releasedKeys;
 Uint32 heldKeys;
@@ -26,6 +24,10 @@ double timer_buttonHold_repeater;
 #define REPEATER_INTERVAL 0.033
 
 bool quit = false;
+
+/////////////
+// GENERAL //
+/////////////
 
 inline bool keyPressed(Uint32 key) {
 	return (pressedKeys & key);
@@ -39,36 +41,128 @@ inline bool keyReleased(Uint32 key) {
 	return (releasedKeys & key);
 }
 
-inline bool stickHeld_Up(Sint16 stickAxis) {
-	return stickAxis < -STICK_THRESHOLD;
+///////////
+// STICK //
+///////////
+
+inline bool stickIsUp(Stick stick) {
+	return stick.y < -stick.threshold;
 }
 
-inline bool stickHeld_Down(Sint16 stickAxis) {
-	return stickAxis > STICK_THRESHOLD;
+inline bool stickIsDown(Stick stick) {
+	return stick.y > stick.threshold;
 }
 
-inline bool stickHeld_Left(Sint16 stickAxis) {
-	return stickAxis < -STICK_THRESHOLD;
+inline bool stickIsLeft(Stick stick) {
+	return stick.x < -stick.threshold;
 }
 
-inline bool stickHeld_Right(Sint16 stickAxis) {
-	return stickAxis > STICK_THRESHOLD;
+inline bool stickIsRight(Stick stick) {
+	return stick.y > stick.threshold;
+}
+
+static inline bool stickWasUp(Stick stick) {
+	return stick.y_last < -stick.threshold;
+}
+
+static inline bool stickWasDown(Stick stick) {
+	return stick.y_last > stick.threshold;
+}
+
+static inline bool stickWasLeft(Stick stick) {
+	return stick.x_last < -stick.threshold;
+}
+
+static inline bool stickWasRight(Stick stick) {
+	return stick.y_last > stick.threshold;
+}
+
+static inline bool stickPressedUp() {
+	return stickIsUp(leftStick) && !stickWasUp(leftStick);
+}
+
+static inline bool stickPressedDown() {
+	return stickIsDown(leftStick) && !stickWasDown(leftStick);
+}
+
+static inline bool stickPressedLeft() {
+	return stickIsLeft(leftStick) && !stickWasLeft(leftStick);
+}
+
+static inline bool stickPressedRight() {
+	return stickIsRight(leftStick) && !stickWasRight(leftStick);
+}
+
+static inline void updateStick(Stick *stick) {
+	stick->x_last = stick->x;
+	stick->y_last = stick->y;
+}
+
+static inline void applyStickZones(Stick *stick) {
+	if (abs(stick->x) < stick->deadZone) {
+		stick->x = 0;
+	}
+	else if (abs(stick->x) > stick->fullZone) {
+		stick->x = copysign(32767, stick->x);
+	}
+	if (abs(stick->y) < stick->deadZone) {
+		stick->y = 0;
+	}
+	else if (abs(stick->y) > stick->fullZone) {
+		stick->y = copysign(32767, stick->y);
+	}
+}
+
+static void mapStickToHeldKeys(Stick stick) {
+	heldKeys |= (stick.x < -stick.threshold) ? INPUT_LEFT : 0;
+	heldKeys |= (stick.x > stick.threshold) ? INPUT_RIGHT : 0;
+	heldKeys |= (stick.y < -stick.threshold) ? INPUT_UP : 0;
+	heldKeys |= (stick.y > stick.threshold) ? INPUT_DOWN : 0;
+}
+
+/////////////////////
+// DIRECTION LOGIC //
+/////////////////////
+
+inline bool dirPressedUp() {
+	return keyPressed(INPUT_UP) || stickPressedUp();
+}
+
+inline bool dirPressedDown() {
+	return keyPressed(INPUT_DOWN) || stickPressedDown();
+}
+
+inline bool dirPressedLeft() {
+	return keyPressed(INPUT_LEFT) || stickPressedLeft();
+}
+
+inline bool dirPressedRight() {
+	return keyPressed(INPUT_RIGHT) || stickPressedRight();
 }
 
 inline bool dirHeld_Up() {
-	return keyHeld(INPUT_UP) || stickHeld_Up(controllerAxis_leftStickY);
+	return keyHeld(INPUT_UP) || stickIsUp(leftStick);
 }
 
 inline bool dirHeld_Down() {
-	return keyHeld(INPUT_DOWN) || stickHeld_Down(controllerAxis_leftStickY);
+	return keyHeld(INPUT_DOWN) || stickIsDown(leftStick);
 }
 
 inline bool dirHeld_Left() {
-	return keyHeld(INPUT_LEFT) || stickHeld_Left(controllerAxis_leftStickX);
+	return keyHeld(INPUT_LEFT) || stickIsLeft(leftStick);
 }
 
 inline bool dirHeld_Right() {
-	return keyHeld(INPUT_RIGHT) || stickHeld_Right(controllerAxis_leftStickX);
+	return keyHeld(INPUT_RIGHT) || stickIsRight(leftStick);
+}
+
+///////////////////
+// MAIN HANDLING //
+///////////////////
+
+static inline void updateChangedKeys() {
+	pressedKeys = heldKeys & ~heldKeys_last;
+	releasedKeys = ~heldKeys & heldKeys_last;
 }
 
 static inline void handleHoldTimer_prepare() {
@@ -80,11 +174,6 @@ static inline void handleHoldTimer_prepare() {
 		timer_buttonHold = 0;
 		timer_buttonHold_repeater = 0;
 	}
-}
-
-static inline void updateChangedKeys() {
-	pressedKeys = heldKeys & ~heldKeys_last;
-	releasedKeys = ~heldKeys & heldKeys_last;
 }
 
 static inline void handleHoldTimer_execute() {
@@ -111,19 +200,8 @@ static inline void handleHoldTimer_execute() {
 
 static inline void updateLastKeys() {
 	heldKeys_last = heldKeys;
-	controllerAxis_leftStickX_last = controllerAxis_leftStickX;
-	controllerAxis_leftStickY_last = controllerAxis_leftStickY;
-	controllerAxis_rightStickX_last = controllerAxis_rightStickX;
-	controllerAxis_rightStickY_last = controllerAxis_rightStickY;
-}
-
-inline void handlePlayerInput() {
-	heldKeys = 0;
-	handleAllCurrentInputs();
-	updateChangedKeys();
-	handleHoldTimer_prepare();
-	handleHoldTimer_execute();
-	updateLastKeys();
+	updateStick(&leftStick);
+	updateStick(&rightStick);
 }
 
 void controllerInit() {
@@ -140,6 +218,19 @@ void controllerInit() {
 	}
 #endif
 }
+
+inline void handlePlayerInput() {
+	heldKeys = 0;
+	handleAllCurrentInputs();
+	updateChangedKeys();
+	handleHoldTimer_prepare();
+	handleHoldTimer_execute();
+	updateLastKeys();
+}
+
+///////////////////
+// INPUT MAPPING //
+///////////////////
 
 #if !(defined(PSP) || defined(GAMECUBE) || defined(WII))
 static inline void mapInputToVar_SDL2(Uint16 varBtn, Sint32 inputBtn) {
@@ -164,36 +255,6 @@ static inline void mapInputToVar_GeneralConsole(Uint32 heldButtons, Uint16 varBt
 	}
 }
 #endif
-
-static inline void applyStickZones() {
-	if (abs(controllerAxis_leftStickX) < STICK_DEADZONE) {
-		controllerAxis_leftStickX = 0;
-	} else if (abs(controllerAxis_leftStickX) > STICK_FULLZONE) {
-		controllerAxis_leftStickX = copysign(32767, controllerAxis_leftStickX);
-	}
-	if (abs(controllerAxis_leftStickY) < STICK_DEADZONE) {
-		controllerAxis_leftStickY = 0;
-	} else if (abs(controllerAxis_leftStickY) > STICK_FULLZONE) {
-		controllerAxis_leftStickY = copysign(32767, controllerAxis_leftStickY);
-	}
-	if (abs(controllerAxis_rightStickX) < STICK_DEADZONE) {
-		controllerAxis_rightStickX = 0;
-	} else if (abs(controllerAxis_rightStickX) > STICK_FULLZONE) {
-		controllerAxis_rightStickX = copysign(32767, controllerAxis_rightStickX);
-	}
-	if (abs(controllerAxis_rightStickY) < STICK_DEADZONE) {
-		controllerAxis_rightStickY = 0;
-	} else if (abs(controllerAxis_rightStickY) > STICK_FULLZONE) {
-		controllerAxis_rightStickY = copysign(32767, controllerAxis_rightStickY);
-	}
-}
-
-static void mapStickToVar() {
-	heldKeys |= (controllerAxis_leftStickX < 0) ? INPUT_LEFT : 0;
-	heldKeys |= (controllerAxis_leftStickX > 0) ? INPUT_RIGHT : 0;
-	heldKeys |= (controllerAxis_leftStickY < 0) ? INPUT_UP : 0;
-	heldKeys |= (controllerAxis_leftStickY > 0) ? INPUT_DOWN : 0;
-}
 
 
 static void handleAllCurrentInputs() {
@@ -220,11 +281,12 @@ static void handleAllCurrentInputs() {
 		heldKeys |= INPUT_ZR;
 	}
 
-	controllerAxis_leftStickX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
-	controllerAxis_leftStickY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
-	controllerAxis_rightStickX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
-	controllerAxis_rightStickY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
-	applyStickZones();
+	leftStick.x = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
+	leftStick.y = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
+	rightStick.x = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
+	rightStick.y = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
+	applyStickZones(&leftStick);
+	applyStickZones(&rightStick);
 #endif
 
 #if defined(PC) || defined(ANDROID)
@@ -265,10 +327,10 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_GeneralConsole(INPUT_START, PAD_BUTTON_START);
 	mapInputToVar_GeneralConsole(INPUT_SELECT, PAD_TRIGGER_Z);
 
-	controllerAxis_leftStickX = PAD_StickX(0) * 256;
-	controllerAxis_leftStickY = PAD_StickY(0) * -256;
-	controllerAxis_rightStickX = PAD_SubStickX(0) * 256;
-	controllerAxis_rightStickY = PAD_SubStickY(0) * -256;
+	leftStick.x = PAD_StickX(0) * 256;
+	leftStick.y = PAD_StickY(0) * -256;
+	rightStick.x = PAD_SubStickX(0) * 256;
+	rightStick.y = PAD_SubStickY(0) * -256;
 	applyStickZones();
 #endif
 
@@ -300,17 +362,17 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_GeneralConsole(INPUT_SELECT, WPAD_CLASSIC_BUTTON_MINUS);
 
 	// Gamecube Controller input should supercede Classic Controller
-	if (controllerAxis_leftStickX == 0) {
-		controllerAxis_leftStickX = WPAD_Stick(WPAD_CHAN_0, 0, 0) * 256;
+	if (leftStick.x == 0) {
+		leftStick.x = WPAD_Stick(WPAD_CHAN_0, 0, 0) * 256;
 	}
-	if (controllerAxis_leftStickY == 0) {
-		controllerAxis_leftStickY = WPAD_Stick(WPAD_CHAN_0, 0, 1) * -256;
+	if (leftStick.y == 0) {
+		leftStick.y = WPAD_Stick(WPAD_CHAN_0, 0, 1) * -256;
 	}
-	if (controllerAxis_rightStickX == 0) {
-		controllerAxis_rightStickX = WPAD_Stick(WPAD_CHAN_0, 1, 0) * 256;
+	if (rightStick.x == 0) {
+		rightStick.x = WPAD_Stick(WPAD_CHAN_0, 1, 0) * 256;
 	}
-	if (controllerAxis_rightStickY == 0) {
-		controllerAxis_rightStickY = WPAD_Stick(WPAD_CHAN_0, 1, 1) * -256;
+	if (rightStick.y == 0) {
+		rightStick.y = WPAD_Stick(WPAD_CHAN_0, 1, 1) * -256;
 	}
 	applyStickZones();
 #endif
@@ -331,20 +393,18 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_GeneralConsole(pad.Buttons, INPUT_START, PSP_CTRL_START);
 	mapInputToVar_GeneralConsole(pad.Buttons, INPUT_SELECT, PSP_CTRL_SELECT);
 
-	controllerAxis_leftStickX = (pad.Lx - 128) * 256;
-	controllerAxis_leftStickY = (pad.Ly - 128) * 256;
+	leftStick.x = (pad.Lx - 128) * 256;
+	leftStick.y = (pad.Ly - 128) * 256;
 	applyStickZones();
 #endif
 
 	gameSpecificInputBehavior();
 }
 
-
-
-////////////////////////////
-// Game-Specific Behavior //
-////////////////////////////
+///////////////////
+// GAME-SPECIFIC //
+///////////////////
 
 static inline void gameSpecificInputBehavior() {
-	//mapStickToVar();
+	//mapStickToHeldKeys(leftStick);
 }

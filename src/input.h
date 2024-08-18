@@ -12,14 +12,18 @@ extern SDL_GameController *controller;
 #endif
 
 /* General Input */
-extern Sint16 controllerAxis_leftStickX;
-extern Sint16 controllerAxis_leftStickX_last;
-extern Sint16 controllerAxis_leftStickY;
-extern Sint16 controllerAxis_leftStickY_last;
-extern Sint16 controllerAxis_rightStickX;
-extern Sint16 controllerAxis_rightStickX_last;
-extern Sint16 controllerAxis_rightStickY;
-extern Sint16 controllerAxis_rightStickY_last;
+typedef struct {
+  Sint16 x;
+  Sint16 x_last;
+  Sint16 y;
+  Sint16 y_last;
+  const Sint16 deadZone;
+  const Sint16 fullZone;
+  const Sint16 threshold;
+} Stick;
+extern Stick leftStick;
+extern Stick rightStick;
+
 extern Uint32 pressedKeys;
 extern Uint32 releasedKeys;
 extern Uint32 heldKeys;
@@ -57,12 +61,22 @@ extern bool quit;
 #define DOWN_PRESSED    (1 << 6)
 #define DOWN_DEPRESSED  (1 << 7)
 
+extern bool stickIsUp(Stick stick);
+extern bool stickIsDown(Stick stick);
+extern bool stickIsLeft(Stick stick);
+extern bool stickIsRight(Stick stick);
 extern bool keyPressed(Uint32);
 extern bool keyHeld(Uint32);
+extern bool keyReleased(Uint32);
+extern inline bool dirPressedUp();
+extern inline bool dirPressedDown();
+extern inline bool dirPressedLeft();
+extern inline bool dirPressedRight();
+extern inline bool dirHeld_Up();
+extern inline bool dirHeld_Down();
+extern inline bool dirHeld_Left();
+extern inline bool dirHeld_Right();
 extern void controllerInit();
-extern void handlePlayerInput();
+extern inline void handlePlayerInput();
 extern void handleAllCurrentInputs();
-extern void updateChangedKeys();
-extern void handleHoldTimer_execute();
-extern void updateLastKeys();
 extern inline void gameSpecificInputBehavior();

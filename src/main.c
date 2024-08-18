@@ -121,9 +121,6 @@ int main(int arg, char *argv[]) {
         break;
     }
 
-    controllerAxis_leftStickX_last = controllerAxis_leftStickX;
-    controllerAxis_leftStickY_last = controllerAxis_leftStickY;
-
     SDL_RenderPresent(renderer);
   }
 
