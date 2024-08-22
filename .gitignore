@@ -55,3 +55,4 @@ include
 blockamok
 
 SDL2/
+/dist

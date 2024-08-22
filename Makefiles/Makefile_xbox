@@ -1,0 +1,13 @@
+XBE_TITLE = Blockamok
+GEN_XISO = $(XBE_TITLE).iso
+SRC_DIR = src
+SRCS		=	$($(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c))
+
+NXDK_DIR ?= ~/nxdk
+NXDK_SDL = y
+
+NXDK_CXX = y
+
+CFLAGS += -O2 -DXBOX
+
+include $(NXDK_DIR)/Makefile

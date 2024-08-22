@@ -9,6 +9,7 @@
 #include "./game.h"
 #include "./math_custom.h"
 #include "./input.h"
+#include "./general.h"
 
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;

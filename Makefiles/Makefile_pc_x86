@@ -1,0 +1,33 @@
+OBJ_DIR = ./build_windows_x86
+EXE=Blockamok.exe
+
+SRC_DIR		=	src
+SRCS		=	$($(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c))
+OBJS		=	$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(SRCS)))
+RC			=	windres
+RESOURCES	=	release-resources/resource.o
+
+
+CXX ?= i686-w64-mingw32-g++
+CXXFLAGS += $(shell pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -DPC
+LDFLAGS += $(shell pkg-config --libs sdl2 SDL2_ttf SDL2_mixer)
+
+.PHONY: all clean
+
+all: $(RESOURCES) $(EXE)
+
+$(RESOURCES): release-resources/resource.rc
+	$(RC) -o $@ $<
+
+$(EXE): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(TARGET_ARCH) $^ $(RESOURCES) $(LDFLAGS) -o $@
+
+$(OBJ_DIR)/%.o: %.cpp
+	mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $@
+
+clean:
+	$(RM) -rv *~ $(RESOURCES) $(OBJS) $(EXE)

@@ -33,6 +33,9 @@
     <ClCompile Include="src\text.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\general.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\general.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
