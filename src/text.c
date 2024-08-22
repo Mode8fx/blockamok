@@ -18,34 +18,39 @@ SDL_Rect pausedRect;
 
 char score[10];
 
+const float textHeightMult = HEIGHT / 1000.0f;
+
 void initStaticMessages(SDL_Renderer *renderer) {
   Sans = TTF_OpenFont("Mono.ttf", 42 * HEIGHT / 1000);
 
   message_titlescreen_surface = TTF_RenderText_Solid(Sans, "Blockamok", TEXT_COLOR);
+  titleScreenRect.w = message_titlescreen_surface->w * 3;
+  titleScreenRect.h = message_titlescreen_surface->h * 3;
   message_titlescreen_texture = SDL_CreateTextureFromSurface(renderer, message_titlescreen_surface);
-  titleScreenRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
-  titleScreenRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
-  titleScreenRect.w = 600 * HEIGHT / 1000;
-  titleScreenRect.h = 150 * HEIGHT / 1000;
+  titleScreenRect.x = WIDTH / 2 - titleScreenRect.w / 2;
+  titleScreenRect.y = HEIGHT / 2 - titleScreenRect.h / 2;
+  SDL_FreeSurface(message_titlescreen_surface);
 
+  scoreRect.w = 72 * textHeightMult;
+  scoreRect.h = 50 * textHeightMult;
   scoreRect.x = 0;
-  scoreRect.y = -HEIGHT / 100;
-  scoreRect.w = 72 * HEIGHT / 1000;
-  scoreRect.h = 50 * HEIGHT / 1000;
+  scoreRect.y = -textHeightMult * 10;
 
   message_gameover_surface = TTF_RenderText_Solid(Sans, "GAME OVER", TEXT_COLOR);
+  gameOverRect.w = message_gameover_surface->w * 3;
+  gameOverRect.h = message_gameover_surface->h * 3;
   message_gameover_texture = SDL_CreateTextureFromSurface(renderer, message_gameover_surface);
-  gameOverRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
-  gameOverRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
-  gameOverRect.w = 600 * HEIGHT / 1000;
-  gameOverRect.h = 150 * HEIGHT / 1000;
+  gameOverRect.x = WIDTH / 2 - gameOverRect.w / 2;
+  gameOverRect.y = HEIGHT / 2 - gameOverRect.h / 2;
+  SDL_FreeSurface(message_gameover_surface);
 
   message_paused_surface = TTF_RenderText_Solid(Sans, "PAUSED", TEXT_COLOR);
+  pausedRect.w = message_paused_surface->w * 3;
+  pausedRect.h = message_paused_surface->h * 3;
   message_paused_texture = SDL_CreateTextureFromSurface(renderer, message_paused_surface);
-  pausedRect.x = WIDTH / 2 - (600 * HEIGHT / 1000) / 2;
-  pausedRect.y = HEIGHT / 2 - (150 * HEIGHT / 1000) / 2 - 10;
-  pausedRect.w = 600 * HEIGHT / 1000;
-  pausedRect.h = 150 * HEIGHT / 1000;
+  pausedRect.x = WIDTH / 2 - pausedRect.w / 2;
+  pausedRect.y = HEIGHT / 2 - pausedRect.h / 2;
+  SDL_FreeSurface(message_paused_surface);
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer) {
