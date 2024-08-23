@@ -81,7 +81,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   message_credits_2.rect.x = WIDTH * 0.5f - message_credits_2.rect.w * 0.5f;
   message_credits_2.rect.y = HEIGHT * 0.3f - message_credits_2.rect.h * 0.5f + message_credits_1.rect.h;
 
-  sprintf(message_credits_3.text, "v2.0 update and console ports by Mode8fx");
+  sprintf(message_credits_3.text, "v2.0 update and ports by Mode8fx");
   prepareMessage(renderer, Sans, &message_credits_3, 1, color_black);
   message_credits_3.rect.x = WIDTH * 0.5f - message_credits_3.rect.w * 0.5f;
   message_credits_3.rect.y = HEIGHT * 0.7f - message_credits_3.rect.h * 0.5f;

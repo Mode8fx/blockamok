@@ -1,8 +1,7 @@
-#include "./game.h"
-
 #include <SDL.h>
 #include <math.h>
 
+#include "./game.h"
 #include "./math_custom.h"
 #include "./draw.h"
 #include "./input.h"

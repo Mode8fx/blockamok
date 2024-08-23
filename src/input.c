@@ -219,13 +219,12 @@ void controllerInit() {
 #endif
 }
 
-inline void handlePlayerInput() {
-	heldKeys = 0;
-	handleAllCurrentInputs();
-	updateChangedKeys();
-	handleHoldTimer_prepare();
-	handleHoldTimer_execute();
-	updateLastKeys();
+///////////////////
+// GAME-SPECIFIC //
+///////////////////
+
+static inline void gameSpecificInputBehavior() {
+	//mapStickToHeldKeys(leftStick);
 }
 
 ///////////////////
@@ -499,9 +498,14 @@ static void handleAllCurrentInputs() {
 #endif
 
 ///////////////////
-// GAME-SPECIFIC //
+// MAIN FUNCTION //
 ///////////////////
 
-static inline void gameSpecificInputBehavior() {
-	//mapStickToHeldKeys(leftStick);
+inline void handlePlayerInput() {
+	heldKeys = 0;
+	handleAllCurrentInputs();
+	updateChangedKeys();
+	handleHoldTimer_prepare();
+	handleHoldTimer_execute();
+	updateLastKeys();
 }

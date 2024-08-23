@@ -10,9 +10,9 @@ typedef struct {
 	SDL_Texture *texture;
 } Message;
 
-extern inline void initStaticMessages(SDL_Renderer *renderer);
-extern inline void drawTitleScreenText(SDL_Renderer *renderer);
-extern inline void drawCreditsText(SDL_Renderer *renderer);
-extern inline void drawScoreText(SDL_Renderer *renderer);
-extern inline void drawGameOverText(SDL_Renderer *renderer);
-extern inline void drawPausedText(SDL_Renderer *renderer);
+extern void initStaticMessages(SDL_Renderer *renderer);
+extern void drawTitleScreenText(SDL_Renderer *renderer);
+extern void drawCreditsText(SDL_Renderer *renderer);
+extern void drawScoreText(SDL_Renderer *renderer);
+extern void drawGameOverText(SDL_Renderer *renderer);
+extern void drawPausedText(SDL_Renderer *renderer);

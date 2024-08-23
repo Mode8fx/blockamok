@@ -1,9 +1,11 @@
+#pragma once
+
 #include <SDL.h>
 
 #include "./game.h"
 
 #if !defined(SDL1)
-SDL_DisplayMode DM;
+extern SDL_DisplayMode DM;
 #endif
 
 #if defined(ANDROID)

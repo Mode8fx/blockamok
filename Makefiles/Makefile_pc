@@ -2,14 +2,11 @@ OBJ_DIR = ./build_windows
 EXE=Blockamok.exe
 
 SRC_DIR		=	src
-SRCS		=	$(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c)
-OBJS		=	$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(SRCS)))
-RC			=	windres
-RESOURCES	=	release-resources/resource.o
+SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
+OBJS		=	$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-
-CXX ?= x86_64-w64-mingw32-g++
-CXXFLAGS += $(shell pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -DPC
+CC ?= x86_64-w64-mingw32-gcc
+CFLAGS += $(shell pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -DPC
 LDFLAGS += $(shell pkg-config --libs sdl2 SDL2_ttf SDL2_mixer)
 
 .PHONY: all clean
@@ -20,14 +17,11 @@ $(RESOURCES): release-resources/resource.rc
 	$(RC) -o $@ $<
 
 $(EXE): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(TARGET_ARCH) $^ $(RESOURCES) $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $^ $(RESOURCES) $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: %.c
 	mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(OBJ_DIR):
-	mkdir -p $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) -rv *~ $(RESOURCES) $(OBJS) $(EXE)

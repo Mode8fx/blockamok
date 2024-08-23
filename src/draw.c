@@ -6,6 +6,10 @@
 #include "./game.h"
 #include "./math_custom.h"
 
+#if !defined(SDL1)
+SDL_DisplayMode DM;
+#endif
+
 float MAX_DEPTH;
 float HALF_FOV_ANGLE_RADIANS;
 float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;

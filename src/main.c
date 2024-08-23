@@ -51,8 +51,8 @@ static void init() {
   controllerInit();
   TTF_Init();
   initStaticMessages(renderer);
-  widthMult = min((float)HEIGHT / WIDTH, 1);
-  heightMult = min((float)WIDTH / HEIGHT, 1);
+  widthMult = fmin((float)HEIGHT / WIDTH, 1);
+  heightMult = fmin((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5f / heightMult;
   cubeCollisionCompareY = 0.5f / widthMult;
   prepareGame();
