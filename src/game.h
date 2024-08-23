@@ -11,6 +11,7 @@
 #define GAME_STATE_PLAYING 1
 #define GAME_STATE_GAME_OVER 2
 #define GAME_STATE_PAUSED 3
+#define GAME_STATE_CREDITS 4
 
 extern Uint64 gameStartTime;
 extern double scoreVal;

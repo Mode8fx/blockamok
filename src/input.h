@@ -31,6 +31,21 @@ extern Uint32 heldKeys_last;
 
 extern bool quit;
 
+extern const char *btn_Up;
+extern const char *btn_Down;
+extern const char *btn_Left;
+extern const char *btn_Right;
+extern const char *btn_A;
+extern const char *btn_B;
+extern const char *btn_X;
+extern const char *btn_Y;
+extern const char *btn_L;
+extern const char *btn_R;
+extern const char *btn_ZL;
+extern const char *btn_ZR;
+extern const char *btn_Start;
+extern const char *btn_Select;
+
 #define INPUT_UP     (1 << 0)
 #define INPUT_DOWN   (1 << 1)
 #define INPUT_LEFT   (1 << 2)

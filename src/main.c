@@ -6,6 +6,7 @@
 #include <time.h>
 
 #include "./draw.h"
+#include "./text.h"
 #include "./game.h"
 #include "./math_custom.h"
 #include "./input.h"
@@ -47,9 +48,9 @@ static void init() {
   screen = SDL_GetWindowSurface(window);
   setScalingVals();
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+  controllerInit();
   TTF_Init();
   initStaticMessages(renderer);
-  controllerInit();
   widthMult = min((float)HEIGHT / WIDTH, 1);
   heightMult = min((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5f / heightMult;
@@ -88,10 +89,20 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
           gameState = GAME_STATE_PLAYING;
-        }
+				} else if (keyPressed(INPUT_SELECT)) {
+					gameState = GAME_STATE_CREDITS;
+				}
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer);
+        break;
+			case GAME_STATE_CREDITS:
+        if (keyPressed(INPUT_SELECT)) {
+          gameState = GAME_STATE_TITLE_SCREEN;
+        }
+				draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawCreditsText(renderer);
         break;
       case GAME_STATE_PLAYING:
         gameLoop();
