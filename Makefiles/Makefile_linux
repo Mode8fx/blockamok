@@ -1,29 +1,28 @@
 OBJ_DIR = ./build_linux
-EXE=blockamok
+EXE = blockamok
 
-SRC_DIR		=	src
-SRCS		=	$(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c)
-OBJS		=	$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(SRCS)))
+SRC_DIR = src
+SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
+OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-
-CXX ?= g++
+CC ?= gcc
 SDLCONFIG ?= sdl2-config
-CXXFLAGS ?= -Os -Wall -Wextra -DLINUX -DPC
-LDFLAGS ?= -lSDL2_ttf -lSDL2_mixer -lstdc++ -lmikmod
+CFLAGS ?= -Os -Wall -Wextra -DLINUX -DPC
+LDFLAGS ?= -lSDL2_ttf -lSDL2_mixer -lmikmod
 
-CXXFLAGS += `$(SDLCONFIG) --cflags`
-LDFLAGS += `$(SDLCONFIG) --libs`
+CFLAGS += `$(SDLCONFIG) --cflags`
+LDFLAGS += `$(SDLCONFIG) --libs` -lm
 
 .PHONY: all clean
 
 all: $(EXE)
 
 $(EXE): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(TARGET_ARCH) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $(TARGET_ARCH) $^ $(LDFLAGS) -o $@
 
-$(OBJ_DIR)/%.o: %.cpp
+$(OBJ_DIR)/%.o: %.c
 	mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
 	mkdir -p $@

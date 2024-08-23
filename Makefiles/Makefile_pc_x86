@@ -23,5 +23,8 @@ $(OBJ_DIR)/%.o: %.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(OBJ_DIR):
+	mkdir -p $@
+
 clean:
 	$(RM) -rv *~ $(RESOURCES) $(OBJS) $(EXE)

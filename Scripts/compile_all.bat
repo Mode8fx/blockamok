@@ -1,7 +1,7 @@
 @echo off
 
 :: Manual sleep amounts (because `start /wait` doesn't work...)
-set SLEEP_COMPILE=45
+set SLEEP_COMPILE=20
 set SLEEP_COMPILE_SHORT=5
 set SLEEP_CLEAN=2
 
@@ -125,8 +125,7 @@ goto :eof
 
 :compile_gc
 echo Gamecube: Compiling with devkitPro...
-:: make is run twice to get around a makefile issue
-start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make -f %MAKEFILE_DKP_GC%; make -f %MAKEFILE_DKP_GC%"
+start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make -f %MAKEFILE_DKP_GC%"
 sleep %SLEEP_COMPILE%
 echo Gamecube: Moving compiled dol to %OUTPUT_GC%...
 mv %REPO%/boot.dol %OUTPUT_GC%
@@ -138,8 +137,7 @@ goto :eof
 
 :compile_wii
 echo Wii: Compiling with devkitPro...
-:: make is run twice to get around a makefile issue
-start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make -f %MAKEFILE_DKP_WII%; make -f %MAKEFILE_DKP_WII%"
+start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make -f %MAKEFILE_DKP_WII%"
 sleep %SLEEP_COMPILE%
 echo Wii: Moving compiled dol to %OUTPUT_WII%...
 mv %REPO%/boot.dol %OUTPUT_WII%
