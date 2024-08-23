@@ -2,7 +2,7 @@ OBJ_DIR = ./build_windows_x86
 EXE=Blockamok.exe
 
 SRC_DIR		=	src
-SRCS		=	$($(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c))
+SRCS		=	$(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c)
 OBJS		=	$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(SRCS)))
 RC			=	windres
 RESOURCES	=	release-resources/resource.o

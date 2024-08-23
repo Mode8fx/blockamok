@@ -3,7 +3,7 @@ PSP_LARGE_MEMORY=1
 TARGET		=	blockamok
 BUILD		=	build_psp
 SRC_DIR		=	src
-SRCS		=	$($(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c))
+SRCS		=	$(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.c)
 OBJS		=	$(patsubst %.cpp, %.o, $(patsubst %.c, %.o, $(SRCS)))
 
 INCDIR =
