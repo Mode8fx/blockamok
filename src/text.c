@@ -12,6 +12,10 @@ Message message_titlescreen_pressselect;
 Message message_score;
 Message message_gameover;
 Message message_paused;
+Message message_credits_1;
+Message message_credits_2;
+Message message_credits_3;
+Message message_credits_4;
 
 SDL_Rect score_rect;
 
@@ -41,7 +45,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   message_titlescreen.rect.x = WIDTH * 0.5f - message_titlescreen.rect.w * 0.5f;
   message_titlescreen.rect.y = HEIGHT * 0.5f - message_titlescreen.rect.h * 0.5f;
 
-  sprintf(message_titlescreen_pressstart.text, "Press %s to fall", btn_Start);
+  sprintf(message_titlescreen_pressstart.text, "Press %s to fly", btn_Start);
   prepareMessage(renderer, Sans, &message_titlescreen_pressstart, 1, color_black);
   message_titlescreen_pressstart.rect.x = WIDTH * 0.5f - message_titlescreen_pressstart.rect.w * 0.5f;
   message_titlescreen_pressstart.rect.y = HEIGHT * 0.75f - message_titlescreen_pressstart.rect.h * 0.5f;
@@ -65,6 +69,27 @@ void initStaticMessages(SDL_Renderer *renderer) {
   prepareMessage(renderer, Sans, &message_paused, 3, color_black);
   message_paused.rect.x = WIDTH / 2 - message_paused.rect.w / 2;
   message_paused.rect.y = HEIGHT / 2 - message_paused.rect.h / 2;
+
+  // Credits Screen
+  sprintf(message_credits_1.text, "Original game by Carl Riis");
+  prepareMessage(renderer, Sans, &message_credits_1, 1, color_black);
+  message_credits_1.rect.x = WIDTH * 0.5f - message_credits_1.rect.w * 0.5f;
+  message_credits_1.rect.y = HEIGHT * 0.3f - message_credits_1.rect.h * 0.5f;
+
+  sprintf(message_credits_2.text, "https://github.com/carltheperson/blockamok");
+  prepareMessage(renderer, Sans, &message_credits_2, 0.8f, color_black);
+  message_credits_2.rect.x = WIDTH * 0.5f - message_credits_2.rect.w * 0.5f;
+  message_credits_2.rect.y = HEIGHT * 0.3f - message_credits_2.rect.h * 0.5f + message_credits_1.rect.h;
+
+  sprintf(message_credits_3.text, "v2.0 update and console ports by Mode8fx");
+  prepareMessage(renderer, Sans, &message_credits_3, 1, color_black);
+  message_credits_3.rect.x = WIDTH * 0.5f - message_credits_3.rect.w * 0.5f;
+  message_credits_3.rect.y = HEIGHT * 0.7f - message_credits_3.rect.h * 0.5f;
+
+  sprintf(message_credits_4.text, "https://github.com/Mode8fx/blockamok");
+  prepareMessage(renderer, Sans, &message_credits_4, 0.8f, color_black);
+  message_credits_4.rect.x = WIDTH * 0.5f - message_credits_4.rect.w * 0.5f;
+  message_credits_4.rect.y = HEIGHT * 0.7f - message_credits_4.rect.h * 0.5f + message_credits_3.rect.h;
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer) {
@@ -74,6 +99,10 @@ inline void drawTitleScreenText(SDL_Renderer *renderer) {
 }
 
 inline void drawCreditsText(SDL_Renderer *renderer) {
+  renderMessage(renderer, &message_credits_1);
+  renderMessage(renderer, &message_credits_2);
+  renderMessage(renderer, &message_credits_3);
+  renderMessage(renderer, &message_credits_4);
 }
 
 inline void drawScoreText(SDL_Renderer *renderer) {
