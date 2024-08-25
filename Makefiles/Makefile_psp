@@ -6,18 +6,15 @@ SRC_DIR		=	src
 SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 OBJS		=	$(patsubst %.c, %.o, $(SRCS))
 
-INCDIR =
-CFLAGS = -G0 -O2 -DPSP
-CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti -fpermissive
-ASFLAGS = $(CFLAGS)
+PSPSDK=$(shell psp-config --pspsdk-path)
+
+CFLAGS = -G0 -O2 -DPSP -I$(PSPSDK)/../include/SDL2
 
 LIBDIR =
 LDFLAGS =
-LIBS = -lSDL2main -lpng -ljpeg -lSDL2_mixer -lstdc++ -lSDL2_ttf -lSDL2 -lGL -lGLU -lglut -lfreetype -lz -lbz2 -lpspmp3 -lmad -logg -lvorbisenc -lvorbis -lvorbisfile -lmikmod \
+LIBS = -lSDL2main -lpng -ljpeg -lSDL2_mixer -lSDL2_ttf -lSDL2 -lGL -lGLU -lglut -lfreetype -lz -lbz2 -lpspmp3 -lmad -logg -lvorbisenc -lvorbis -lvorbisfile -lmikmod -lharfbuzz \
          -lpspvfpu -lpsphprm -lpspsdk -lpspctrl -lpspumd -lpsprtc -lpsppower -lpspgum -lpspgu -lpspaudiolib -lpspaudio \
          -lm -lpspvram
-
-# -lpsphttp -lpspssl -lpspwlan -lpspnet_adhocmatching -lpspnet_adhoc -lpspnet_adhocctl
 
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = blockamok
@@ -25,9 +22,4 @@ PSP_EBOOT_ICON = release-resources/logo_icon_psp.png
 PSP_EBOOT_PIC1 = release-resources/background_psp.png
 # psp sound file: PSP_EBOOT_SND0=SND0.at3
 
-PSPSDK=$(shell psp-config --pspsdk-path)
 include $(PSPSDK)/lib/build.mak
-#PSPSDK=/usr/local/pspdev/psp/sdk
-
-#PSPSDK=C:/pspsdk/psp/sdk
-#include C:/pspsdk/psp/sdk/lib/build.mak
