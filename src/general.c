@@ -1,12 +1,15 @@
+#include "./general.h"
+
 void systemSpecificOpen() {
 #if defined(WII_U)
 	/* Set SD Card Mount Path */
 	WHBMountSdCard();
 	WHBGetSdCardMountPath();
-	string sdPathStr = "/wiiu/apps/blockamok";
+	char sdPathStr[256];
 	const char *sdPathStart = WHBGetSdCardMountPath();
-	sdPathStr = sdPathStart + sdPathStr;
-	const char *sdPath = sdPathStr.c_str();
+	strcpy(sdPathStr, sdPathStart);
+	strcat(sdPathStr, "/wiiu/apps/blockamok");
+	const char *sdPath = sdPathStr;
 	chdir(sdPath);
 #elif defined(VITA)
 	/* Disable rear touch pad */

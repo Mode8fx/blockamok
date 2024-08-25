@@ -37,12 +37,12 @@ int faceOrder[5];
 SDL_Vertex triangle1[3];
 SDL_Vertex triangle2[3];
 
-const float HEIGHT_DOUBLE = HEIGHT * 2.0f;
-const float HEIGHT_HALF = HEIGHT * 0.5f;
-const float HEIGHT_NEG = -HEIGHT;
-const float WIDTH_DOUBLE = WIDTH * 2.0f;
-const float WIDTH_HALF = WIDTH * 0.5f;
-const float WIDTH_NEG = -WIDTH;
+float HEIGHT_DOUBLE;
+float HEIGHT_HALF;
+float HEIGHT_NEG;
+float WIDTH_DOUBLE;
+float WIDTH_HALF;
+float WIDTH_NEG;
 
 void setScalingVals() {
   float largerAspectRatio;
@@ -54,6 +54,12 @@ void setScalingVals() {
     largerAspectRatio = ((float)HEIGHT / WIDTH);
     smallerAspectRatio = ((float)WIDTH / HEIGHT);
   }
+  HEIGHT_DOUBLE = HEIGHT * 2.0f;
+  HEIGHT_HALF = HEIGHT * 0.5f;
+  HEIGHT_NEG = -HEIGHT;
+  WIDTH_DOUBLE = WIDTH * 2.0f;
+  WIDTH_HALF = WIDTH * 0.5f;
+  WIDTH_NEG = -WIDTH;
 
   MAX_DEPTH = 150 * largerAspectRatio;
   HALF_FOV_ANGLE_RADIANS = ((ADJUSTED_FOV / 180.0) * M_PI) / 2;

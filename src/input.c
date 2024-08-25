@@ -1,6 +1,14 @@
 #include "./input.h"
 
-#if defined(PSP)
+#if defined(WII)
+#include <wiiuse/wpad.h>
+#elif defined(GAMECUBE)
+#include <ogc/pad.h>
+#elif defined(PSP)
+#include <pspctrl.h>
+#endif
+
+#if defined(SDL1)
 SDL_Joystick *controller = NULL;
 #else
 SDL_GameController *controller = NULL;
@@ -205,7 +213,7 @@ static inline void updateLastKeys() {
 }
 
 void controllerInit() {
-#if defined(PSP)
+#if defined(SDL1)
 	SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
 	controller = SDL_JoystickOpen(0);
 #else
@@ -247,7 +255,7 @@ static inline void mapInputToVar_Keyboard(const Uint8 *state, Uint16 varBtn, Sin
 }
 #endif
 
-#if defined(WII) || defined(GAMECUBE) || defined(PSP)
+#if defined(PSP) || defined(WII) || defined(GAMECUBE)
 static inline void mapInputToVar_GeneralConsole(Uint32 heldButtons, Uint16 varBtn, Sint32 inputBtn) {
 	if (heldButtons & inputBtn) {
 		heldKeys |= varBtn;
@@ -313,30 +321,31 @@ static void handleAllCurrentInputs() {
 
 #if defined(WII) || defined(GAMECUBE)
 	PAD_ScanPads();
-	u32 heldButtonsGC = PAD_ButtonsHeld(0);
+	Uint32 heldButtonsGC = PAD_ButtonsHeld(0);
 	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_UP, PAD_BUTTON_UP);
 	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_DOWN, PAD_BUTTON_DOWN);
 	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_LEFT, PAD_BUTTON_LEFT);
 	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_RIGHT, PAD_BUTTON_RIGHT);
-	mapInputToVar_GeneralConsole(INPUT_A, PAD_BUTTON_A);
-	mapInputToVar_GeneralConsole(INPUT_B, PAD_BUTTON_B);
-	mapInputToVar_GeneralConsole(INPUT_X, PAD_BUTTON_X);
-	mapInputToVar_GeneralConsole(INPUT_Y, PAD_BUTTON_Y);
-	mapInputToVar_GeneralConsole(INPUT_L, PAD_TRIGGER_L);
-	mapInputToVar_GeneralConsole(INPUT_R, PAD_TRIGGER_R);
-	mapInputToVar_GeneralConsole(INPUT_START, PAD_BUTTON_START);
-	mapInputToVar_GeneralConsole(INPUT_SELECT, PAD_TRIGGER_Z);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_A, PAD_BUTTON_A);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_B, PAD_BUTTON_B);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_X, PAD_BUTTON_X);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_Y, PAD_BUTTON_Y);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_L, PAD_TRIGGER_L);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_R, PAD_TRIGGER_R);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_START, PAD_BUTTON_START);
+	mapInputToVar_GeneralConsole(heldButtonsGC, INPUT_SELECT, PAD_TRIGGER_Z);
 
 	leftStick.x = PAD_StickX(0) * 256;
 	leftStick.y = PAD_StickY(0) * -256;
 	rightStick.x = PAD_SubStickX(0) * 256;
 	rightStick.y = PAD_SubStickY(0) * -256;
-	applyStickZones();
+	applyStickZones(&leftStick);
+	applyStickZones(&rightStick);
 #endif
 
 #if defined(WII)
 	WPAD_ScanPads();
-	u32 heldButtonsWii = WPAD_ButtonsHeld(0);
+	Uint32 heldButtonsWii = WPAD_ButtonsHeld(0);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_UP, WPAD_BUTTON_RIGHT);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_DOWN, WPAD_BUTTON_LEFT);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_LEFT, WPAD_BUTTON_UP);
@@ -348,33 +357,38 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_START, WPAD_BUTTON_PLUS);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_SELECT, WPAD_BUTTON_MINUS);
 
-	mapInputToVar_GeneralConsole(INPUT_UP, WPAD_CLASSIC_BUTTON_UP);
-	mapInputToVar_GeneralConsole(INPUT_DOWN, WPAD_CLASSIC_BUTTON_DOWN);
-	mapInputToVar_GeneralConsole(INPUT_LEFT, WPAD_CLASSIC_BUTTON_LEFT);
-	mapInputToVar_GeneralConsole(INPUT_RIGHT, WPAD_CLASSIC_BUTTON_RIGHT);
-	mapInputToVar_GeneralConsole(INPUT_A, WPAD_CLASSIC_BUTTON_A);
-	mapInputToVar_GeneralConsole(INPUT_B, WPAD_CLASSIC_BUTTON_B);
-	mapInputToVar_GeneralConsole(INPUT_X, WPAD_CLASSIC_BUTTON_X);
-	mapInputToVar_GeneralConsole(INPUT_Y, WPAD_CLASSIC_BUTTON_Y);
-	mapInputToVar_GeneralConsole(INPUT_L, WPAD_CLASSIC_BUTTON_FULL_L);
-	mapInputToVar_GeneralConsole(INPUT_R, WPAD_CLASSIC_BUTTON_FULL_R);
-	mapInputToVar_GeneralConsole(INPUT_START, WPAD_CLASSIC_BUTTON_PLUS);
-	mapInputToVar_GeneralConsole(INPUT_SELECT, WPAD_CLASSIC_BUTTON_MINUS);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_UP, WPAD_CLASSIC_BUTTON_UP);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_DOWN, WPAD_CLASSIC_BUTTON_DOWN);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_LEFT, WPAD_CLASSIC_BUTTON_LEFT);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_RIGHT, WPAD_CLASSIC_BUTTON_RIGHT);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_A, WPAD_CLASSIC_BUTTON_A);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_B, WPAD_CLASSIC_BUTTON_B);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_X, WPAD_CLASSIC_BUTTON_X);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_Y, WPAD_CLASSIC_BUTTON_Y);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_L, WPAD_CLASSIC_BUTTON_FULL_L);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_R, WPAD_CLASSIC_BUTTON_FULL_R);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_START, WPAD_CLASSIC_BUTTON_PLUS);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_SELECT, WPAD_CLASSIC_BUTTON_MINUS);
 
 	// Gamecube Controller input should supercede Classic Controller
-	if (leftStick.x == 0) {
-		leftStick.x = WPAD_Stick(WPAD_CHAN_0, 0, 0) * 256;
+	expansion_t wii_exp;
+	WPAD_Expansion(WPAD_CHAN_0, &wii_exp);
+	if (wii_exp.type == EXP_CLASSIC) {
+		if (leftStick.x == 0) {
+			leftStick.x = ((Sint16)wii_exp.classic.ljs.pos.x - 32) * 1023;
+		}
+		if (leftStick.y == 0) {
+			leftStick.y = ((Sint16)wii_exp.classic.ljs.pos.y - 32) * -1023;
+		}
+		if (leftStick.x == 0) {
+			rightStick.x = ((Sint16)wii_exp.classic.rjs.pos.x - 32) * 1023;
+		}
+		if (leftStick.y == 0) {
+			rightStick.y = ((Sint16)wii_exp.classic.rjs.pos.y - 32) * -1023;
+		}
 	}
-	if (leftStick.y == 0) {
-		leftStick.y = WPAD_Stick(WPAD_CHAN_0, 0, 1) * -256;
-	}
-	if (rightStick.x == 0) {
-		rightStick.x = WPAD_Stick(WPAD_CHAN_0, 1, 0) * 256;
-	}
-	if (rightStick.y == 0) {
-		rightStick.y = WPAD_Stick(WPAD_CHAN_0, 1, 1) * -256;
-	}
-	applyStickZones();
+	applyStickZones(&leftStick);
+	applyStickZones(&rightStick);
 #endif
 
 #if defined(PSP)
@@ -395,7 +409,7 @@ static void handleAllCurrentInputs() {
 
 	leftStick.x = (pad.Lx - 128) * 256;
 	leftStick.y = (pad.Ly - 128) * 256;
-	applyStickZones();
+	applyStickZones(&leftStick);
 #endif
 
 	gameSpecificInputBehavior();
@@ -421,10 +435,10 @@ static void handleAllCurrentInputs() {
 	const char *btn_Start = "Enter/Start";
 	const char *btn_Select = "Backspace/Select";
 #elif defined(GAMECUBE)
-	const char *btn_Up = "D-Up";
-	const char *btn_Down = "D-Down";
-	const char *btn_Left = "D-Left";
-	const char *btn_Right = "D-Right";
+	const char *btn_Up = "Up";
+	const char *btn_Down = "Down";
+	const char *btn_Left = "Left";
+	const char *btn_Right = "Right";
 	const char *btn_A = "A";
 	const char *btn_B = "B";
 	const char *btn_X = "X";

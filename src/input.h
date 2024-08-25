@@ -5,7 +5,7 @@
 
 extern double deltaTime;
 
-#if defined(PSP)
+#if defined(SDL1)
 extern SDL_Joystick *controller;
 #else
 extern SDL_GameController *controller;

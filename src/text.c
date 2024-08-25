@@ -19,9 +19,6 @@ Message message_credits_4;
 
 SDL_Rect score_rect;
 
-const float textWidthMult = WIDTH / 1000.0f;
-const float textHeightMult = HEIGHT / 1000.0f;
-
 static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, Message *message, float sizeMult, SDL_Color color) {
 	message->surface = TTF_RenderText_Solid(font, message->text, color);
 	message->rect.w = message->surface->w * sizeMult;

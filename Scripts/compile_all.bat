@@ -1,7 +1,7 @@
 @echo off
 
 :: Manual sleep amounts (because `start /wait` doesn't work...)
-set SLEEP_COMPILE=20
+set SLEEP_COMPILE=15
 set SLEEP_COMPILE_SHORT=5
 set SLEEP_CLEAN=2
 
