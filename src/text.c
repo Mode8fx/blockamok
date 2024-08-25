@@ -2,6 +2,7 @@
 #include "./input.h"
 #include "./draw.h"
 #include "./game.h"
+#include "./fonts/Mono.h"
 
 TTF_Font *Sans_42 = NULL;
 int outlineSize_42;
@@ -108,12 +109,17 @@ static void setMessagePosRelativeToScreen(Message *message, float x, float y) {
 ///////////////////
 
 void initStaticMessages(SDL_Renderer *renderer) {
+  // Initialize TTF_Fonts
+  SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
+
   int textSize_42 = 42 * HEIGHT / 1000;
-	outlineSize_42 = textSize_42 / 10;
-  Sans_42 = TTF_OpenFont("Mono.ttf", textSize_42);
-	int textSize_38 = 38 * HEIGHT / 1000;
-	Sans_38 = TTF_OpenFont("Mono.ttf", textSize_38);
-	outlineSize_38 = textSize_38 / 10;
+  outlineSize_42 = textSize_42 / 10;
+  Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
+
+  SDL_RWseek(rw, 0, RW_SEEK_SET);
+  int textSize_38 = 38 * HEIGHT / 1000;
+  outlineSize_38 = textSize_38 / 10;
+  Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
 
   // Title Screen
   sprintf(message_titlescreen.text, "Blockamok");

@@ -15,6 +15,8 @@ add_executable(blockamok
 	"src/math_custom.h"
 	"src/text.c"
 	"src/text.h"
+	"src/fonts/Mono.c"
+	"src/fonts/Mono.h"
 )
 find_package(PkgConfig REQUIRED)
 

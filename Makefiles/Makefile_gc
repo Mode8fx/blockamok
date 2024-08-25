@@ -22,10 +22,10 @@ include $(DEVKITPPC)/gamecube_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	boot
 BUILD		:=	build_gc
-SOURCES		:=	src
+SOURCES		:=	src src/fonts
 DATA		:=  data
 TEXTURES	:=
-INCLUDES	:=	src
+INCLUDES	:=	src src/fonts
 
 #---------------------------------------------------------------------------------
 # options for code generation

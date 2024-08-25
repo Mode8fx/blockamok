@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\draw.c" />
+    <ClCompile Include="src\fonts\Mono.c" />
     <ClCompile Include="src\game.c" />
     <ClCompile Include="src\general.c" />
     <ClCompile Include="src\input.c" />
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h" />
+    <ClInclude Include="src\fonts\Mono.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\general.h" />
     <ClInclude Include="src\input.h" />
