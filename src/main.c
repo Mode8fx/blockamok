@@ -89,21 +89,38 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
           gameState = GAME_STATE_PLAYING;
-				} else if (keyPressed(INPUT_SELECT)) {
+        } else if (keyPressed(INPUT_X)) {
+          gameState = GAME_STATE_INSTRUCTIONS;
+				} else if (keyPressed(INPUT_Y)) {
 					gameState = GAME_STATE_CREDITS;
-				}
+				} else if (keyPressed(INPUT_SELECT)) {
+          quit = true;
+        }
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer);
         break;
+
+      case GAME_STATE_INSTRUCTIONS:
+        if (keyPressed(INPUT_LEFT) || keyPressed(INPUT_RIGHT)) {
+					isAnalog = !isAnalog;
+        } else if (keyPressed(INPUT_B) || keyPressed(INPUT_START) || keyPressed(INPUT_SELECT)) {
+          gameState = GAME_STATE_TITLE_SCREEN;
+        }
+        draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawInstructionsText(renderer);
+        break;
+
 			case GAME_STATE_CREDITS:
-        if (keyPressed(INPUT_SELECT)) {
+        if (keyPressed(INPUT_B) || keyPressed(INPUT_START) || keyPressed(INPUT_SELECT)) {
           gameState = GAME_STATE_TITLE_SCREEN;
         }
 				draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawCreditsText(renderer);
         break;
+
       case GAME_STATE_PLAYING:
         gameLoop();
         if (keyPressed(INPUT_START)) {
@@ -113,6 +130,7 @@ int main(int arg, char *argv[]) {
         drawCubes(renderer, cubes, cubesLength);
         drawScoreText(renderer);
         break;
+
       case GAME_STATE_PAUSED:
         if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PLAYING;
@@ -126,6 +144,7 @@ int main(int arg, char *argv[]) {
         drawScoreText(renderer);
         drawPausedText(renderer);
         break;
+
       case GAME_STATE_GAME_OVER:
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);

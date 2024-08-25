@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <stdbool.h>
 
 #define CUBE_FACE_POINTS_N 4
 #define CUBE_FACE_N 5
@@ -8,13 +9,18 @@
 #define FRONT_I 16        // 4 * 4
 
 #define GAME_STATE_TITLE_SCREEN 0
-#define GAME_STATE_PLAYING 1
-#define GAME_STATE_GAME_OVER 2
-#define GAME_STATE_PAUSED 3
-#define GAME_STATE_CREDITS 4
+#define GAME_STATE_INSTRUCTIONS 1
+#define GAME_STATE_CREDITS 2
+#define GAME_STATE_PLAYING 3
+#define GAME_STATE_PAUSED 4
+#define GAME_STATE_GAME_OVER 5
 
 extern Uint64 gameStartTime;
 extern double scoreVal;
+
+extern bool isAnalog;
+extern Sint16 movementMagnitudeX;
+extern Sint16 movementMagnitudeY;
 
 typedef struct {
   float z;

@@ -7,7 +7,8 @@
 #include "./input.h"
 
 const float PLAYER_INITIAL_SPEED = 100;
-const float BASE_TURN_SPEED = 30;
+const float BASE_TURN_SPEED_TYPE_A = 30; // effectively 42.43 when diagonal
+const float BASE_TURN_SPEED_TYPE_B = 36.21;
 
 const int CUBE_AMOUNT = 600;
 
@@ -22,6 +23,10 @@ const Uint16 MAX_SPEED = 1500;
 const float CUBE_SIZE = 0.5;
 
 float playerSpeed;
+
+bool isAnalog;
+Sint16 movementMagnitudeX;
+Sint16 movementMagnitudeY;
 
 static void addNewCube(Cube cubes[], int *cubesLength) {
   Point point = {
@@ -102,7 +107,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
     addNewCube(cubes, cubesLength);
   }
 
-  bool speedingUp = (keyHeld(INPUT_A));
+  bool speedingUp = (keyHeld(INPUT_A) || keyHeld(INPUT_B));
 
   playerSpeed += deltaTime * SPEED_INCREASE * (speedingUp ? 3 : 1);
   if (playerSpeed > MAX_SPEED) {
@@ -110,24 +115,33 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
   }
 
   float speed = playerSpeed * deltaTime;
-  float turnSpeed = (BASE_TURN_SPEED + playerSpeed / 50) * deltaTime;
 
   int cubesRemoved = 0;
 
   float xDiff = 0;
   float yDiff = 0;
-  if (dirHeld_Up()) {
-    yDiff = +turnSpeed;
+
+  if (!isAnalog) {
+    float turnSpeed = (BASE_TURN_SPEED_TYPE_A + playerSpeed / 50) * deltaTime;
+    if (dirHeld_Up()) {
+      yDiff = +turnSpeed;
+    }
+    if (dirHeld_Down()) {
+      yDiff = -turnSpeed;
+    }
+    if (dirHeld_Left()) {
+      xDiff = +turnSpeed;
+    }
+    if (dirHeld_Right()) {
+      xDiff = -turnSpeed;
+    }
   }
-  if (dirHeld_Down()) {
-    yDiff = -turnSpeed;
+  else {
+    float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTime;
+    xDiff = turnSpeed * -movementMagnitudeX / 32767;
+		yDiff = turnSpeed * -movementMagnitudeY / 32767;
   }
-  if (dirHeld_Left()) {
-    xDiff = +turnSpeed;
-  }
-  if (dirHeld_Right()) {
-    xDiff = -turnSpeed;
-  }
+
   float zSpeed = -speed;
   if (speedingUp) {
     zSpeed *= SPEED_UP_MULT;

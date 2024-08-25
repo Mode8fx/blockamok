@@ -1,4 +1,5 @@
 #include "./input.h"
+#include "./game.h"
 
 #if defined(WII)
 #include <wiiuse/wpad.h>
@@ -66,7 +67,7 @@ inline bool stickIsLeft(Stick stick) {
 }
 
 inline bool stickIsRight(Stick stick) {
-	return stick.y > stick.threshold;
+	return stick.x > stick.threshold;
 }
 
 static inline bool stickWasUp(Stick stick) {
@@ -82,7 +83,7 @@ static inline bool stickWasLeft(Stick stick) {
 }
 
 static inline bool stickWasRight(Stick stick) {
-	return stick.y_last > stick.threshold;
+	return stick.x_last > stick.threshold;
 }
 
 static inline bool stickPressedUp() {
@@ -233,6 +234,27 @@ void controllerInit() {
 
 static inline void gameSpecificInputBehavior() {
 	//mapStickToHeldKeys(leftStick);
+	// Map input to analog movement (where D-pad input is absolute)
+	if (keyHeld(INPUT_LEFT) != keyHeld(INPUT_RIGHT)) {
+		if (keyHeld(INPUT_LEFT)) {
+			movementMagnitudeX = -32767;
+		}
+		else {
+			movementMagnitudeX = 32767;
+		}
+	} else {
+		movementMagnitudeX = leftStick.x;
+	}
+	if (keyHeld(INPUT_UP) != keyHeld(INPUT_DOWN)) {
+		if (keyHeld(INPUT_UP)) {
+			movementMagnitudeY = -32767;
+		}
+		else {
+			movementMagnitudeY = 32767;
+		}
+	} else {
+		movementMagnitudeY = leftStick.y;
+	}
 }
 
 ///////////////////
@@ -308,12 +330,15 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_RIGHT, SDL_SCANCODE_D);
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_LSHIFT);
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_RSHIFT);
+	mapInputToVar_Keyboard(state, INPUT_B, SDL_SCANCODE_BACKSPACE);
+	mapInputToVar_Keyboard(state, INPUT_X, SDL_SCANCODE_I);
+	mapInputToVar_Keyboard(state, INPUT_Y, SDL_SCANCODE_C);
 	mapInputToVar_Keyboard(state, INPUT_L, SDL_SCANCODE_MINUS);
 	mapInputToVar_Keyboard(state, INPUT_R, SDL_SCANCODE_EQUALS);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN2);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_KP_ENTER);
-	mapInputToVar_Keyboard(state, INPUT_SELECT, SDL_SCANCODE_BACKSPACE);
+	mapInputToVar_Keyboard(state, INPUT_SELECT, SDL_SCANCODE_ESCAPE);
 #if defined(ANDROID)
 	mapInputToVar_Button_Keyboard(state, INPUT_START, SDLK_AC_BACK);
 #endif
@@ -425,15 +450,15 @@ static void handleAllCurrentInputs() {
 	const char *btn_Left = "Left";
 	const char *btn_Right = "Right";
 	const char *btn_A = "Shift/A";
-	const char *btn_B = "?";
-	const char *btn_X = "?";
-	const char *btn_Y = "?";
+	const char *btn_B = "Backspace/B";
+	const char *btn_X = "I/X";
+	const char *btn_Y = "C/Y";
 	const char *btn_L = "-";
 	const char *btn_R = "=";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
 	const char *btn_Start = "Enter/Start";
-	const char *btn_Select = "Backspace/Select";
+	const char *btn_Select = "Esc/Select";
 #elif defined(GAMECUBE)
 	const char *btn_Up = "Up";
 	const char *btn_Down = "Down";
