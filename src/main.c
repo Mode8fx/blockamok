@@ -34,7 +34,7 @@ static void prepareGame() {
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
   gameStartTime = SDL_GetTicks();
-  srand(time(NULL));
+  srand((Uint32)time(NULL));
   gameInit(cubes, &cubesLength);
 }
 
@@ -51,8 +51,8 @@ static void init() {
   controllerInit();
   TTF_Init();
   initStaticMessages(renderer);
-  widthMult = fmin((float)HEIGHT / WIDTH, 1);
-  heightMult = fmin((float)WIDTH / HEIGHT, 1);
+  widthMult = fminf((float)HEIGHT / WIDTH, 1);
+  heightMult = fminf((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5f / heightMult;
   cubeCollisionCompareY = 0.5f / widthMult;
   prepareGame();

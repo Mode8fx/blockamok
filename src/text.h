@@ -5,9 +5,10 @@
 
 typedef struct {
 	char text[100];
-	SDL_Rect rect;
-	SDL_Surface *surface;
-	SDL_Texture *texture;
+	SDL_Rect text_rect;
+	SDL_Rect outline_rect;
+	SDL_Texture *text_texture;
+	SDL_Texture *outline_texture;
 } Message;
 
 extern void initStaticMessages(SDL_Renderer *renderer);
