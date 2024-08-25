@@ -12,6 +12,7 @@ Message message_titlescreen_pressselect;
 Message message_score;
 Message message_gameover;
 Message message_paused;
+Message message_paused_quit;
 Message message_credits_1;
 Message message_credits_2;
 Message message_credits_3;
@@ -58,14 +59,19 @@ void initStaticMessages(SDL_Renderer *renderer) {
 	// Game Over Screen
   sprintf(message_gameover.text, "GAME OVER");
   prepareMessage(renderer, Sans, &message_gameover, 3, color_black);
-  message_gameover.rect.x = WIDTH / 2 - message_gameover.rect.w / 2;
-  message_gameover.rect.y = HEIGHT / 2 - message_gameover.rect.h / 2;
+  message_gameover.rect.x = WIDTH * 0.5f - message_gameover.rect.w * 0.5f;
+  message_gameover.rect.y = HEIGHT * 0.5f - message_gameover.rect.h * 0.5f;
 
 	// Pause Screen
   sprintf(message_paused.text, "PAUSED");
   prepareMessage(renderer, Sans, &message_paused, 3, color_black);
-  message_paused.rect.x = WIDTH / 2 - message_paused.rect.w / 2;
-  message_paused.rect.y = HEIGHT / 2 - message_paused.rect.h / 2;
+  message_paused.rect.x = WIDTH * 0.5f - message_paused.rect.w * 0.5f;
+  message_paused.rect.y = HEIGHT * 0.5f - message_paused.rect.h * 0.5f;
+
+  sprintf(message_paused_quit.text, "Press %s to quit", btn_Select);
+  prepareMessage(renderer, Sans, &message_paused_quit, 1, color_black);
+  message_paused_quit.rect.x = WIDTH * 0.5f - message_paused_quit.rect.w * 0.5f;
+  message_paused_quit.rect.y = HEIGHT * 0.65f - message_paused_quit.rect.h * 0.5f;
 
   // Credits Screen
   sprintf(message_credits_1.text, "Original game by Carl Riis");
@@ -115,4 +121,5 @@ inline void drawGameOverText(SDL_Renderer *renderer) {
 
 inline void drawPausedText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_paused);
+  renderMessage(renderer, &message_paused_quit);
 }

@@ -114,13 +114,17 @@ int main(int arg, char *argv[]) {
         drawScoreText(renderer);
         break;
       case GAME_STATE_PAUSED:
+        if (keyPressed(INPUT_START)) {
+          gameState = GAME_STATE_PLAYING;
+        } else if (keyPressed(INPUT_SELECT)) {
+          prepareGame();
+          gameFrame((float)deltaTime, cubes, &cubesLength);
+          gameState = GAME_STATE_TITLE_SCREEN;
+        }
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawScoreText(renderer);
         drawPausedText(renderer);
-        if (keyPressed(INPUT_START)) {
-          gameState = GAME_STATE_PLAYING;
-        }
         break;
       case GAME_STATE_GAME_OVER:
         draw(renderer);
