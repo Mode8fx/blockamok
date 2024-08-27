@@ -75,8 +75,8 @@
     <LibraryPath>D:\GitHub\blockamok\SDL2\SDL2\lib\x64;D:\GitHub\blockamok\SDL2\SDL2_ttf\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\GitHub\blockamok\SDL2\SDL2\include;D:\GitHub\blockamok\SDL2\SDL2_ttf\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\GitHub\blockamok\SDL2\SDL2\lib\x64;D:\GitHub\blockamok\SDL2\SDL2_ttf\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\GitHub\blockamok\SDL2\SDL2\include;D:\GitHub\blockamok\SDL2\SDL2_ttf\include;D:\GitHub\blockamok\SDL2\SDL2_mixer\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\GitHub\blockamok\SDL2\SDL2\lib\x64;D:\GitHub\blockamok\SDL2\SDL2_ttf\lib\x64;D:\GitHub\blockamok\SDL2\SDL2_mixer\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,10 +139,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_ttf.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_ttf.lib;SDL2_mixer.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\audio.c" />
+    <ClCompile Include="src\audio\mano_-_darkness_in_the_night.c" />
+    <ClCompile Include="src\audio\spaceranger_50k.c" />
     <ClCompile Include="src\draw.c" />
     <ClCompile Include="src\fonts\Mono.c" />
     <ClCompile Include="src\game.c" />
@@ -153,6 +156,9 @@
     <ClCompile Include="src\text.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\audio.h" />
+    <ClInclude Include="src\audio\mano_-_darkness_in_the_night.h" />
+    <ClInclude Include="src\audio\spaceranger_50k.h" />
     <ClInclude Include="src\draw.h" />
     <ClInclude Include="src\fonts\Mono.h" />
     <ClInclude Include="src\game.h" />

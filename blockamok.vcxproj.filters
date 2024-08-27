@@ -39,6 +39,15 @@
     <ClCompile Include="src\fonts\Mono.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\audio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\mano_-_darkness_in_the_night.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\spaceranger_50k.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h">
@@ -60,6 +69,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\fonts\Mono.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\mano_-_darkness_in_the_night.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\spaceranger_50k.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

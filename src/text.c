@@ -72,34 +72,40 @@ static inline void renderMessage(SDL_Renderer *renderer, Message *message) {
 	SDL_RenderCopy(renderer, message->text_texture, NULL, &message->text_rect);
 }
 
+static inline void renderAndDestroyMessage(SDL_Renderer *renderer, Message *message) {
+  renderMessage(renderer, message);
+	SDL_DestroyTexture(message->text_texture);
+	SDL_DestroyTexture(message->outline_texture);
+}
+
 ///////////////////
 // TEXT POSITION //
 ///////////////////
 
-static void setMessagePosX(Message *message, int x) {
+static inline void setMessagePosX(Message *message, int x) {
   message->text_rect.x = x;
   message->outline_rect.x = message->text_rect.x - (message->outline_rect.w - message->text_rect.w) / 2;
 }
 
-static void setMessagePosY(Message *message, int y) {
+static inline void setMessagePosY(Message *message, int y) {
 	message->text_rect.y = y;
 	message->outline_rect.y = message->text_rect.y - (message->outline_rect.h - message->text_rect.h) / 2;
 }
 
-static void setMessagePos(Message *message, int x, int y) {
+static inline void setMessagePos(Message *message, int x, int y) {
 	setMessagePosX(message, x);
 	setMessagePosY(message, y);
 }
 
-static void setMessagePosRelativeToScreenX(Message *message, float x) {
+static inline void setMessagePosRelativeToScreenX(Message *message, float x) {
 	setMessagePosX(message, (int)(WIDTH * x - message->text_rect.w * 0.5f));
 }
 
-static void setMessagePosRelativeToScreenY(Message *message, float y) {
+static inline void setMessagePosRelativeToScreenY(Message *message, float y) {
 	setMessagePosY(message, (int)(HEIGHT * y - message->text_rect.h * 0.5f));
 }
 
-static void setMessagePosRelativeToScreen(Message *message, float x, float y) {
+static inline void setMessagePosRelativeToScreen(Message *message, float x, float y) {
 	setMessagePosRelativeToScreenX(message, x);
 	setMessagePosRelativeToScreenY(message, y);
 }
@@ -263,7 +269,7 @@ inline void drawScoreText(SDL_Renderer *renderer) {
   sprintf(message_score.text, "%d", (int)scoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_score, 1, color_white, color_black);
 	setMessagePosRelativeToScreenX(&message_score, 0.5f);
-	renderMessage(renderer, &message_score);
+  renderAndDestroyMessage(renderer, &message_score);
 }
 
 inline void drawGameOverText(SDL_Renderer *renderer) {

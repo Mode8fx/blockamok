@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -39,7 +40,7 @@ static void prepareGame() {
 }
 
 static void init() {
-  SDL_Init(SDL_INIT_EVERYTHING);
+  SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
 #if !defined(SDL1)
   SDL_GetCurrentDisplayMode(0, &DM);
 #endif
@@ -51,6 +52,9 @@ static void init() {
   controllerInit();
   TTF_Init();
   initStaticMessages(renderer);
+  Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+  initAudio();
+  playMusicAtIndex(0);
   widthMult = fminf((float)HEIGHT / WIDTH, 1);
   heightMult = fminf((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5f / heightMult;
@@ -83,6 +87,7 @@ int main(int arg, char *argv[]) {
     }
 
     handlePlayerInput();
+    handleChangeSong();
 
     switch (gameState) {
       case GAME_STATE_TITLE_SCREEN:

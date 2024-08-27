@@ -453,8 +453,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_B = "Backspace/B";
 	const char *btn_X = "I/X";
 	const char *btn_Y = "C/Y";
-	const char *btn_L = "-";
-	const char *btn_R = "=";
+	const char *btn_L = "-/L";
+	const char *btn_R = "=/R";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
 	const char *btn_Start = "Enter/Start";
