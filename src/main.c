@@ -11,11 +11,11 @@
 #include "./math_custom.h"
 #include "./input.h"
 #include "./general.h"
+#include "./archipelago.h"
 
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
-int gameState = GAME_STATE_TITLE_SCREEN;
 
 Uint64 now = 0;
 Uint64 last = 0;
@@ -99,6 +99,11 @@ int main(int arg, char *argv[]) {
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer);
+        if (ap_isEnabled) {
+          ap_drawIsEnabledText(renderer);
+        } else {
+          ap_handleInputCheck();
+        }
         break;
 
       case GAME_STATE_INSTRUCTIONS:
@@ -153,9 +158,27 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_START)) {
           prepareGame();
           gameFrame((float)deltaTime, cubes, &cubesLength);
-          gameState = GAME_STATE_TITLE_SCREEN;
+          if (ap_isEnabled && ap_pointsUntilHint <= 0) {
+            ap_handleHintCheck();
+						gameState = GAME_STATE_ARCHIPELAGO_HINT;
+          } else {
+            gameState = GAME_STATE_TITLE_SCREEN;
+          }
         }
         break;
+
+			case GAME_STATE_ARCHIPELAGO_LOGIN:
+        draw(renderer);
+        ap_handleLoginScreen();
+				break;
+
+			case GAME_STATE_ARCHIPELAGO_HINT:
+        if (keyPressed(INPUT_B)) {
+					gameState = GAME_STATE_TITLE_SCREEN;
+        }
+				draw(renderer);
+				ap_handleHintScreen();
+				break;
     }
 
     SDL_RenderPresent(renderer);

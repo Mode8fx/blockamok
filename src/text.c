@@ -2,6 +2,7 @@
 #include "./input.h"
 #include "./draw.h"
 #include "./game.h"
+#include "./archipelago.h"
 #include "./fonts/Mono.h"
 
 TTF_Font *Sans_42 = NULL;
@@ -38,6 +39,9 @@ Message message_credits_1;
 Message message_credits_2;
 Message message_credits_3;
 Message message_credits_4;
+
+Message ap_message_isEnabled;
+Message ap_message_pointsUntilHint;
 
 SDL_Rect score_rect;
 
@@ -273,4 +277,16 @@ inline void drawGameOverText(SDL_Renderer *renderer) {
 inline void drawPausedText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_paused);
   renderMessage(renderer, &message_paused_quit);
+}
+
+inline void ap_drawIsEnabledText(SDL_Renderer *renderer) {
+  sprintf(ap_message_isEnabled.text, "Connected to AP room %s", ap_room);
+  prepareMessage(renderer, Sans_38, outlineSize_38, &ap_message_isEnabled, 1, color_white, color_black);
+  setMessagePosRelativeToScreen(&ap_message_isEnabled, 0.5f, 0.15f);
+  renderMessage(renderer, &ap_message_isEnabled);
+
+  sprintf(ap_message_pointsUntilHint.text, "Points until next hint: %d", ap_pointsUntilHint);
+  prepareMessage(renderer, Sans_38, outlineSize_38, &ap_message_pointsUntilHint, 1, color_white, color_black);
+  setMessagePosRelativeToScreen(&ap_message_pointsUntilHint, 0.5f, 0.2f);
+  renderMessage(renderer, &ap_message_pointsUntilHint);
 }

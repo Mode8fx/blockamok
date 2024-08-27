@@ -18,3 +18,4 @@ extern void drawCreditsText(SDL_Renderer *renderer);
 extern void drawScoreText(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);
 extern void drawPausedText(SDL_Renderer *renderer);
+extern void ap_drawIsEnabledText(SDL_Renderer *renderer);

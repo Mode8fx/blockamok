@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\archipelago.c" />
     <ClCompile Include="src\draw.c" />
     <ClCompile Include="src\fonts\Mono.c" />
     <ClCompile Include="src\game.c" />
@@ -153,6 +154,7 @@
     <ClCompile Include="src\text.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\archipelago.h" />
     <ClInclude Include="src\draw.h" />
     <ClInclude Include="src\fonts\Mono.h" />
     <ClInclude Include="src\game.h" />

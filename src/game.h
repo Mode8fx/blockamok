@@ -14,6 +14,10 @@
 #define GAME_STATE_PLAYING 3
 #define GAME_STATE_PAUSED 4
 #define GAME_STATE_GAME_OVER 5
+#define GAME_STATE_ARCHIPELAGO_LOGIN 6
+#define GAME_STATE_ARCHIPELAGO_HINT 7
+
+extern int gameState;
 
 extern Uint64 gameStartTime;
 extern double scoreVal;
