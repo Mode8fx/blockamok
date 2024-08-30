@@ -12,11 +12,12 @@
 #include "./math_custom.h"
 #include "./input.h"
 #include "./general.h"
+#include "./game_init.h"
 
 SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
-int gameState = GAME_STATE_TITLE_SCREEN;
+int gameState = GAME_STATE_STARTED;
 
 Uint64 now = 0;
 Uint64 last = 0;
@@ -59,6 +60,7 @@ static void init() {
   heightMult = fminf((float)WIDTH / HEIGHT, 1);
   cubeCollisionCompareX = 0.5f / heightMult;
   cubeCollisionCompareY = 0.5f / widthMult;
+  startingTick = SDL_GetTicks();
   prepareGame();
 }
 
@@ -90,6 +92,15 @@ int main(int arg, char *argv[]) {
     handleChangeSong();
 
     switch (gameState) {
+      case GAME_STATE_STARTED:
+        draw(renderer);
+        drawCubes(renderer, cubes, cubesLength);
+        drawTitleScreenText(renderer, false);
+        fadeInFromBlack(renderer);
+				if (now - startingTick > INIT_FADE_LENGTH) {
+					gameState = GAME_STATE_TITLE_SCREEN;
+				}
+        break;
       case GAME_STATE_TITLE_SCREEN:
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
@@ -106,7 +117,7 @@ int main(int arg, char *argv[]) {
         }
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
-        drawTitleScreenText(renderer);
+        drawTitleScreenText(renderer, true);
         break;
 
       case GAME_STATE_INSTRUCTIONS:

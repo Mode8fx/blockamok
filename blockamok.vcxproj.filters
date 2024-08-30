@@ -57,6 +57,9 @@
     <ClCompile Include="src\audio\falling_people.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_init.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\audio\insanity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_init.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

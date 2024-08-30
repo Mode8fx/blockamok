@@ -25,7 +25,7 @@ Message message_gameover;
 Message message_paused;
 Message message_paused_quit;
 Message message_array_instructions[12];
-Message message_array_credits[43];
+Message message_array_credits[45];
 
 SDL_Rect score_rect;
 
@@ -246,28 +246,30 @@ void initStaticMessages(SDL_Renderer *renderer) {
   const char *message_array_credits_text[] = {
     "Lo BLOCKAMOK v2.0",
     "",
-    "Mr Original game by Carl Riis",
+    "Mr Carl Riis",
+    "Mr Original game",
     "MW https://github.com/carltheperson/blockamok",
     "",
-    "Mb v2.0 update and ports by Mode8fx",
+    "Mb Mode8fx",
+    "Mb v2.0 update and ports",
     "MW https://github.com/Mode8fx/blockamok",
     "",
     "Lo MUSIC",
     "",
+    "MG Raina ft. Coaxcable",
     "MW \"Spaceranger 50k\"",
-    "MW Raina ft. Coaxcable",
     "",
+    "MG Cobburn and Monty",
     "MW \"Falling Up\"",
-    "MW Cobburn and Monty",
     "",
+    "MG Diomatic",
     "MW \"Falling People\"",
-    "MW Diomatic",
     "",
+    "MG mano and ske",
     "MW \"Darkness in da Night\"",
-    "MW mano and ske",
     "",
+    "MG Diáblo",
     "MW \"Dance 2 Insanity\"",
-    "MW Diáblo",
     "",
     "MG All music obtained from modarchive.org",
     "",
@@ -288,15 +290,17 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "MG Play it everywhere!",
     "MW https://github.com/Mode8fx/blockamok"
   };
-  mapTextArrayToMessageArray(renderer, message_array_credits_text, &message_array_credits, 43);
+  mapTextArrayToMessageArray(renderer, message_array_credits_text, &message_array_credits, 45);
 }
 
-inline void drawTitleScreenText(SDL_Renderer *renderer) {
+inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
 	renderMessage(renderer, &message_titlescreen);
-	renderMessage(renderer, &message_titlescreen_play);
-	renderMessage(renderer, &message_titlescreen_instructions);
-	renderMessage(renderer, &message_titlescreen_credits);
-	renderMessage(renderer, &message_titlescreen_quit);
+  if (drawSecondaryText) {
+    renderMessage(renderer, &message_titlescreen_play);
+    renderMessage(renderer, &message_titlescreen_instructions);
+    renderMessage(renderer, &message_titlescreen_credits);
+    renderMessage(renderer, &message_titlescreen_quit);
+  }
 }
 
 inline void drawInstructionsText(SDL_Renderer *renderer) {

@@ -39,9 +39,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build_switch
-SOURCES		:=	src src/fonts
+SOURCES		:=	src src/fonts src/audio
 DATA		:=	
-INCLUDES	:=	src src/fonts
+INCLUDES	:=	src src/fonts src/audio
 # ROMFS		:=	romfs
 
 APP_TITLE   := Blockamok

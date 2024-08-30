@@ -18,7 +18,7 @@ extern bool credits_paused;
 extern Uint64 credits_startTime;
 
 extern void initStaticMessages(SDL_Renderer *renderer);
-extern void drawTitleScreenText(SDL_Renderer *renderer);
+extern void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText);
 extern void drawInstructionsText(SDL_Renderer* renderer);
 extern void drawCreditsText(SDL_Renderer *renderer, Uint64 timer);
 extern void drawScoreText(SDL_Renderer *renderer);
