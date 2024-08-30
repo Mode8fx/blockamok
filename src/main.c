@@ -97,9 +97,10 @@ int main(int arg, char *argv[]) {
         drawCubes(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer, false);
         fadeInFromBlack(renderer);
-				if (now - startingTick > INIT_FADE_LENGTH) {
-					gameState = GAME_STATE_TITLE_SCREEN;
-				}
+        if (now - startingTick > INIT_FADE_LENGTH) {
+          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          gameState = GAME_STATE_TITLE_SCREEN;
+        }
         break;
       case GAME_STATE_TITLE_SCREEN:
         if (keyPressed(INPUT_START)) {
