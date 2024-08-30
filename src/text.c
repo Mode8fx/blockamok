@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "./text.h"
 #include "./input.h"
 #include "./draw.h"
@@ -79,7 +81,7 @@ static void mapTextArrayToMessageArray(SDL_Renderer *renderer, const char *textA
 		char flag_color = textArray[i][1];
 		SDL_Color text_color;
 		const char *flag_text = &textArray[i][3];
-    strncpy(messageArray[i].text, flag_text, sizeof(messageArray[i].text) - 1);
+    strncpy_s(messageArray[i].text, sizeof(messageArray[i].text), flag_text, _TRUNCATE);
     messageArray[i].text[sizeof(messageArray[i].text) - 1] = '\0';
 		switch (flag_font) {
 		  case 'L':
@@ -227,7 +229,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   sprintf(message_array_instructions_text[1], "MW Hold %s or %s to speed up.", btn_A, btn_B);
   sprintf(message_array_instructions_text[2], "MW Press %s to pause.", btn_Start);
   sprintf(message_array_instructions_text[3], "MW Press %s or %s to change music.", btn_L, btn_R);
-  mapTextArrayToMessageArray(renderer, message_array_instructions_text, &message_array_instructions, 12);
+  mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, 12);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
   setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.25f);
@@ -290,7 +292,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "MG Play it everywhere!",
     "MW https://github.com/Mode8fx/blockamok"
   };
-  mapTextArrayToMessageArray(renderer, message_array_credits_text, &message_array_credits, 45);
+  mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, 45);
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
@@ -326,11 +328,11 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint64 now) {
 		credits_paused = !credits_paused;
   }
   if (keyHeld(INPUT_UP)) {
-    credits_startTime += 36000 * deltaTime;
+    credits_startTime += (Uint64)(36000 * deltaTime);
   } else if (keyHeld(INPUT_DOWN)) {
-    credits_startTime -= 12000 * deltaTime;
+    credits_startTime -= (Uint64)(12000 * deltaTime);
 	} else if (credits_paused) {
-    credits_startTime += 12000 * deltaTime;
+    credits_startTime += (Uint64)(12000 * deltaTime);
   }
 
   int numMessages = sizeof(message_array_credits) / sizeof(message_array_credits[0]);
