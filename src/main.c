@@ -35,7 +35,6 @@ static void prepareGame() {
   }
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
-  gameStartTime = SDL_GetTicks();
   srand((Uint32)time(NULL));
   gameInit(cubes, &cubesLength);
 }
@@ -94,6 +93,7 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_TITLE_SCREEN:
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
+          gameStartTime = SDL_GetTicks();
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_X)) {
           gameState = GAME_STATE_INSTRUCTIONS;
