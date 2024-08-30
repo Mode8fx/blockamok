@@ -144,6 +144,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\audio.c" />
+    <ClCompile Include="src\audio\falling_people.c" />
+    <ClCompile Include="src\audio\falling_up.c" />
+    <ClCompile Include="src\audio\insanity.c" />
     <ClCompile Include="src\audio\mano_-_darkness_in_the_night.c" />
     <ClCompile Include="src\audio\spaceranger_50k.c" />
     <ClCompile Include="src\draw.c" />
@@ -157,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio.h" />
+    <ClInclude Include="src\audio\falling_people.h" />
+    <ClInclude Include="src\audio\falling_up.h" />
+    <ClInclude Include="src\audio\insanity.h" />
     <ClInclude Include="src\audio\mano_-_darkness_in_the_night.h" />
     <ClInclude Include="src\audio\spaceranger_50k.h" />
     <ClInclude Include="src\draw.h" />

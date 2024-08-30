@@ -22,6 +22,7 @@ Uint64 now = 0;
 Uint64 last = 0;
 Uint64 gameStartTime = 0;
 double deltaTime = 0;
+Uint64 credits_startTime = 0;
 
 int cubesLength = 0;
 Cube cubes[1000];
@@ -97,6 +98,8 @@ int main(int arg, char *argv[]) {
         } else if (keyPressed(INPUT_X)) {
           gameState = GAME_STATE_INSTRUCTIONS;
 				} else if (keyPressed(INPUT_Y)) {
+          credits_paused = false;
+					credits_startTime = SDL_GetTicks();
 					gameState = GAME_STATE_CREDITS;
 				} else if (keyPressed(INPUT_SELECT)) {
           quit = true;
@@ -123,7 +126,7 @@ int main(int arg, char *argv[]) {
         }
 				draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
-        drawCreditsText(renderer);
+        drawCreditsText(renderer, now);
         break;
 
       case GAME_STATE_PLAYING:

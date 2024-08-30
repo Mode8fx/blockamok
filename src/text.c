@@ -10,8 +10,10 @@ TTF_Font *Sans_38 = NULL;
 int outlineSize_38;
 SDL_Color color_black = {0, 0, 0};
 SDL_Color color_white = {255, 255, 255};
+SDL_Color color_gray = {192, 192, 192};
 SDL_Color color_orange = {255, 160, 0};
 SDL_Color color_red = {255, 92, 92};
+SDL_Color color_blue = {128, 128, 255};
 
 Message message_titlescreen;
 Message message_titlescreen_play;
@@ -22,24 +24,12 @@ Message message_score;
 Message message_gameover;
 Message message_paused;
 Message message_paused_quit;
-Message message_instructions_1;
-Message message_instructions_2;
-Message message_instructions_3;
-Message message_instructions_4;
-Message message_instructions_5;
-Message message_instructions_6;
-Message message_instructions_7a;
-Message message_instructions_7b;
-Message message_instructions_8a;
-Message message_instructions_8b;
-Message message_instructions_9a;
-Message message_instructions_9b;
-Message message_credits_1;
-Message message_credits_2;
-Message message_credits_3;
-Message message_credits_4;
+Message message_array_instructions[12];
+Message message_array_credits[43];
 
 SDL_Rect score_rect;
+
+bool credits_paused = false;
 
 ///////////////////
 // TEXT CREATION //
@@ -76,6 +66,60 @@ static inline void renderAndDestroyMessage(SDL_Renderer *renderer, Message *mess
   renderMessage(renderer, message);
 	SDL_DestroyTexture(message->text_texture);
 	SDL_DestroyTexture(message->outline_texture);
+}
+
+static void mapTextArrayToMessageArray(SDL_Renderer *renderer, const char *textArray[], Message *messageArray, Sint16 numMessages) {
+  for (Sint16 i = 0; i < numMessages; i++) {
+		if (textArray[i][0] == '\0') {
+      textArray[i] = "    ";
+		}
+		char flag_font = textArray[i][0];
+		TTF_Font *font;
+		int outlineSize;
+		char flag_color = textArray[i][1];
+		SDL_Color text_color;
+		const char *flag_text = &textArray[i][3];
+    strncpy(messageArray[i].text, flag_text, sizeof(messageArray[i].text) - 1);
+    messageArray[i].text[sizeof(messageArray[i].text) - 1] = '\0';
+		switch (flag_font) {
+		  case 'L':
+			  font = Sans_42;
+			  outlineSize = outlineSize_42;
+			  break;
+		  case 'M':
+			  font = Sans_38;
+			  outlineSize = outlineSize_38;
+			  break;
+		  default:
+        font = Sans_38;
+        outlineSize = outlineSize_38;
+			  break;
+		}
+		switch (flag_color) {
+		  case 'B':
+			  text_color = color_black;
+			  break;
+		  case 'W':
+			  text_color = color_white;
+			  break;
+			case 'G':
+				text_color = color_gray;
+				break;
+		  case 'o':
+        text_color = color_orange;
+        break;
+		  case 'r':
+        text_color = color_red;
+        break;
+			case 'b':
+				text_color = color_blue;
+				break;
+		  default:
+        text_color = color_white;
+        break;
+		}
+		prepareMessage(renderer, font, outlineSize, &messageArray[i], 1, text_color, color_black);
+	}
 }
 
 ///////////////////
@@ -166,70 +210,85 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_paused_quit, 0.5f, 0.65f);
 
   // Instructions Screen
-  sprintf(message_instructions_1.text, "Dodge the incoming blocks!");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_instructions_1, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_1, 0.5f, 0.15f);
+  const char *message_array_instructions_text[] = {
+		"Lo Dodge the incoming blocks!",
+		malloc(TEXT_LINE_SIZE),
+    malloc(TEXT_LINE_SIZE),
+    malloc(TEXT_LINE_SIZE),
+		"LW Two different movement types!",
+		"LW Press Left/Right to toggle:",
+		"Lr Type A",
+		"Mr Up/Down and Left/Right movement are",
+		"Mr independent, so diagonal is faster.",
+		"Lb Type B",
+		"Mb Speed is the same regardless of direction.",
+		"Mb More analog stick-friendly."
+	};
+  sprintf(message_array_instructions_text[1], "MW Hold %s or %s to speed up.", btn_A, btn_B);
+  sprintf(message_array_instructions_text[2], "MW Press %s to pause.", btn_Start);
+  sprintf(message_array_instructions_text[3], "MW Press %s or %s to change music.", btn_L, btn_R);
+  mapTextArrayToMessageArray(renderer, message_array_instructions_text, &message_array_instructions, 12);
 
-  sprintf(message_instructions_2.text, "Hold %s or %s to speed up.", btn_A, btn_B);
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_2, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_2, 0.5f, 0.25f);
-
-  sprintf(message_instructions_3.text, "Press %s to pause.", btn_Start);
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_3, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_3, 0.5f, 0.325f);
-
-  sprintf(message_instructions_4.text, "Press %s or %s to change music.", btn_L, btn_R);
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_4, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_4, 0.5f, 0.4f);
-
-  sprintf(message_instructions_5.text, "Two different movement types!");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_instructions_5, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_5, 0.5f, 0.55f);
-
-  sprintf(message_instructions_6.text, "Press Left/Right to toggle:");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_instructions_6, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_6, 0.5f, 0.625f);
-
-  sprintf(message_instructions_7a.text, "Type A");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_instructions_7a, 1, color_orange, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_7a, 0.5f, 0.7f);
-
-  sprintf(message_instructions_8a.text, "Up/Down and Left/Right movement are");
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_8a, 1, color_orange, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_8a, 0.5f, 0.775f);
-
-  sprintf(message_instructions_9a.text, "independent, so diagonal is faster.");
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_9a, 1, color_orange, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_9a, 0.5f, 0.85f);
-
-  sprintf(message_instructions_7b.text, "Type B");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_instructions_7b, 1, color_red, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_7b, 0.5f, 0.7f);
-
-  sprintf(message_instructions_8b.text, "Speed is the same regardless of direction.");
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_8b, 1, color_red, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_8b, 0.5f, 0.775f);
-
-  sprintf(message_instructions_9b.text, "More analog stick-friendly.");
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_instructions_9b, 1, color_red, color_black);
-  setMessagePosRelativeToScreen(&message_instructions_9b, 0.5f, 0.85f);
+  setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
+  setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.25f);
+  setMessagePosRelativeToScreen(&message_array_instructions[2], 0.5f, 0.325f);
+  setMessagePosRelativeToScreen(&message_array_instructions[3], 0.5f, 0.4f);
+  setMessagePosRelativeToScreen(&message_array_instructions[4], 0.5f, 0.55f);
+  setMessagePosRelativeToScreen(&message_array_instructions[5], 0.5f, 0.625f);
+  setMessagePosRelativeToScreen(&message_array_instructions[6], 0.5f, 0.7f);
+  setMessagePosRelativeToScreen(&message_array_instructions[7], 0.5f, 0.775f);
+  setMessagePosRelativeToScreen(&message_array_instructions[8], 0.5f, 0.85f);
+  setMessagePosRelativeToScreen(&message_array_instructions[9], 0.5f, 0.7f);
+  setMessagePosRelativeToScreen(&message_array_instructions[10], 0.5f, 0.775f);
+  setMessagePosRelativeToScreen(&message_array_instructions[11], 0.5f, 0.85f);
 
   // Credits Screen
-  sprintf(message_credits_1.text, "Original game by Carl Riis");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_credits_1, 1, color_orange, color_black);
-  setMessagePosRelativeToScreen(&message_credits_1, 0.5f, 0.3f);
-
-  sprintf(message_credits_2.text, "https://github.com/carltheperson/blockamok");
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_credits_2, 1, color_orange, color_black);
-  setMessagePosRelativeToScreen(&message_credits_2, 0.5f, 0.4f);
-
-  sprintf(message_credits_3.text, "v2.0 update and ports by Mode8fx");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_credits_3, 1, color_red, color_black);
-  setMessagePosRelativeToScreen(&message_credits_3, 0.5f, 0.7f);
-
-  sprintf(message_credits_4.text, "https://github.com/Mode8fx/blockamok");
-  prepareMessage(renderer, Sans_38, outlineSize_38, &message_credits_4, 1, color_red, color_black);
-  setMessagePosRelativeToScreen(&message_credits_4, 0.5f, 0.8f);
+  const char *message_array_credits_text[] = {
+    "Lo BLOCKAMOK v2.0",
+    "",
+    "Mr Original game by Carl Riis",
+    "MW https://github.com/carltheperson/blockamok",
+    "",
+    "Mb v2.0 update and ports by Mode8fx",
+    "MW https://github.com/Mode8fx/blockamok",
+    "",
+    "Lo MUSIC",
+    "",
+    "MW \"Spaceranger 50k\"",
+    "MW Raina ft. Coaxcable",
+    "",
+    "MW \"Falling Up\"",
+    "MW Cobburn and Monty",
+    "",
+    "MW \"Falling People\"",
+    "MW Diomatic",
+    "",
+    "MW \"Darkness in da Night\"",
+    "MW mano and ske",
+    "",
+    "MW \"Dance 2 Insanity\"",
+    "MW Diáblo",
+    "",
+    "MG All music obtained from modarchive.org",
+    "",
+    "Lo SOUND EFFECTS",
+    "",
+    "MW ???",
+    "",
+    "Lo LIBRARIES",
+    "",
+    "MW SDL2",
+    "MW SDL2_mixer",
+    "MW SDL2_ttf",
+    "",
+    "Lo THANKS FOR PLAYING!",
+    "",
+    "MG Blockamok is available on a wide variety",
+    "MG of homebrew-enabled systems, old and new.",
+    "MG Play it everywhere!",
+    "MW https://github.com/Mode8fx/blockamok"
+  };
+  mapTextArrayToMessageArray(renderer, message_array_credits_text, &message_array_credits, 43);
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer) {
@@ -241,28 +300,52 @@ inline void drawTitleScreenText(SDL_Renderer *renderer) {
 }
 
 inline void drawInstructionsText(SDL_Renderer *renderer) {
-  renderMessage(renderer, &message_instructions_1);
-	renderMessage(renderer, &message_instructions_2);
-	renderMessage(renderer, &message_instructions_3);
-	renderMessage(renderer, &message_instructions_4);
-	renderMessage(renderer, &message_instructions_5);
-  renderMessage(renderer, &message_instructions_6);
+  renderMessage(renderer, &message_array_instructions[0]);
+	renderMessage(renderer, &message_array_instructions[1]);
+	renderMessage(renderer, &message_array_instructions[2]);
+	renderMessage(renderer, &message_array_instructions[3]);
+	renderMessage(renderer, &message_array_instructions[4]);
+  renderMessage(renderer, &message_array_instructions[5]);
   if (!isAnalog) {
-		renderMessage(renderer, &message_instructions_7a);
-		renderMessage(renderer, &message_instructions_8a);
-		renderMessage(renderer, &message_instructions_9a);
+		renderMessage(renderer, &message_array_instructions[6]);
+		renderMessage(renderer, &message_array_instructions[7]);
+		renderMessage(renderer, &message_array_instructions[8]);
 	} else {
-    renderMessage(renderer, &message_instructions_7b);
-    renderMessage(renderer, &message_instructions_8b);
-    renderMessage(renderer, &message_instructions_9b);
+    renderMessage(renderer, &message_array_instructions[9]);
+    renderMessage(renderer, &message_array_instructions[10]);
+    renderMessage(renderer, &message_array_instructions[11]);
   }
 }
 
-inline void drawCreditsText(SDL_Renderer *renderer) {
-  renderMessage(renderer, &message_credits_1);
-  renderMessage(renderer, &message_credits_2);
-  renderMessage(renderer, &message_credits_3);
-  renderMessage(renderer, &message_credits_4);
+inline void drawCreditsText(SDL_Renderer *renderer, Uint64 now) {
+  if (keyPressed(INPUT_A)) {
+		credits_paused = !credits_paused;
+  }
+  if (keyHeld(INPUT_UP)) {
+    credits_startTime += 36000 * deltaTime;
+  } else if (keyHeld(INPUT_DOWN)) {
+    credits_startTime -= 12000 * deltaTime;
+	} else if (credits_paused) {
+    credits_startTime += 12000 * deltaTime;
+  }
+
+  int numMessages = sizeof(message_array_credits) / sizeof(message_array_credits[0]);
+  Uint64 timer = now - credits_startTime;
+  float offset_timer = 0.15f * timer / 1000; // scroll speed
+  for (int i = 0; i < numMessages; i++) {
+		float offset_index = 0.06f * i; // spacing between lines
+    float startPosY = 1.0f + offset_index - offset_timer;
+    if (startPosY < -0.1f) {
+      if (i == numMessages - 1 && startPosY < -0.5f) {
+				credits_startTime = now; // loop credits
+      }
+      continue;
+		} else if (startPosY > 1.2f) {
+			break;
+		}
+		setMessagePosRelativeToScreen(&message_array_credits[i], 0.5f, startPosY);
+		renderMessage(renderer, &message_array_credits[i]);
+  }
 }
 
 inline void drawScoreText(SDL_Renderer *renderer) {
