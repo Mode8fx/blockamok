@@ -26,8 +26,10 @@ Message message_score;
 Message message_gameover;
 Message message_paused;
 Message message_paused_quit;
-Message message_array_instructions[12];
-Message message_array_credits[45];
+#define INSTRUCTIONS_LENGTH 12
+Message message_array_instructions[INSTRUCTIONS_LENGTH];
+#define CREDITS_LENGTH 48
+Message message_array_credits[CREDITS_LENGTH];
 
 SDL_Rect score_rect;
 
@@ -229,7 +231,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   sprintf(message_array_instructions_text[1], "MW Hold %s or %s to speed up.", btn_A, btn_B);
   sprintf(message_array_instructions_text[2], "MW Press %s to pause.", btn_Start);
   sprintf(message_array_instructions_text[3], "MW Press %s or %s to change music.", btn_L, btn_R);
-  mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, 12);
+  mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, INSTRUCTIONS_LENGTH);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
   setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.25f);
@@ -275,6 +277,9 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "",
     "MG All music obtained from modarchive.org",
     "",
+    "MG \"Spaceranger 50k\" and \"Falling People\"",
+    "MG edited by Mode8fx for looping purposes",
+    "",
     "Lo SOUND EFFECTS",
     "",
     "MW ???",
@@ -292,7 +297,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "MG Play it everywhere!",
     "MW https://github.com/Mode8fx/blockamok"
   };
-  mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, 45);
+  mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
