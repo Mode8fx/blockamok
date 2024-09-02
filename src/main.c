@@ -56,10 +56,6 @@ static void init() {
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   initAudio();
   playMusicAtIndex(0);
-  widthMult = fminf((float)HEIGHT / WIDTH, 1);
-  heightMult = fminf((float)WIDTH / HEIGHT, 1);
-  cubeCollisionCompareX = 0.5f / heightMult;
-  cubeCollisionCompareY = 0.5f / widthMult;
   startingTick = SDL_GetTicks();
   prepareGame();
 }

@@ -25,8 +25,6 @@ extern SDL_DisplayMode DM;
 extern float MAX_DEPTH;
 extern float HALF_FOV_ANGLE_RADIANS;
 
-extern float widthMult, heightMult, cubeCollisionCompareX, cubeCollisionCompareY;
-
 void setScalingVals();
 
 void draw(SDL_Renderer *renderer);
