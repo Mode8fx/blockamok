@@ -165,12 +165,12 @@ void initStaticMessages(SDL_Renderer *renderer) {
   SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
 
   int textSize_42 = 42 * GAME_HEIGHT / 1000;
-  outlineSize_42 = textSize_42 / 10;
+  outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
   Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
   int textSize_38 = 38 * GAME_HEIGHT / 1000;
-  outlineSize_38 = textSize_38 / 10;
+  outlineSize_38 = (int)fmax(textSize_38 / 10, 3);
   Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
 
   // Title Screen
