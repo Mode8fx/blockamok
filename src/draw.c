@@ -10,6 +10,9 @@
 SDL_DisplayMode DM;
 #endif
 
+Sint16 gameOffsetX;
+SDL_Rect gameViewport;
+
 float HALF_FOV_ANGLE_RADIANS;
 
 const int UP = 0;
@@ -43,12 +46,12 @@ float WIDTH_HALF;
 float WIDTH_NEG;
 
 void setScalingVals() {
-  HEIGHT_DOUBLE = HEIGHT * 2.0f;
-  HEIGHT_HALF = HEIGHT * 0.5f;
-  HEIGHT_NEG = -HEIGHT;
-  WIDTH_DOUBLE = WIDTH * 2.0f;
-  WIDTH_HALF = WIDTH * 0.5f;
-  WIDTH_NEG = -WIDTH;
+  HEIGHT_DOUBLE = GAME_HEIGHT * 2.0f;
+  HEIGHT_HALF = GAME_HEIGHT * 0.5f;
+  HEIGHT_NEG = -GAME_HEIGHT;
+  WIDTH_DOUBLE = GAME_WIDTH * 2.0f;
+  WIDTH_HALF = GAME_WIDTH * 0.5f;
+  WIDTH_NEG = -GAME_WIDTH;
 
   HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0) * M_PI) / 2;
 }
@@ -82,11 +85,11 @@ void draw(SDL_Renderer *renderer) {
 }
 
 static inline float screenX(float x) {
-  return x * WIDTH + WIDTH_HALF;
+  return x * GAME_WIDTH + WIDTH_HALF;
 }
 
 static inline float screenY(float y) {
-  return y * HEIGHT + HEIGHT_HALF;
+  return y * GAME_HEIGHT + HEIGHT_HALF;
 }
 
 static bool isPointOutsideFront(int f, int frontI) {

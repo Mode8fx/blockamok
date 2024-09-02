@@ -45,7 +45,7 @@ static void init() {
 #if !defined(SDL1)
   SDL_GetCurrentDisplayMode(0, &DM);
 #endif
-  window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+  window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
   setScalingVals();
@@ -72,6 +72,11 @@ int main(int arg, char *argv[]) {
   gameFrame((float)deltaTime, cubes, &cubesLength);
   draw(renderer);
 
+  int gameOffsetX = (SCREEN_WIDTH - GAME_WIDTH) / 2;
+  SDL_Rect gameViewport = { gameOffsetX, 0, GAME_WIDTH, GAME_HEIGHT };
+  SDL_Rect leftBar = { 0, 0, gameOffsetX, SCREEN_HEIGHT };
+  SDL_Rect rightBar = { gameOffsetX + GAME_WIDTH, 0, gameOffsetX, SCREEN_HEIGHT };
+
   while (!quit) {
     last = now;
     now = SDL_GetTicks();
@@ -86,6 +91,8 @@ int main(int arg, char *argv[]) {
 
     handlePlayerInput();
     handleChangeSong();
+
+    SDL_RenderSetViewport(renderer, &gameViewport);
 
     switch (gameState) {
       case GAME_STATE_STARTED:
@@ -174,6 +181,10 @@ int main(int arg, char *argv[]) {
         break;
     }
 
+    SDL_RenderSetViewport(renderer, NULL);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &leftBar);
+    SDL_RenderFillRect(renderer, &rightBar);
     SDL_RenderPresent(renderer);
   }
 

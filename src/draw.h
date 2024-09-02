@@ -9,18 +9,21 @@ extern SDL_DisplayMode DM;
 #endif
 
 #if defined(ANDROID)
-#define WIDTH  max(DM.w, DM.h)
-#define HEIGHT min(DM.w, DM.h)
+#define SCREEN_WIDTH  max(DM.w, DM.h)
+#define SCREEN_HEIGHT min(DM.w, DM.h)
 #elif defined(SDL1)
-#define WIDTH  1000
-#define HEIGHT 1000
+#define SCREEN_WIDTH  1000
+#define SCREEN_HEIGHT 1000
 #elif !defined(PC)
-#define WIDTH  DM.w
-#define HEIGHT DM.h
+#define SCREEN_WIDTH  DM.w
+#define SCREEN_HEIGHT DM.h
 #else
-#define WIDTH 1000
-#define HEIGHT 1000
+#define SCREEN_WIDTH 1000
+#define SCREEN_HEIGHT 1000
 #endif
+
+#define GAME_WIDTH SCREEN_HEIGHT // square
+#define GAME_HEIGHT SCREEN_HEIGHT
 
 #define MAX_DEPTH 150
 extern float HALF_FOV_ANGLE_RADIANS;

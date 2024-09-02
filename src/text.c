@@ -144,11 +144,11 @@ static inline void setMessagePos(Message *message, int x, int y) {
 }
 
 static inline void setMessagePosRelativeToScreenX(Message *message, float x) {
-	setMessagePosX(message, (int)(WIDTH * x - message->text_rect.w * 0.5f));
+	setMessagePosX(message, (int)(GAME_WIDTH * x - message->text_rect.w * 0.5f));
 }
 
 static inline void setMessagePosRelativeToScreenY(Message *message, float y) {
-	setMessagePosY(message, (int)(HEIGHT * y - message->text_rect.h * 0.5f));
+	setMessagePosY(message, (int)(GAME_HEIGHT * y - message->text_rect.h * 0.5f));
 }
 
 static inline void setMessagePosRelativeToScreen(Message *message, float x, float y) {
@@ -164,12 +164,12 @@ void initStaticMessages(SDL_Renderer *renderer) {
   // Initialize TTF_Fonts
   SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
 
-  int textSize_42 = 42 * HEIGHT / 1000;
+  int textSize_42 = 42 * GAME_HEIGHT / 1000;
   outlineSize_42 = textSize_42 / 10;
   Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_38 = 38 * HEIGHT / 1000;
+  int textSize_38 = 38 * GAME_HEIGHT / 1000;
   outlineSize_38 = textSize_38 / 10;
   Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
 
@@ -195,7 +195,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_titlescreen_quit, 0.5f, 0.9f);
 
   // Score Counter
-  score_rect.y = -HEIGHT / 100;
+  score_rect.y = -SCREEN_HEIGHT / 100;
 
 	// Game Over Screen
   sprintf(message_gameover.text, "GAME OVER");
