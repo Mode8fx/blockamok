@@ -22,7 +22,7 @@ extern SDL_DisplayMode DM;
 #define HEIGHT 1000
 #endif
 
-extern float MAX_DEPTH;
+#define MAX_DEPTH 150
 extern float HALF_FOV_ANGLE_RADIANS;
 
 void setScalingVals();

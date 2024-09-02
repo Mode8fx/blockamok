@@ -10,7 +10,6 @@
 SDL_DisplayMode DM;
 #endif
 
-float MAX_DEPTH;
 float HALF_FOV_ANGLE_RADIANS;
 
 const int UP = 0;
@@ -44,15 +43,6 @@ float WIDTH_HALF;
 float WIDTH_NEG;
 
 void setScalingVals() {
-  float largerAspectRatio;
-  float smallerAspectRatio;
-  if (WIDTH >= HEIGHT) {
-    largerAspectRatio = ((float)WIDTH / HEIGHT);
-    smallerAspectRatio = ((float)HEIGHT / WIDTH);
-  } else {
-    largerAspectRatio = ((float)HEIGHT / WIDTH);
-    smallerAspectRatio = ((float)WIDTH / HEIGHT);
-  }
   HEIGHT_DOUBLE = HEIGHT * 2.0f;
   HEIGHT_HALF = HEIGHT * 0.5f;
   HEIGHT_NEG = -HEIGHT;
@@ -60,8 +50,7 @@ void setScalingVals() {
   WIDTH_HALF = WIDTH * 0.5f;
   WIDTH_NEG = -WIDTH;
 
-  MAX_DEPTH = 150 * largerAspectRatio;
-  HALF_FOV_ANGLE_RADIANS = ((ADJUSTED_FOV / 180.0) * M_PI) / 2;
+  HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0) * M_PI) / 2;
 }
 
 static void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
