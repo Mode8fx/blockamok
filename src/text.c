@@ -45,6 +45,7 @@ static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int ou
   SDL_Surface *outlineSurface = TTF_RenderText_Solid(font, message->text, outlineColor);
   message->outline_rect.w = (int)(outlineSurface->w * sizeMult);
   message->outline_rect.h = (int)(outlineSurface->h * sizeMult);
+  if (message->outline_texture != NULL) SDL_DestroyTexture(message->outline_texture);
   message->outline_texture = SDL_CreateTextureFromSurface(renderer, outlineSurface);
   SDL_FreeSurface(outlineSurface);
 
