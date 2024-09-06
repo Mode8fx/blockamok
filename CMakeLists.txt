@@ -27,6 +27,10 @@ add_executable(blockamok
 	"src/audio/mano_-_darkness_in_the_night.h"
 	"src/audio/spaceranger_50k.c"
 	"src/audio/spaceranger_50k.h"
+	"src/audio/thunk.c"
+	"src/audio/thunk.h"
+	"src/audio/zoom3_short.c"
+	"src/audio/zoom3_short.h"
 	"src/fonts/Mono.c"
 	"src/fonts/Mono.h"
 )

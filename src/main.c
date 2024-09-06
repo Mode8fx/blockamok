@@ -8,6 +8,7 @@
 
 #include "./draw.h"
 #include "./text.h"
+#include "./audio.h"
 #include "./game.h"
 #include "./math_custom.h"
 #include "./input.h"
@@ -108,6 +109,7 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_TITLE_SCREEN:
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
+          playSFX(SFX_ZOOM);
           gameStartTime = SDL_GetTicks();
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_X)) {

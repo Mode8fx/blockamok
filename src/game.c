@@ -5,6 +5,7 @@
 #include "./math_custom.h"
 #include "./draw.h"
 #include "./input.h"
+#include "./audio.h"
 
 const float PLAYER_INITIAL_SPEED = 100;
 const float BASE_TURN_SPEED_TYPE_A = 30; // effectively 42.43 when diagonal
@@ -163,6 +164,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
       float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
       float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
       if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5 && (SDL_GetTicks() - gameStartTime) > 1000) {
+        playSFX(SFX_CRASH);
         return GAME_STATE_GAME_OVER;
       }
     }

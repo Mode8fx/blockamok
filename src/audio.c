@@ -5,6 +5,8 @@
 #include "./audio/falling_people.h"
 #include "./audio/falling_up.h"
 #include "./audio/insanity.h"
+#include "./audio/thunk.h"
+#include "./audio/zoom3_short.h"
 #include "./input.h"
 
 Sint8 audioIndex = 0;
@@ -15,6 +17,8 @@ Mix_Music *bgm_2;
 Mix_Music *bgm_3;
 Mix_Music *bgm_4;
 Mix_Music *bgm_5;
+Mix_Chunk *sfx_zoom;
+Mix_Chunk *sfx_thunk;
 
 void initAudio() {
 	bgm_1 = Mix_LoadMUS_RW(SDL_RWFromConstMem(spaceranger_50k_xm, spaceranger_50k_xm_len), 1);
@@ -22,6 +26,8 @@ void initAudio() {
 	bgm_3 = Mix_LoadMUS_RW(SDL_RWFromConstMem(falling_people_xm, falling_people_xm_len), 1);
 	bgm_4 = Mix_LoadMUS_RW(SDL_RWFromConstMem(mano___darkness_in_the_night_xm, mano___darkness_in_the_night_xm_len), 1);
 	bgm_5 = Mix_LoadMUS_RW(SDL_RWFromConstMem(insanity_s3m, insanity_s3m_len), 1);
+	sfx_zoom = Mix_LoadWAV_RW(SDL_RWFromConstMem(zoom3_short_wav, zoom3_short_wav_len), 1);
+	sfx_thunk = Mix_LoadWAV_RW(SDL_RWFromConstMem(thunk_wav, thunk_wav_len), 1);
 
 	Mix_VolumeMusic(128);
 	Mix_Volume(1, 128);
@@ -59,5 +65,18 @@ void handleChangeSong() {
 	} else if (keyPressed(INPUT_R)) {
 		audioIndex = (audioIndex + 1) % NUM_SONGS;
 		playMusicAtIndex(audioIndex);
+	}
+}
+
+void playSFX(Sint8 index) {
+	switch (index) {
+		case 0:
+			Mix_PlayChannel(-1, sfx_zoom, 0);
+			break;
+		case 1:
+			Mix_PlayChannel(-1, sfx_thunk, 0);
+			break;
+		default:
+			break;
 	}
 }

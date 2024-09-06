@@ -28,7 +28,7 @@ Message message_paused;
 Message message_paused_quit;
 #define INSTRUCTIONS_LENGTH 12
 Message message_array_instructions[INSTRUCTIONS_LENGTH];
-#define CREDITS_LENGTH 48
+#define CREDITS_LENGTH 50
 Message message_array_credits[CREDITS_LENGTH];
 
 SDL_Rect score_rect;
@@ -283,7 +283,9 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "",
     "Lo SOUND EFFECTS",
     "",
-    "MW ???",
+    "MG claudeb",
+    "MW https://opengameart.org",
+    "MW /content/buzz-grid-sounds",
     "",
     "Lo LIBRARIES",
     "",
