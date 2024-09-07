@@ -7,13 +7,15 @@
 #include "./game.h"
 #include "./fonts/Mono.h"
 
+TTF_Font *Sans_126 = NULL;
+int outlineSize_126;
 TTF_Font *Sans_42 = NULL;
 int outlineSize_42;
 TTF_Font *Sans_38 = NULL;
 int outlineSize_38;
 SDL_Color color_black = {0, 0, 0};
 SDL_Color color_white = {255, 255, 255};
-SDL_Color color_gray = {192, 192, 192};
+SDL_Color color_gray = {208, 208, 208};
 SDL_Color color_orange = {255, 160, 0};
 SDL_Color color_red = {255, 92, 92};
 SDL_Color color_blue = {128, 128, 255};
@@ -50,6 +52,13 @@ static inline void destroyMessage(Message *message) {
     SDL_DestroyTexture(message->text_texture);
     message->text_texture = NULL;
   }
+}
+
+static inline void destroyFont(TTF_Font *font) {
+	if (font != NULL) {
+		TTF_CloseFont(font);
+		font = NULL;
+	}
 }
 
 static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor) {
@@ -97,6 +106,10 @@ static void mapTextArrayToMessageArray(SDL_Renderer *renderer, const char *textA
     strncpy_s(messageArray[i].text, sizeof(messageArray[i].text), flag_text, _TRUNCATE);
     messageArray[i].text[sizeof(messageArray[i].text) - 1] = '\0';
 		switch (flag_font) {
+		  case 'G':
+			  font = Sans_126;
+			  outlineSize = outlineSize_126;
+			  break;
 		  case 'L':
 			  font = Sans_42;
 			  outlineSize = outlineSize_42;
@@ -177,6 +190,11 @@ void initStaticMessages(SDL_Renderer *renderer) {
   // Initialize TTF_Fonts
   SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
 
+  int textSize_126 = (int)fmax(126 * GAME_HEIGHT / 1000, 12);
+  outlineSize_126 = (int)fmax(textSize_126 / 10, 3);
+  Sans_126 = TTF_OpenFontRW(rw, 0, textSize_126);
+
+  SDL_RWseek(rw, 0, RW_SEEK_SET);
   int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 12);
   outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
   Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
@@ -191,7 +209,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
   // Title Screen
   snprintf(message_titlescreen.text, sizeof(message_titlescreen.text), "Blockamok");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen, 3, color_white, color_black);
+  prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen, 0.5f, 0.4f);
 
   snprintf(message_titlescreen_play.text, sizeof(message_titlescreen_play.text), "Press %s to fly", btn_Start);
@@ -223,7 +241,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
 	// Game Over Screen
   snprintf(message_gameover.text, sizeof(message_gameover.text), "GAME OVER");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover, 3, color_white, color_black);
+  prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
 
   snprintf(message_gameover_highscore.text, sizeof(message_gameover_highscore.text), "New High Score!");
@@ -232,7 +250,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
 	// Pause Screen
   snprintf(message_paused.text, sizeof(message_paused.text), "PAUSED");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_paused, 3, color_white, color_black);
+  prepareMessage(renderer, Sans_126, outlineSize_126, &message_paused, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused, 0.5f, 0.5f);
 
   snprintf(message_paused_quit.text, sizeof(message_paused_quit.text), "Press %s to quit", btn_Select);
@@ -329,6 +347,8 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "MW https://github.com/Mode8fx/blockamok"
   };
   mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
+
+  destroyFont(Sans_126); // no longer needed
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
@@ -444,8 +464,8 @@ void cleanUpText() {
     destroyMessage(&message_array_credits[i]);
   }
 
-  if (Sans_42 != NULL) TTF_CloseFont(Sans_42);
-  if (Sans_38 != NULL) TTF_CloseFont(Sans_38);
+  destroyFont(Sans_42);
+  destroyFont(Sans_38);
 
   TTF_Quit();
 }
