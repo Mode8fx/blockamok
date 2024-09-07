@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 
 #include "./text.h"
 #include "./input.h"
@@ -176,23 +177,23 @@ void initStaticMessages(SDL_Renderer *renderer) {
   Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
 
   // Title Screen
-  sprintf(message_titlescreen.text, "Blockamok");
-	prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen, 3, color_white, color_black);
+  snprintf(message_titlescreen.text, sizeof(message_titlescreen.text), "Blockamok");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen, 3, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen, 0.5f, 0.4f);
 
-  sprintf(message_titlescreen_play.text, "Press %s to fly", btn_Start);
+  snprintf(message_titlescreen_play.text, sizeof(message_titlescreen_play.text), "Press %s to fly", btn_Start);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_play, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.575f);
 
-  sprintf(message_titlescreen_instructions.text, "Press %s for instructions", btn_X);
+  snprintf(message_titlescreen_instructions.text, sizeof(message_titlescreen_instructions.text), "Press %s for instructions", btn_X);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_instructions, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_instructions, 0.5f, 0.65f);
 
-  sprintf(message_titlescreen_credits.text, "Press %s for credits", btn_Y);
+  snprintf(message_titlescreen_credits.text, sizeof(message_titlescreen_credits.text), "Press %s for credits", btn_Y);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_credits, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_credits, 0.5f, 0.725f);
 
-  sprintf(message_titlescreen_quit.text, "Press %s to quit", btn_Select);
+  snprintf(message_titlescreen_quit.text, sizeof(message_titlescreen_quit.text), "Press %s to quit", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_quit, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_quit, 0.5f, 0.8f);
 
@@ -202,20 +203,20 @@ void initStaticMessages(SDL_Renderer *renderer) {
   score_rect.y = -SCREEN_HEIGHT / 100;
 
 	// Game Over Screen
-  sprintf(message_gameover.text, "GAME OVER");
+  snprintf(message_gameover.text, sizeof(message_gameover.text), "GAME OVER");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover, 3, color_white, color_black);
   setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
 
-  sprintf(message_gameover_highscore.text, "New High Score!");
+  snprintf(message_gameover_highscore.text, sizeof(message_gameover_highscore.text), "New High Score!");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover_highscore, 1, color_orange, color_black);
   setMessagePosRelativeToScreen(&message_gameover_highscore, 0.5f, 0.75f);
 
 	// Pause Screen
-  sprintf(message_paused.text, "PAUSED");
+  snprintf(message_paused.text, sizeof(message_paused.text), "PAUSED");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_paused, 3, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused, 0.5f, 0.5f);
 
-  sprintf(message_paused_quit.text, "Press %s to quit", btn_Select);
+  snprintf(message_paused_quit.text, sizeof(message_paused_quit.text), "Press %s to quit", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_paused_quit, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused_quit, 0.5f, 0.65f);
 
@@ -234,9 +235,9 @@ void initStaticMessages(SDL_Renderer *renderer) {
 		"Mb Speed is the same regardless of direction.",
 		"Mb More analog stick-friendly."
 	};
-  sprintf(message_array_instructions_text[1], "MW Hold %s or %s to speed up.", btn_A, btn_B);
-  sprintf(message_array_instructions_text[2], "MW Press %s to pause.", btn_Start);
-  sprintf(message_array_instructions_text[3], "MW Press %s or %s to change music.", btn_L, btn_R);
+  snprintf(message_array_instructions_text[1], sizeof(message_array_instructions_text[1]), "MW Hold %s or %s to speed up.", btn_A, btn_B);
+  snprintf(message_array_instructions_text[2], sizeof(message_array_instructions_text[2]), "MW Press %s to pause.", btn_Start);
+  snprintf(message_array_instructions_text[3], sizeof(message_array_instructions_text[3]), "MW Press %s or %s to change music.", btn_L, btn_R);
   mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, INSTRUCTIONS_LENGTH);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
@@ -369,7 +370,7 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint64 now) {
 }
 
 inline void drawScoreText(SDL_Renderer *renderer) {
-  sprintf(message_score.text, "%d", (int)scoreVal);
+  snprintf(message_score.text, sizeof(message_score.text), "%d", (int)scoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_score, 1, color_white, color_black);
 	setMessagePosRelativeToScreenX(&message_score, 0.5f);
   renderAndDestroyMessage(renderer, &message_score);
@@ -388,7 +389,7 @@ inline void drawPausedText(SDL_Renderer *renderer) {
 }
 
 inline void refreshHighScoreText(SDL_Renderer *renderer) {
-  sprintf(message_titlescreen_highscore.text, "High Score: %d", highScoreVal);
+  snprintf(message_titlescreen_highscore.text, sizeof(message_titlescreen_highscore.text), "High Score: %d", highScoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_highscore, 1, color_orange, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.925f);
 }
