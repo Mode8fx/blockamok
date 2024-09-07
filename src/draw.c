@@ -6,9 +6,7 @@
 #include "./game.h"
 #include "./math_custom.h"
 
-#if !defined(SDL1)
 SDL_DisplayMode DM;
-#endif
 
 Sint16 gameOffsetX;
 SDL_Rect gameViewport;

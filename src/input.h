@@ -5,11 +5,7 @@
 
 extern double deltaTime;
 
-#if defined(SDL1)
-extern SDL_Joystick *controller;
-#else
 extern SDL_GameController *controller;
-#endif
 
 /* General Input */
 typedef struct {

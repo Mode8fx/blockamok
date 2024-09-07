@@ -4,17 +4,12 @@
 
 #include "./game.h"
 
-#if !defined(SDL1)
 extern SDL_DisplayMode DM;
-#endif
 extern SDL_Renderer *renderer;
 
 #if defined(ANDROID)
 #define SCREEN_WIDTH  max(DM.w, DM.h)
 #define SCREEN_HEIGHT min(DM.w, DM.h)
-#elif defined(SDL1)
-#define SCREEN_WIDTH  1000
-#define SCREEN_HEIGHT 1000
 #elif !defined(PC)
 #define SCREEN_WIDTH  DM.w
 #define SCREEN_HEIGHT DM.h

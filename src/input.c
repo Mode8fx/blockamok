@@ -9,11 +9,7 @@
 #include <pspctrl.h>
 #endif
 
-#if defined(SDL1)
-SDL_Joystick *controller = NULL;
-#else
 SDL_GameController *controller = NULL;
-#endif
 
 Stick leftStick = {
 	0, 0, 0, 0, STICK_DEADZONE, STICK_FULLZONE, STICK_THRESHOLD
@@ -214,10 +210,6 @@ static inline void updateLastKeys() {
 }
 
 void controllerInit() {
-#if defined(SDL1)
-	SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
-	controller = SDL_JoystickOpen(0);
-#else
 	Sint8 numJoysticks = SDL_NumJoysticks();
 	for (Sint8 controllerNum = 0; controllerNum < numJoysticks; controllerNum++) {
 		if (SDL_IsGameController(controllerNum)) {
@@ -225,7 +217,6 @@ void controllerInit() {
 			break;
 		}
 	}
-#endif
 }
 
 ///////////////////
