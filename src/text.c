@@ -34,8 +34,8 @@ Message message_paused;
 Message message_paused_quit;
 #define INSTRUCTIONS_LENGTH 13
 Message message_array_instructions[INSTRUCTIONS_LENGTH];
-#define CREDITS_LENGTH 50
-Message message_array_credits[CREDITS_LENGTH];
+Sint8 CREDITS_LENGTH;
+Message message_array_credits[60];
 
 bool credits_paused = false;
 
@@ -296,72 +296,123 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_array_instructions[12], 0.5f, 0.875f);
 
   // Credits Screen
-  char *message_array_credits_text[] = {
-    "Lo BLOCKAMOK v2.0",
-    "",
-    "Mr Carl Riis",
-    "Mr Original game",
-    malloc(TEXT_LINE_SIZE),
-    "",
-    "Mb Mode8fx",
-    "Mb v2.0 update and ports",
-    malloc(TEXT_LINE_SIZE),
-    "",
-    "Lo MUSIC",
-    "",
-    "MG Raina ft. Coaxcable",
-    "MW \"Spaceranger 50k\"",
-    "",
-    "MG Cobburn and Monty",
-    "MW \"Falling Up\"",
-    "",
-    "MG Diomatic",
-    "MW \"Falling People\"",
-    "",
-    "MG mano and ske",
-    "MW \"Darkness in da Night\"",
-    "",
-    "MG Diáblo",
-    "MW \"Dance 2 Insanity\"",
-    "",
-    "MG All music obtained from modarchive.org",
-    "",
-    "MG \"Spaceranger 50k\" and \"Falling People\"",
-    "MG edited by Mode8fx for looping purposes",
-    "",
-    "Lo SOUND EFFECTS",
-    "",
-    "MG claudeb",
-    "MW https://opengameart.org",
-    "MW /content/buzz-grid-sounds",
-    "",
-    "Lo LIBRARIES",
-    "",
-    "MW SDL2",
-    "MW SDL2_mixer",
-    "MW SDL2_ttf",
-    "",
-    "Lo THANKS FOR PLAYING!",
-    "",
-    malloc(TEXT_LINE_SIZE),
-    malloc(TEXT_LINE_SIZE),
-    malloc(TEXT_LINE_SIZE),
-    "MW https://github.com/Mode8fx/blockamok"
-  };
-  if (compactView) {
-    snprintf(message_array_credits_text[4], TEXT_LINE_SIZE, "MW github.com/carltheperson/blockamok");
-    snprintf(message_array_credits_text[8], TEXT_LINE_SIZE, "MW github.com/Mode8fx/blockamok");
-    snprintf(message_array_credits_text[46], TEXT_LINE_SIZE, "MG Blockamok is available on a wide");
-    snprintf(message_array_credits_text[47], TEXT_LINE_SIZE, "MG variety of homebrew-enabled systems,");
-    snprintf(message_array_credits_text[48], TEXT_LINE_SIZE, "MG old and new. Play it everywhere!");
+  if (!compactView) {
+    char *message_array_credits_text[] = {
+      "Lo BLOCKAMOK v2.0",
+      "",
+      "Mr Carl Riis",
+      "Mr Original game",
+      "MW https://github.com/carltheperson/blockamok",
+      "",
+      "Mb Mode8fx",
+      "Mb v2.0 update and ports",
+      "MW https://github.com/Mode8fx/blockamok",
+      "",
+      "Lo MUSIC",
+      "",
+      "MG Raina ft. Coaxcable",
+      "MW \"Spaceranger 50k\"",
+      "",
+      "MG Cobburn and Monty",
+      "MW \"Falling Up\"",
+      "",
+      "MG Diomatic",
+      "MW \"Falling People\"",
+      "",
+      "MG mano and ske",
+      "MW \"Darkness in da Night\"",
+      "",
+      "MG Diáblo",
+      "MW \"Dance 2 Insanity\"",
+      "",
+      "MG All music obtained from modarchive.org",
+      "",
+      "MG \"Spaceranger 50k\" and \"Falling People\"",
+      "MG edited by Mode8fx for looping purposes",
+      "",
+      "Lo SOUND EFFECTS",
+      "",
+      "MG claudeb",
+      "MW https://opengameart.org",
+      "MW /content/buzz-grid-sounds",
+      "",
+      "Lo LIBRARIES",
+      "",
+      "MW SDL2",
+      "MW SDL2_mixer",
+      "MW SDL2_ttf",
+      "",
+      "Lo THANKS FOR PLAYING!",
+      "",
+      "MG Blockamok is available on a wide variety",
+      "MG of homebrew-enabled systems, old and new.",
+      "MG Play it everywhere!",
+      "MW https://github.com/Mode8fx/blockamok"
+    };
+    CREDITS_LENGTH = 50;
+    mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   } else {
-    snprintf(message_array_credits_text[4], TEXT_LINE_SIZE, "MW https://github.com/carltheperson/blockamok");
-    snprintf(message_array_credits_text[8], TEXT_LINE_SIZE, "MW https://github.com/Mode8fx/blockamok");
-    snprintf(message_array_credits_text[46], TEXT_LINE_SIZE, "MG Blockamok is available on a wide variety");
-    snprintf(message_array_credits_text[47], TEXT_LINE_SIZE, "MG of homebrew-enabled systems, old and new.");
-    snprintf(message_array_credits_text[48], TEXT_LINE_SIZE, "MG Play it everywhere!");
+    char *message_array_credits_text[] = {
+      "Lo BLOCKAMOK v2.0",
+      "",
+      "Mr Carl Riis",
+      "Mr Original game",
+      "MW https://github.com",
+      "MW /carltheperson/blockamok",
+      "",
+      "Mb Mode8fx",
+      "Mb v2.0 update and ports",
+      "MW https://github.com",
+      "MW /Mode8fx/blockamok",
+      "",
+      "Lo MUSIC",
+      "",
+      "MG Raina ft. Coaxcable",
+      "MW \"Spaceranger 50k\"",
+      "",
+      "MG Cobburn and Monty",
+      "MW \"Falling Up\"",
+      "",
+      "MG Diomatic",
+      "MW \"Falling People\"",
+      "",
+      "MG mano and ske",
+      "MW \"Darkness in da Night\"",
+      "",
+      "MG Diáblo",
+      "MW \"Dance 2 Insanity\"",
+      "",
+      "MG All music obtained from",
+      "MG modarchive.org",
+      "",
+      "MG \"Spaceranger 50k\" and",
+      "MG \"Falling People\" edited by",
+      "MG Mode8fx for looping purposes",
+      "",
+      "Lo SOUND EFFECTS",
+      "",
+      "MG claudeb",
+      "MW https://opengameart.org",
+      "MW /content/buzz-grid-sounds",
+      "",
+      "Lo LIBRARIES",
+      "",
+      "MW SDL2",
+      "MW SDL2_mixer",
+      "MW SDL2_ttf",
+      "",
+      "Lo THANKS FOR PLAYING!",
+      "",
+      "MG Blockamok is available on a wide",
+      "MG variety of homebrew-enabled",
+      "MG systems, old and new.",
+      "MG Play it everywhere!",
+      "MW https://github.com",
+      "MW /Mode8fx/blockamok"
+    };
+    CREDITS_LENGTH = 56;
+    mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   }
-  mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
 
   destroyFont(Sans_126); // no longer needed
 }
@@ -408,14 +459,13 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint64 now) {
     credits_startTime += (Uint64)(12000 * deltaTime);
   }
 
-  int numMessages = sizeof(message_array_credits) / sizeof(message_array_credits[0]);
   Uint64 timer = now - credits_startTime;
   float offset_timer = 0.15f * timer / 1000; // scroll speed
-  for (int i = 0; i < numMessages; i++) {
+  for (int i = 0; i < CREDITS_LENGTH; i++) {
 		float offset_index = 0.06f * i; // spacing between lines
     float startPosY = 1.0f + offset_index - offset_timer;
     if (startPosY < -0.1f) {
-      if (i == numMessages - 1 && startPosY < -0.5f) {
+      if (i == CREDITS_LENGTH - 1 && startPosY < -0.5f) {
 				credits_startTime = now; // loop credits
       }
       continue;

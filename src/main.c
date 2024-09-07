@@ -58,7 +58,7 @@ static void handleWindowResize(SDL_Event *event) {
   }
   if (WINDOW_HEIGHT > WINDOW_WIDTH) {
     WINDOW_HEIGHT = WINDOW_WIDTH;
-		needsReset = true;
+    needsReset = true;
   }
   if (needsReset) {
     SDL_SetWindowSize(window, WINDOW_WIDTH, WINDOW_HEIGHT);
