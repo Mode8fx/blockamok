@@ -187,22 +187,23 @@ static inline void setMessagePosRelativeToScreen(Message *message, float x, floa
 ///////////////////
 
 void initStaticMessages(SDL_Renderer *renderer) {
+  bool compactView = GAME_HEIGHT <= 289;
   // Initialize TTF_Fonts
   SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
 
-  int textSize_126 = (int)fmax(126 * GAME_HEIGHT / 1000, 12);
+  int textSize_126 = (int)fmax(126 * GAME_HEIGHT / 1000, 36);
   outlineSize_126 = (int)fmax(textSize_126 / 10, 3);
   Sans_126 = TTF_OpenFontRW(rw, 0, textSize_126);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 12);
+  int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 13);
   outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
   Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 9);
+  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 11);
   outlineSize_38 = (int)fmax(textSize_38 / 10, 3);
-  if (GAME_HEIGHT <= 263) {
+  if (compactView) {
     outlineSize_38 = 2;
   }
   Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
@@ -232,6 +233,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
   // Game
   setMessagePosRelativeToScreenY(&message_score, 0.01f);
+  message_score.outline_rect.y -= (int)fmax(GAME_HEIGHT / 240, 3);
 
   snprintf(message_cursor.text, sizeof(message_cursor.text), "+");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_cursor, 1, color_white, color_black);
@@ -299,11 +301,11 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "",
     "Mr Carl Riis",
     "Mr Original game",
-    "MW https://github.com/carltheperson/blockamok",
+    malloc(TEXT_LINE_SIZE),
     "",
     "Mb Mode8fx",
     "Mb v2.0 update and ports",
-    "MW https://github.com/Mode8fx/blockamok",
+    malloc(TEXT_LINE_SIZE),
     "",
     "Lo MUSIC",
     "",
@@ -341,11 +343,24 @@ void initStaticMessages(SDL_Renderer *renderer) {
     "",
     "Lo THANKS FOR PLAYING!",
     "",
-    "MG Blockamok is available on a wide variety",
-    "MG of homebrew-enabled systems, old and new.",
-    "MG Play it everywhere!",
+    malloc(TEXT_LINE_SIZE),
+    malloc(TEXT_LINE_SIZE),
+    malloc(TEXT_LINE_SIZE),
     "MW https://github.com/Mode8fx/blockamok"
   };
+  if (compactView) {
+    snprintf(message_array_credits_text[4], TEXT_LINE_SIZE, "MW github.com/carltheperson/blockamok");
+    snprintf(message_array_credits_text[8], TEXT_LINE_SIZE, "MW github.com/Mode8fx/blockamok");
+    snprintf(message_array_credits_text[46], TEXT_LINE_SIZE, "MG Blockamok is available on a wide");
+    snprintf(message_array_credits_text[47], TEXT_LINE_SIZE, "MG variety of homebrew-enabled systems,");
+    snprintf(message_array_credits_text[48], TEXT_LINE_SIZE, "MG old and new. Play it everywhere!");
+  } else {
+    snprintf(message_array_credits_text[4], TEXT_LINE_SIZE, "MW https://github.com/carltheperson/blockamok");
+    snprintf(message_array_credits_text[8], TEXT_LINE_SIZE, "MW https://github.com/Mode8fx/blockamok");
+    snprintf(message_array_credits_text[46], TEXT_LINE_SIZE, "MG Blockamok is available on a wide variety");
+    snprintf(message_array_credits_text[47], TEXT_LINE_SIZE, "MG of homebrew-enabled systems, old and new.");
+    snprintf(message_array_credits_text[48], TEXT_LINE_SIZE, "MG Play it everywhere!");
+  }
   mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
 
   destroyFont(Sans_126); // no longer needed
