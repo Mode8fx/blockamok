@@ -393,3 +393,34 @@ inline void refreshHighScoreText(SDL_Renderer *renderer) {
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_highscore, 1, color_orange, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.925f);
 }
+
+static void destroyMessageTexture(Message *message) {
+  if (message->outline_texture != NULL) SDL_DestroyTexture(message->outline_texture);
+	if (message->text_texture != NULL) SDL_DestroyTexture(message->text_texture);
+}
+
+void cleanUpText() {
+  destroyMessageTexture(&message_titlescreen);
+  destroyMessageTexture(&message_titlescreen_play);
+  destroyMessageTexture(&message_titlescreen_instructions);
+  destroyMessageTexture(&message_titlescreen_credits);
+  destroyMessageTexture(&message_titlescreen_quit);
+  destroyMessageTexture(&message_titlescreen_highscore);
+  destroyMessageTexture(&message_score);
+  destroyMessageTexture(&message_gameover);
+  destroyMessageTexture(&message_gameover_highscore);
+  destroyMessageTexture(&message_paused);
+  destroyMessageTexture(&message_paused_quit);
+
+  for (int i = 0; i < INSTRUCTIONS_LENGTH; i++) {
+    destroyMessageTexture(&message_array_instructions[i]);
+  }
+  for (int i = 0; i < CREDITS_LENGTH; i++) {
+    destroyMessageTexture(&message_array_credits[i]);
+  }
+
+  if (Sans_42 != NULL) TTF_CloseFont(Sans_42);
+  if (Sans_38 != NULL) TTF_CloseFont(Sans_38);
+
+  TTF_Quit();
+}

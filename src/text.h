@@ -25,3 +25,4 @@ extern void drawScoreText(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);
 extern void drawPausedText(SDL_Renderer *renderer);
 extern void refreshHighScoreText(SDL_Renderer *renderer);
+extern void cleanUpText();

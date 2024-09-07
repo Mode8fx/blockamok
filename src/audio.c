@@ -80,3 +80,30 @@ void playSFX(Sint8 index) {
 			break;
 	}
 }
+
+static void destroyMusic(Mix_Music *music) {
+	if (music != NULL) {
+		Mix_FreeMusic(music);
+		music = NULL;
+	}
+}
+
+static void destroyChunk(Mix_Chunk *chunk) {
+	if (chunk != NULL) {
+		Mix_FreeChunk(chunk);
+		chunk = NULL;
+	}
+}
+
+void cleanUpAudio() {
+	destroyMusic(bgm_1);
+	destroyMusic(bgm_2);
+	destroyMusic(bgm_3);
+	destroyMusic(bgm_4);
+	destroyMusic(bgm_5);
+	destroyChunk(sfx_zoom);
+	destroyChunk(sfx_thunk);
+
+	Mix_CloseAudio();
+	Mix_Quit();
+}

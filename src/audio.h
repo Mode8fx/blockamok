@@ -12,3 +12,4 @@ extern void initAudio();
 extern void playMusicAtIndex(Sint8 index);
 extern void handleChangeSong();
 extern void playSFX(Sint8 index);
+extern void cleanUpAudio();

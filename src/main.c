@@ -193,5 +193,9 @@ int main(int arg, char *argv[]) {
     SDL_RenderPresent(renderer);
   }
 
+  cleanUpText();
+  cleanUpAudio();
+  systemSpecificClose();
+
   return 0;
 }
