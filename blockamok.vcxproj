@@ -144,6 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\audio.c" />
+    <ClCompile Include="src\audio\ding2_short.c" />
+    <ClCompile Include="src\audio\ding2_short_reversed.c" />
     <ClCompile Include="src\audio\falling_people.c" />
     <ClCompile Include="src\audio\falling_up.c" />
     <ClCompile Include="src\audio\insanity.c" />
@@ -163,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\audio.h" />
+    <ClInclude Include="src\audio\ding2_short.h" />
+    <ClInclude Include="src\audio\ding2_short_reversed.h" />
     <ClInclude Include="src\audio\falling_people.h" />
     <ClInclude Include="src\audio\falling_up.h" />
     <ClInclude Include="src\audio\insanity.h" />

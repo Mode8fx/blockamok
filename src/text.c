@@ -30,7 +30,7 @@ Message message_gameover;
 Message message_gameover_highscore;
 Message message_paused;
 Message message_paused_quit;
-#define INSTRUCTIONS_LENGTH 12
+#define INSTRUCTIONS_LENGTH 13
 Message message_array_instructions[INSTRUCTIONS_LENGTH];
 #define CREDITS_LENGTH 50
 Message message_array_credits[CREDITS_LENGTH];
@@ -229,36 +229,39 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
   // Instructions Screen
   char *message_array_instructions_text[] = {
-		"Lo Dodge the incoming blocks!",
-		malloc(TEXT_LINE_SIZE),
+    "Lo Dodge the incoming blocks!",
     malloc(TEXT_LINE_SIZE),
     malloc(TEXT_LINE_SIZE),
-		"LW Two different movement types!",
-		"LW Press Left/Right to toggle:",
-		"Lr Type A",
-		"Mr Up/Down and Left/Right movement are",
-		"Mr independent, so diagonal is faster.",
-		"Lb Type B",
-		"Mb Speed is the same regardless of direction.",
-		"Mb More analog stick-friendly."
+    malloc(TEXT_LINE_SIZE),
+    malloc(TEXT_LINE_SIZE),
+    "Lo Two different movement types!",
+    "Lo Press Left/Right to toggle:",
+    "Lr Type A",
+    "Mr Up/Down and Left/Right movement are",
+    "Mr independent, so diagonal is faster.",
+    "Lb Type B",
+    "Mb Speed is the same regardless of direction.",
+    "Mb More analog stick-friendly."
 	};
-  snprintf(message_array_instructions_text[1], TEXT_LINE_SIZE, "MW Hold %s or %s to speed up.", btn_A, btn_B);
-  snprintf(message_array_instructions_text[2], TEXT_LINE_SIZE, "MW Press %s to pause.", btn_Start);
-  snprintf(message_array_instructions_text[3], TEXT_LINE_SIZE, "MW Press %s or %s to change music.", btn_L, btn_R);
+  snprintf(message_array_instructions_text[1], TEXT_LINE_SIZE, "MG Hold %s or %s to speed up.", btn_A, btn_B);
+  snprintf(message_array_instructions_text[2], TEXT_LINE_SIZE, "MG Press %s or %s to toggle cursor.", btn_X, btn_Y);
+  snprintf(message_array_instructions_text[3], TEXT_LINE_SIZE, "MG Press %s to pause.", btn_Start);
+  snprintf(message_array_instructions_text[4], TEXT_LINE_SIZE, "MG Press %s or %s to change music.", btn_L, btn_R);
   mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, INSTRUCTIONS_LENGTH);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
-  setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.25f);
-  setMessagePosRelativeToScreen(&message_array_instructions[2], 0.5f, 0.325f);
-  setMessagePosRelativeToScreen(&message_array_instructions[3], 0.5f, 0.4f);
-  setMessagePosRelativeToScreen(&message_array_instructions[4], 0.5f, 0.55f);
-  setMessagePosRelativeToScreen(&message_array_instructions[5], 0.5f, 0.625f);
-  setMessagePosRelativeToScreen(&message_array_instructions[6], 0.5f, 0.7f);
-  setMessagePosRelativeToScreen(&message_array_instructions[7], 0.5f, 0.775f);
-  setMessagePosRelativeToScreen(&message_array_instructions[8], 0.5f, 0.85f);
-  setMessagePosRelativeToScreen(&message_array_instructions[9], 0.5f, 0.7f);
-  setMessagePosRelativeToScreen(&message_array_instructions[10], 0.5f, 0.775f);
-  setMessagePosRelativeToScreen(&message_array_instructions[11], 0.5f, 0.85f);
+  setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.225f);
+  setMessagePosRelativeToScreen(&message_array_instructions[2], 0.5f, 0.3f);
+  setMessagePosRelativeToScreen(&message_array_instructions[3], 0.5f, 0.375f);
+  setMessagePosRelativeToScreen(&message_array_instructions[4], 0.5f, 0.45f);
+  setMessagePosRelativeToScreen(&message_array_instructions[5], 0.5f, 0.575f);
+  setMessagePosRelativeToScreen(&message_array_instructions[6], 0.5f, 0.65f);
+  setMessagePosRelativeToScreen(&message_array_instructions[7], 0.5f, 0.725f);
+  setMessagePosRelativeToScreen(&message_array_instructions[8], 0.5f, 0.8f);
+  setMessagePosRelativeToScreen(&message_array_instructions[9], 0.5f, 0.875f);
+  setMessagePosRelativeToScreen(&message_array_instructions[10], 0.5f, 0.725f);
+  setMessagePosRelativeToScreen(&message_array_instructions[11], 0.5f, 0.8f);
+  setMessagePosRelativeToScreen(&message_array_instructions[12], 0.5f, 0.875f);
 
   // Credits Screen
   char *message_array_credits_text[] = {
@@ -334,14 +337,15 @@ inline void drawInstructionsText(SDL_Renderer *renderer) {
 	renderMessage(renderer, &message_array_instructions[3]);
 	renderMessage(renderer, &message_array_instructions[4]);
   renderMessage(renderer, &message_array_instructions[5]);
+  renderMessage(renderer, &message_array_instructions[6]);
   if (!isAnalog) {
-		renderMessage(renderer, &message_array_instructions[6]);
-		renderMessage(renderer, &message_array_instructions[7]);
-		renderMessage(renderer, &message_array_instructions[8]);
-	} else {
+    renderMessage(renderer, &message_array_instructions[7]);
+    renderMessage(renderer, &message_array_instructions[8]);
     renderMessage(renderer, &message_array_instructions[9]);
+  } else {
     renderMessage(renderer, &message_array_instructions[10]);
     renderMessage(renderer, &message_array_instructions[11]);
+    renderMessage(renderer, &message_array_instructions[12]);
   }
 }
 
