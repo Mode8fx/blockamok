@@ -122,6 +122,7 @@ static void handleResetHighScore() {
 }
 
 static void handleFullscreenToggle() {
+#if defined(PC)
   if (keyPressed(INPUT_RS)) {
     if (isFullscreen) {
       isFullscreen = false;
@@ -132,6 +133,7 @@ static void handleFullscreenToggle() {
       SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
     }
   }
+#endif
 }
 
 int main(int arg, char *argv[]) {
