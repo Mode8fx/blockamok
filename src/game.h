@@ -18,6 +18,8 @@
 
 extern Uint64 gameStartTime;
 extern double scoreVal;
+extern int highScoreVal;
+extern bool newHighScore;
 
 extern bool isAnalog;
 extern Sint16 movementMagnitudeX;

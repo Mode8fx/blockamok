@@ -22,8 +22,10 @@ Message message_titlescreen_play;
 Message message_titlescreen_instructions;
 Message message_titlescreen_credits;
 Message message_titlescreen_quit;
+Message message_titlescreen_highscore;
 Message message_score;
 Message message_gameover;
+Message message_gameover_highscore;
 Message message_paused;
 Message message_paused_quit;
 #define INSTRUCTIONS_LENGTH 12
@@ -57,14 +59,11 @@ static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int ou
   if (message->text_texture != NULL) SDL_DestroyTexture(message->text_texture);
   message->text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
   SDL_FreeSurface(textSurface);
-
-  // Render the main text
-  SDL_RenderCopy(renderer, message->text_texture, NULL, &message->text_rect);
 }
 
 static inline void renderMessage(SDL_Renderer *renderer, Message *message) {
   SDL_RenderCopy(renderer, message->outline_texture, NULL, &message->outline_rect);
-	SDL_RenderCopy(renderer, message->text_texture, NULL, &message->text_rect);
+  SDL_RenderCopy(renderer, message->text_texture, NULL, &message->text_rect);
 }
 
 static inline void renderAndDestroyMessage(SDL_Renderer *renderer, Message *message) {
@@ -183,19 +182,21 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
   sprintf(message_titlescreen_play.text, "Press %s to fly", btn_Start);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_play, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.6f);
+  setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.575f);
 
   sprintf(message_titlescreen_instructions.text, "Press %s for instructions", btn_X);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_instructions, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_instructions, 0.5f, 0.7f);
+  setMessagePosRelativeToScreen(&message_titlescreen_instructions, 0.5f, 0.65f);
 
   sprintf(message_titlescreen_credits.text, "Press %s for credits", btn_Y);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_credits, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_credits, 0.5f, 0.8f);
+  setMessagePosRelativeToScreen(&message_titlescreen_credits, 0.5f, 0.725f);
 
   sprintf(message_titlescreen_quit.text, "Press %s to quit", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_quit, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_quit, 0.5f, 0.9f);
+  setMessagePosRelativeToScreen(&message_titlescreen_quit, 0.5f, 0.8f);
+
+  refreshHighScoreText(renderer);
 
   // Score Counter
   score_rect.y = -SCREEN_HEIGHT / 100;
@@ -204,6 +205,10 @@ void initStaticMessages(SDL_Renderer *renderer) {
   sprintf(message_gameover.text, "GAME OVER");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover, 3, color_white, color_black);
   setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
+
+  sprintf(message_gameover_highscore.text, "New High Score!");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover_highscore, 1, color_orange, color_black);
+  setMessagePosRelativeToScreen(&message_gameover_highscore, 0.5f, 0.75f);
 
 	// Pause Screen
   sprintf(message_paused.text, "PAUSED");
@@ -310,6 +315,7 @@ inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) 
     renderMessage(renderer, &message_titlescreen_instructions);
     renderMessage(renderer, &message_titlescreen_credits);
     renderMessage(renderer, &message_titlescreen_quit);
+    renderMessage(renderer, &message_titlescreen_highscore);
   }
 }
 
@@ -371,9 +377,18 @@ inline void drawScoreText(SDL_Renderer *renderer) {
 
 inline void drawGameOverText(SDL_Renderer *renderer) {
 	renderMessage(renderer, &message_gameover);
+  if (newHighScore) {
+    renderMessage(renderer, &message_gameover_highscore);
+  }
 }
 
 inline void drawPausedText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_paused);
   renderMessage(renderer, &message_paused_quit);
+}
+
+inline void refreshHighScoreText(SDL_Renderer *renderer) {
+  sprintf(message_titlescreen_highscore.text, "High Score: %d", highScoreVal);
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_highscore, 1, color_orange, color_black);
+  setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.925f);
 }

@@ -30,6 +30,8 @@ int cubesLength = 0;
 Cube cubes[1000];
 
 double scoreVal;
+int highScoreVal = 0;
+bool newHighScore = false;
 
 static void prepareGame() {
   for (int i = 0; i < cubesLength; i++) {
@@ -176,6 +178,7 @@ int main(int arg, char *argv[]) {
         drawScoreText(renderer);
         drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {
+          newHighScore = false;
           prepareGame();
           gameFrame((float)deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;

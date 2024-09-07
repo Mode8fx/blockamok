@@ -7,6 +7,7 @@
 #if !defined(SDL1)
 extern SDL_DisplayMode DM;
 #endif
+extern SDL_Renderer *renderer;
 
 #if defined(ANDROID)
 #define SCREEN_WIDTH  max(DM.w, DM.h)

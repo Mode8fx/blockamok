@@ -111,9 +111,6 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
   bool speedingUp = (keyHeld(INPUT_A) || keyHeld(INPUT_B));
 
   playerSpeed += deltaTime * SPEED_INCREASE * (speedingUp ? 3 : 1);
-  if (playerSpeed > MAX_SPEED) {
-    playerSpeed = MAX_SPEED;
-  }
 
   float speed = playerSpeed * deltaTime;
 
@@ -147,6 +144,9 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
   if (speedingUp) {
     zSpeed *= SPEED_UP_MULT;
   }
+  if (zSpeed < -MAX_SPEED) {
+    zSpeed = -MAX_SPEED;
+  }
 
   for (int i = 0; i < (*cubesLength); i++) {
     if ((cubes[i][0].z + zSpeed) < 1.5) {
@@ -165,6 +165,11 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
       float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
       if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5 && (SDL_GetTicks() - gameStartTime) > 1000) {
         playSFX(SFX_CRASH);
+        if (scoreVal > highScoreVal) {
+          highScoreVal = scoreVal;
+          newHighScore = true;
+          refreshHighScoreText(renderer);
+        }
         return GAME_STATE_GAME_OVER;
       }
     }
