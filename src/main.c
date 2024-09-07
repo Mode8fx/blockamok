@@ -31,9 +31,16 @@ int cubesLength = 0;
 Cube cubes[1000];
 
 double scoreVal;
-int highScoreVal = 1000;
+#define DEFAULT_HIGH_SCORE 1000
+int highScoreVal = DEFAULT_HIGH_SCORE;
 bool newHighScore = false;
 bool showCursor = true;
+
+Sint8 highScoreResetIndex = 0;
+#define HIGH_SCORE_RESET_SEQUENCE_LENGTH 8
+static const int highScoreResetSequence[HIGH_SCORE_RESET_SEQUENCE_LENGTH] = {
+  INPUT_UP, INPUT_B, INPUT_DOWN, INPUT_B, INPUT_LEFT, INPUT_B, INPUT_RIGHT, INPUT_B
+};
 
 static void handleWindowResize(SDL_Event *event) {
 #if defined(PC)
@@ -92,10 +99,25 @@ static void init() {
   prepareGame();
 }
 
-static void gameLoop() {
+static inline void gameLoop() {
   if (gameState != GAME_STATE_GAME_OVER) {
     gameState = gameFrame((float)deltaTime, cubes, &cubesLength);
   }
+}
+
+static void handleResetHighScore() {
+  if (keyPressed(highScoreResetSequence[highScoreResetIndex])) {
+    highScoreResetIndex++;
+    if (highScoreResetIndex >= HIGH_SCORE_RESET_SEQUENCE_LENGTH) {
+      highScoreVal = DEFAULT_HIGH_SCORE;
+      refreshHighScoreText(renderer);
+      writeSaveData();
+			playSFX(SFX_THUNK);
+      highScoreResetIndex = 0;
+    }
+	} else if (pressedKeys != 0) {
+    highScoreResetIndex = 0;
+	}
 }
 
 int main(int arg, char *argv[]) {
@@ -148,6 +170,7 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_TITLE_SCREEN:
+        handleResetHighScore();
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
           playSFX(SFX_ZOOM);
@@ -159,7 +182,7 @@ int main(int arg, char *argv[]) {
           credits_paused = false;
 					credits_startTime = SDL_GetTicks();
 					gameState = GAME_STATE_CREDITS;
-				} else if (keyPressed(INPUT_SELECT)) {
+        } else if (keyPressed(INPUT_SELECT)) {
           quit = true;
         }
         draw(renderer);
