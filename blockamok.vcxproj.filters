@@ -66,6 +66,12 @@
     <ClCompile Include="src\audio\thunk.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\audio\ding2_short.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\ding2_short_reversed.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\draw.h">
@@ -114,6 +120,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\audio\thunk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\ding2_short.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\audio\ding2_short_reversed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

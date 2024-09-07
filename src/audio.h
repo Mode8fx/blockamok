@@ -5,6 +5,8 @@
 
 #define SFX_ZOOM 0
 #define SFX_CRASH 1
+#define SFX_DING_A 2
+#define SFX_DING_B 3
 
 extern Sint8 audioIndex;
 

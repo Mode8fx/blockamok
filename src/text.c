@@ -25,6 +25,7 @@ Message message_titlescreen_credits;
 Message message_titlescreen_quit;
 Message message_titlescreen_highscore;
 Message message_score;
+Message message_cursor;
 Message message_gameover;
 Message message_gameover_highscore;
 Message message_paused;
@@ -199,8 +200,14 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
   refreshHighScoreText(renderer);
 
-  // Score Counter
-  score_rect.y = -SCREEN_HEIGHT / 100;
+  // Game
+  setMessagePosRelativeToScreenY(&message_score, 0.01f);
+
+  snprintf(message_cursor.text, sizeof(message_cursor.text), "+");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_cursor, 1, color_white, color_black);
+  setMessagePosRelativeToScreen(&message_cursor, 0.5f, 0.5f);
+  SDL_SetTextureAlphaMod(message_cursor.outline_texture, 64);
+  SDL_SetTextureAlphaMod(message_cursor.text_texture, 64);
 
 	// Game Over Screen
   snprintf(message_gameover.text, sizeof(message_gameover.text), "GAME OVER");
@@ -221,7 +228,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_paused_quit, 0.5f, 0.65f);
 
   // Instructions Screen
-  const char *message_array_instructions_text[] = {
+  char *message_array_instructions_text[] = {
 		"Lo Dodge the incoming blocks!",
 		malloc(TEXT_LINE_SIZE),
     malloc(TEXT_LINE_SIZE),
@@ -235,9 +242,9 @@ void initStaticMessages(SDL_Renderer *renderer) {
 		"Mb Speed is the same regardless of direction.",
 		"Mb More analog stick-friendly."
 	};
-  snprintf(message_array_instructions_text[1], sizeof(message_array_instructions_text[1]), "MW Hold %s or %s to speed up.", btn_A, btn_B);
-  snprintf(message_array_instructions_text[2], sizeof(message_array_instructions_text[2]), "MW Press %s to pause.", btn_Start);
-  snprintf(message_array_instructions_text[3], sizeof(message_array_instructions_text[3]), "MW Press %s or %s to change music.", btn_L, btn_R);
+  snprintf(message_array_instructions_text[1], TEXT_LINE_SIZE, "MW Hold %s or %s to speed up.", btn_A, btn_B);
+  snprintf(message_array_instructions_text[2], TEXT_LINE_SIZE, "MW Press %s to pause.", btn_Start);
+  snprintf(message_array_instructions_text[3], TEXT_LINE_SIZE, "MW Press %s or %s to change music.", btn_L, btn_R);
   mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, INSTRUCTIONS_LENGTH);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
@@ -254,7 +261,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_array_instructions[11], 0.5f, 0.85f);
 
   // Credits Screen
-  const char *message_array_credits_text[] = {
+  char *message_array_credits_text[] = {
     "Lo BLOCKAMOK v2.0",
     "",
     "Mr Carl Riis",
@@ -376,8 +383,14 @@ inline void drawScoreText(SDL_Renderer *renderer) {
   renderAndDestroyMessage(renderer, &message_score);
 }
 
+inline void drawCursor(SDL_Renderer *renderer) {
+  if (showCursor) {
+    renderMessage(renderer, &message_cursor);
+  }
+}
+
 inline void drawGameOverText(SDL_Renderer *renderer) {
-	renderMessage(renderer, &message_gameover);
+  renderMessage(renderer, &message_gameover);
   if (newHighScore) {
     renderMessage(renderer, &message_gameover_highscore);
   }

@@ -22,6 +22,7 @@ extern void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText);
 extern void drawInstructionsText(SDL_Renderer* renderer);
 extern void drawCreditsText(SDL_Renderer *renderer, Uint64 timer);
 extern void drawScoreText(SDL_Renderer *renderer);
+extern void drawCursor(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);
 extern void drawPausedText(SDL_Renderer *renderer);
 extern void refreshHighScoreText(SDL_Renderer *renderer);

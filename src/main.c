@@ -32,6 +32,7 @@ Cube cubes[1000];
 double scoreVal;
 int highScoreVal = 0;
 bool newHighScore = false;
+bool showCursor = true;
 
 static void prepareGame() {
   for (int i = 0; i < cubesLength; i++) {
@@ -150,10 +151,19 @@ int main(int arg, char *argv[]) {
         gameLoop();
         if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PAUSED;
+        } else if (keyPressed(INPUT_X) || keyPressed(INPUT_Y)) {
+          if (!showCursor) {
+            showCursor = true;
+            playSFX(SFX_DING_A);
+          } else {
+            showCursor = false;
+            playSFX(SFX_DING_B);
+          }
         }
         draw(renderer);
         drawCubes(renderer, cubes, cubesLength);
         drawScoreText(renderer);
+        drawCursor(renderer);
         break;
 
       case GAME_STATE_PAUSED:
@@ -193,6 +203,8 @@ int main(int arg, char *argv[]) {
 
   cleanUpText();
   cleanUpAudio();
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
   systemSpecificClose();
 
   return 0;

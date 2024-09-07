@@ -321,11 +321,14 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_RIGHT, SDL_SCANCODE_D);
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_LSHIFT);
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_RSHIFT);
+	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_KP_0);
 	mapInputToVar_Keyboard(state, INPUT_B, SDL_SCANCODE_BACKSPACE);
-	mapInputToVar_Keyboard(state, INPUT_X, SDL_SCANCODE_I);
-	mapInputToVar_Keyboard(state, INPUT_Y, SDL_SCANCODE_C);
+	mapInputToVar_Keyboard(state, INPUT_X, SDL_SCANCODE_X);
+	mapInputToVar_Keyboard(state, INPUT_Y, SDL_SCANCODE_Y);
 	mapInputToVar_Keyboard(state, INPUT_L, SDL_SCANCODE_MINUS);
+	mapInputToVar_Keyboard(state, INPUT_L, SDL_SCANCODE_L);
 	mapInputToVar_Keyboard(state, INPUT_R, SDL_SCANCODE_EQUALS);
+	mapInputToVar_Keyboard(state, INPUT_R, SDL_SCANCODE_R);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN2);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_KP_ENTER);
@@ -442,8 +445,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_Right = "Right";
 	const char *btn_A = "Shift/A";
 	const char *btn_B = "Backspace/B";
-	const char *btn_X = "I/X";
-	const char *btn_Y = "C/Y";
+	const char *btn_X = "X";
+	const char *btn_Y = "Y";
 	const char *btn_L = "-/L";
 	const char *btn_R = "=/R";
 	const char *btn_ZL = "?";
