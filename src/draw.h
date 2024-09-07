@@ -11,6 +11,9 @@ extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 #define GAME_WIDTH WINDOW_HEIGHT // square
 #define GAME_HEIGHT WINDOW_HEIGHT
+extern SDL_Rect gameViewport;
+extern SDL_Rect leftBar;
+extern SDL_Rect rightBar;
 
 #define MAX_DEPTH 150
 extern float HALF_FOV_ANGLE_RADIANS;

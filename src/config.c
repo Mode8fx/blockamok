@@ -7,8 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MIN_SCREEN_SIZE 240
-
 int WINDOW_WIDTH;
 int WINDOW_HEIGHT;
 
@@ -94,8 +92,8 @@ void loadConfig(int screenWidth, int screenHeight) {
 
   fclose(file);
 
-  if (width >= MIN_SCREEN_SIZE && width <= screenHeight &&
-    height >= MIN_SCREEN_SIZE && height <= screenHeight) {
+  if (width >= MIN_WINDOW_SIZE && width <= screenHeight &&
+    height >= MIN_WINDOW_SIZE && height <= screenHeight) {
     WINDOW_WIDTH = width;
     WINDOW_HEIGHT = height;
     validConfig = true;

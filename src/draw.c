@@ -8,8 +8,9 @@
 
 SDL_DisplayMode DM;
 
-Sint16 gameOffsetX;
 SDL_Rect gameViewport;
+SDL_Rect leftBar;
+SDL_Rect rightBar;
 
 float HALF_FOV_ANGLE_RADIANS;
 
@@ -44,14 +45,19 @@ float WIDTH_HALF;
 float WIDTH_NEG;
 
 void setScalingVals() {
+  int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
+  gameViewport = (SDL_Rect){ .x = gameOffsetX, .y = 0, .w = GAME_WIDTH, .h = GAME_HEIGHT };
+  leftBar = (SDL_Rect){ .x = 0, .y = 0, .w = gameOffsetX, .h = WINDOW_HEIGHT };
+  rightBar = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = gameOffsetX + 10, .h = WINDOW_HEIGHT };
+
   HEIGHT_DOUBLE = GAME_HEIGHT * 2.0f;
   HEIGHT_HALF = GAME_HEIGHT * 0.5f;
-  HEIGHT_NEG = -GAME_HEIGHT;
+  HEIGHT_NEG = -(float)GAME_HEIGHT;
   WIDTH_DOUBLE = GAME_WIDTH * 2.0f;
   WIDTH_HALF = GAME_WIDTH * 0.5f;
-  WIDTH_NEG = -GAME_WIDTH;
+  WIDTH_NEG = -(float)GAME_WIDTH;
 
-  HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0) * M_PI) / 2;
+  HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) / 2;
 }
 
 static void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
@@ -91,12 +97,12 @@ static inline float screenY(float y) {
 }
 
 static bool isPointOutsideFront(int f, int frontI) {
-  float x = transformedCube[f].x;
-  float y = transformedCube[f].y;
-  float frontStartX = transformedCube[frontI].x;
-  float frontEndX = transformedCube[frontI + 2].x;
-  float frontStartY = transformedCube[frontI].y;
-  float frontEndY = transformedCube[frontI + 2].y;
+  float x = (float)transformedCube[f].x;
+  float y = (float)transformedCube[f].y;
+  float frontStartX = (float)transformedCube[frontI].x;
+  float frontEndX = (float)transformedCube[frontI + 2].x;
+  float frontStartY = (float)transformedCube[frontI].y;
+  float frontEndY = (float)transformedCube[frontI + 2].y;
   bool outWithX = x < frontStartX || x > frontEndX;
 	if (outWithX) {
 		return true;
@@ -134,8 +140,8 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
       Point point = cube[orgCubeI + p];
       // Changing sPoint.x and sPoint.y can change the "angle" at which you fall, if it looks like you're shifting too much in one direction
       SDL_Point sPoint = {
-        screenX(transform3Dto2D(point.x, point.z)),
-        screenY(transform3Dto2D(point.y, point.z))
+        (int)screenX(transform3Dto2D(point.x, point.z)),
+        (int)screenY(transform3Dto2D(point.y, point.z))
       };
       transformedCube[transCubeI + p] = sPoint;
     }
@@ -183,7 +189,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     float z = (cube[(cubeI / 5) * 4].z) + fabsf(cube[(cubeI / 5) * 4].x) * 7 + fabsf(cube[(cubeI / 5) * 4].y) * 7;
     float fadeAmount = z < min ? 0 : fminf((z - min) / (max - min), 1);
 
-    color.a = fadeTowards(255, 0, fadeAmount);
+    color.a = (Uint8)fadeTowards(255, 0, fadeAmount);
 
     triangle1[0].color = color;
     triangle1[1].color = color;
@@ -216,8 +222,8 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     SDL_RenderGeometry(renderer, NULL, triangle1, 3, NULL, 0);
     SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
-    fadeAmount = fminf(fadeAmount * 1.5, 1);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, fadeTowards(255, 0, fadeAmount));
+    fadeAmount = fminf(fadeAmount * 1.5f, 1);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)fadeTowards(255, 0, fadeAmount));
     SDL_RenderDrawLines(renderer, linePoints, 5);
   }
 }

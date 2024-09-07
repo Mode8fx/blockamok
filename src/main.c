@@ -35,6 +35,39 @@ int highScoreVal = 1000;
 bool newHighScore = false;
 bool showCursor = true;
 
+static void handleWindowResize(SDL_Event *event) {
+#if defined(PC)
+  WINDOW_WIDTH = event->window.data1;
+  WINDOW_HEIGHT = event->window.data2;
+  bool needsReset = false;
+  if (WINDOW_WIDTH < MIN_WINDOW_SIZE) {
+    WINDOW_WIDTH = MIN_WINDOW_SIZE;
+    needsReset = true;
+  } if (WINDOW_HEIGHT < MIN_WINDOW_SIZE) {
+    WINDOW_HEIGHT = MIN_WINDOW_SIZE;
+    needsReset = true;
+  }
+  if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * max(WINDOW_WIDTH, WINDOW_HEIGHT)) {
+    if (WINDOW_WIDTH > WINDOW_HEIGHT) {
+      WINDOW_WIDTH = WINDOW_HEIGHT;
+    }
+    else {
+      WINDOW_HEIGHT = WINDOW_WIDTH;
+    }
+    needsReset = true;
+  }
+  if (WINDOW_HEIGHT > WINDOW_WIDTH) {
+    WINDOW_HEIGHT = WINDOW_WIDTH;
+		needsReset = true;
+  }
+  if (needsReset) {
+    SDL_SetWindowSize(window, WINDOW_WIDTH, WINDOW_HEIGHT);
+  }
+  setScalingVals();
+  initStaticMessages(renderer);
+#endif
+}
+
 static void prepareGame() {
   for (int i = 0; i < cubesLength; i++) {
     removeCube(cubes, i);
@@ -46,14 +79,12 @@ static void prepareGame() {
 }
 
 static void init() {
-  window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+  window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
-  setScalingVals();
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   controllerInit();
   TTF_Init();
-  initStaticMessages(renderer);
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   initAudio();
   playMusicAtIndex(audioIndex);
@@ -74,14 +105,11 @@ int main(int arg, char *argv[]) {
   loadConfig(DM.w, DM.h);
   readSaveData();
   init();
+  setScalingVals();
+  initStaticMessages(renderer);
   // Call once at the start for initial render
   gameFrame((float)deltaTime, cubes, &cubesLength);
   draw(renderer);
-
-  int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
-  SDL_Rect gameViewport = { gameOffsetX, 0, GAME_WIDTH, GAME_HEIGHT };
-  SDL_Rect leftBar = { 0, 0, gameOffsetX, WINDOW_HEIGHT };
-  SDL_Rect rightBar = { gameOffsetX + GAME_WIDTH, 0, gameOffsetX, WINDOW_HEIGHT };
 
   while (!quit) {
     last = now;
@@ -93,6 +121,13 @@ int main(int arg, char *argv[]) {
       if (event.type == SDL_QUIT) {
         quit = true;
       }
+#if defined(PC)
+      else if (event.type == SDL_WINDOWEVENT) {
+        if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+          handleWindowResize(&event);
+        }
+      }
+#endif
     }
 
     handlePlayerInput();
@@ -111,6 +146,7 @@ int main(int arg, char *argv[]) {
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         break;
+
       case GAME_STATE_TITLE_SCREEN:
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
