@@ -35,21 +35,31 @@ Message message_array_instructions[INSTRUCTIONS_LENGTH];
 #define CREDITS_LENGTH 50
 Message message_array_credits[CREDITS_LENGTH];
 
-SDL_Rect score_rect;
-
 bool credits_paused = false;
 
 ///////////////////
 // TEXT CREATION //
 ///////////////////
 
+static inline void destroyMessage(Message *message) {
+  if (message->outline_texture != NULL) {
+    SDL_DestroyTexture(message->outline_texture);
+    message->outline_texture = NULL;
+  }
+  if (message->text_texture != NULL) {
+    SDL_DestroyTexture(message->text_texture);
+    message->text_texture = NULL;
+  }
+}
+
 static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor) {
+  destroyMessage(message);
+  
   // Create the outline
   TTF_SetFontOutline(font, outlineSize);
   SDL_Surface *outlineSurface = TTF_RenderText_Solid(font, message->text, outlineColor);
   message->outline_rect.w = (int)(outlineSurface->w * sizeMult);
   message->outline_rect.h = (int)(outlineSurface->h * sizeMult);
-  if (message->outline_texture != NULL) SDL_DestroyTexture(message->outline_texture);
   message->outline_texture = SDL_CreateTextureFromSurface(renderer, outlineSurface);
   SDL_FreeSurface(outlineSurface);
 
@@ -58,7 +68,6 @@ static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int ou
   SDL_Surface *textSurface = TTF_RenderText_Solid(font, message->text, textColor);
   message->text_rect.w = (int)(textSurface->w * sizeMult);
   message->text_rect.h = (int)(textSurface->h * sizeMult);
-  if (message->text_texture != NULL) SDL_DestroyTexture(message->text_texture);
   message->text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
   SDL_FreeSurface(textSurface);
 }
@@ -384,7 +393,7 @@ inline void drawScoreText(SDL_Renderer *renderer) {
   snprintf(message_score.text, sizeof(message_score.text), "%d", (int)scoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_score, 1, color_white, color_black);
 	setMessagePosRelativeToScreenX(&message_score, 0.5f);
-  renderAndDestroyMessage(renderer, &message_score);
+  renderMessage(renderer, &message_score);
 }
 
 inline void drawCursor(SDL_Renderer *renderer) {
@@ -411,29 +420,25 @@ inline void refreshHighScoreText(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.925f);
 }
 
-static void destroyMessageTexture(Message *message) {
-  if (message->outline_texture != NULL) SDL_DestroyTexture(message->outline_texture);
-	if (message->text_texture != NULL) SDL_DestroyTexture(message->text_texture);
-}
-
 void cleanUpText() {
-  destroyMessageTexture(&message_titlescreen);
-  destroyMessageTexture(&message_titlescreen_play);
-  destroyMessageTexture(&message_titlescreen_instructions);
-  destroyMessageTexture(&message_titlescreen_credits);
-  destroyMessageTexture(&message_titlescreen_quit);
-  destroyMessageTexture(&message_titlescreen_highscore);
-  destroyMessageTexture(&message_score);
-  destroyMessageTexture(&message_gameover);
-  destroyMessageTexture(&message_gameover_highscore);
-  destroyMessageTexture(&message_paused);
-  destroyMessageTexture(&message_paused_quit);
+  destroyMessage(&message_titlescreen);
+  destroyMessage(&message_titlescreen_play);
+  destroyMessage(&message_titlescreen_instructions);
+  destroyMessage(&message_titlescreen_credits);
+  destroyMessage(&message_titlescreen_quit);
+  destroyMessage(&message_titlescreen_highscore);
+  destroyMessage(&message_score);
+  destroyMessage(&message_cursor);
+  destroyMessage(&message_gameover);
+  destroyMessage(&message_gameover_highscore);
+  destroyMessage(&message_paused);
+  destroyMessage(&message_paused_quit);
 
   for (int i = 0; i < INSTRUCTIONS_LENGTH; i++) {
-    destroyMessageTexture(&message_array_instructions[i]);
+    destroyMessage(&message_array_instructions[i]);
   }
   for (int i = 0; i < CREDITS_LENGTH; i++) {
-    destroyMessageTexture(&message_array_credits[i]);
+    destroyMessage(&message_array_credits[i]);
   }
 
   if (Sans_42 != NULL) TTF_CloseFont(Sans_42);
