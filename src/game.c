@@ -1,15 +1,18 @@
 #include <SDL.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "./game.h"
 #include "./math_custom.h"
 #include "./draw.h"
 #include "./input.h"
 #include "./audio.h"
+#include "./config.h"
+#include "./text.h"
 
 const float PLAYER_INITIAL_SPEED = 100;
 const float BASE_TURN_SPEED_TYPE_A = 30; // effectively 42.43 when diagonal
-const float BASE_TURN_SPEED_TYPE_B = 36.21;
+const float BASE_TURN_SPEED_TYPE_B = 36.21f;
 
 const int CUBE_AMOUNT = 600;
 
@@ -19,7 +22,7 @@ const float BOUNDS_X = 12;
 const float BOUNDS_Y = 12;
 const float SPEED_INCREASE = 350;
 const Sint8 SPEED_UP_MULT = 3;
-const Uint16 MAX_SPEED = 1500;
+const float MAX_SPEED = 1500;
 
 const float CUBE_SIZE = 0.5;
 
@@ -166,9 +169,10 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
       if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5 && (SDL_GetTicks() - gameStartTime) > 1000) {
         playSFX(SFX_CRASH);
         if (scoreVal > highScoreVal) {
-          highScoreVal = scoreVal;
+          highScoreVal = (int)scoreVal;
           newHighScore = true;
           refreshHighScoreText(renderer);
+          writeSaveData();
         }
         return GAME_STATE_GAME_OVER;
       }

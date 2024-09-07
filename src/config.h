@@ -1,3 +1,6 @@
 #pragma once
 
-extern void loadConfig(const char *filename, int screenWidth, int screenHeight);
+extern void initFilePaths();
+extern void writeSaveData();
+extern void readSaveData();
+extern void loadConfig(int screenWidth, int screenHeight);

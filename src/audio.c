@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "./audio.h"
 #include "./audio/spaceranger_50k.h"
 #include "./audio/mano_-_darkness_in_the_night.h"
@@ -10,9 +9,11 @@
 #include "./audio/thunk.h"
 #include "./audio/zoom3_short.h"
 #include "./input.h"
+#include "./config.h"
+
+#include <stdio.h>
 
 Sint8 audioIndex = 0;
-#define NUM_SONGS 5
 
 Mix_Music *bgm_1;
 Mix_Music *bgm_2;
@@ -69,9 +70,11 @@ void handleChangeSong() {
 		if (audioIndex < 0) {
 			audioIndex = NUM_SONGS - 1;
 		}
+		writeSaveData();
 		playMusicAtIndex(audioIndex);
 	} else if (keyPressed(INPUT_R)) {
 		audioIndex = (audioIndex + 1) % NUM_SONGS;
+		writeSaveData();
 		playMusicAtIndex(audioIndex);
 	}
 }

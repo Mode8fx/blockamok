@@ -56,7 +56,7 @@ static void init() {
   initStaticMessages(renderer);
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   initAudio();
-  playMusicAtIndex(0);
+  playMusicAtIndex(audioIndex);
   startingTick = SDL_GetTicks();
   prepareGame();
 }
@@ -70,7 +70,9 @@ static void gameLoop() {
 int main(int arg, char *argv[]) {
   SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
   SDL_GetCurrentDisplayMode(0, &DM);
-  loadConfig("config.ini", DM.w, DM.h);
+  initFilePaths();
+  loadConfig(DM.w, DM.h);
+  readSaveData();
   init();
   // Call once at the start for initial render
   gameFrame((float)deltaTime, cubes, &cubesLength);
@@ -133,6 +135,7 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_LEFT) || keyPressed(INPUT_RIGHT)) {
 					isAnalog = !isAnalog;
         } else if (keyPressed(INPUT_B) || keyPressed(INPUT_START) || keyPressed(INPUT_SELECT)) {
+          writeSaveData();
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         draw(renderer);
