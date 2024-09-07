@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app version="1">
+  <name>Blockamok</name>
+  <coder>Mode8fx</coder>
+  <version>2.0</version>
+  <release_date>20240909220000</release_date>
+  <short_description>Dodge the incoming blocks!</short_description>
+  <long_description>Fly through the void and survive for as long as you can!
+  
+  https://github.com/Mode8fx/Blockamok
+  
+  This is an upgraded version of Blockamok, originally made by Carl Riis. Credits are listed in-game.
+  </long_description>
+</app>

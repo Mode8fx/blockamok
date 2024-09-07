@@ -5,6 +5,11 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blockamok", "blockamok.vcxproj", "{B4E4FC74-8AEE-4FF1-916A-497791983AE0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AD55FD8-48C8-4006-90C3-D5942F2207D0}"
+	ProjectSection(SolutionItems) = preProject
+		release-resources\resource.rc = release-resources\resource.rc
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

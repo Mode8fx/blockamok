@@ -108,7 +108,7 @@ elseif (VITA)
 	vita_create_vpk(blockamok.vpk ${VITA_TITLEID} blockamok.self
 		VERSION ${VITA_VERSION}
 		NAME ${VITA_APP_NAME}
-		FILE release-resources/logo_icon_vita.png sce_sys/icon0.png
+		FILE release-resources/logo_icon_128.png sce_sys/icon0.png
 		FILE release-resources/background_vita.png sce_sys/livearea/contents/bg.png
 		FILE release-resources/logo_startup_vita.png sce_sys/livearea/contents/startup.png
 		FILE release-resources/template_vita.xml sce_sys/livearea/contents/template.xml

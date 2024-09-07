@@ -72,8 +72,8 @@ set MAKEFILE_WSL_RG35XX=%MAKEFILES_WSL%/make_rg35xx.sh
 
 
 :: Running compilation commands...
-call :compile_windows_x64
-call :compile_windows_x86
+rem call :compile_windows_x64
+rem call :compile_windows_x86
 call :compile_linux
 call :compile_gc
 call :compile_wii
@@ -154,7 +154,7 @@ sleep %SLEEP_COMPILE%
 echo Wii U: Moving compiled rpx to %OUTPUT_WII_U%...
 mv %REPO%/build_wii_u/blockamok.rpx %OUTPUT_WII_U%
 echo Wii U: Creating WUHB in %OUTPUT_WII_U_WUHB%...
-start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %OUTPUT_WII_U% %OUTPUT_WII_U_WUHB% --name=\"Blockamok\" --short-name=\"Blockamok\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_vita.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
+start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %OUTPUT_WII_U% %OUTPUT_WII_U_WUHB% --name=\"Blockamok\" --short-name=\"Blockamok\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_128.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
 sleep %SLEEP_COMPILE_SHORT%
 echo Wii U: Cleaning up...
 rm -r %REPO%/build_wii_u
