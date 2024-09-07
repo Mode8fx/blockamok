@@ -153,6 +153,7 @@
     <ClCompile Include="src\audio\spaceranger_50k.c" />
     <ClCompile Include="src\audio\thunk.c" />
     <ClCompile Include="src\audio\zoom3_short.c" />
+    <ClCompile Include="src\config.c" />
     <ClCompile Include="src\draw.c" />
     <ClCompile Include="src\fonts\Mono.c" />
     <ClCompile Include="src\game.c" />
@@ -174,6 +175,7 @@
     <ClInclude Include="src\audio\spaceranger_50k.h" />
     <ClInclude Include="src\audio\thunk.h" />
     <ClInclude Include="src\audio\zoom3_short.h" />
+    <ClInclude Include="src\config.h" />
     <ClInclude Include="src\draw.h" />
     <ClInclude Include="src\fonts\Mono.h" />
     <ClInclude Include="src\game.h" />

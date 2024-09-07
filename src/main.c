@@ -13,6 +13,7 @@
 #include "./math_custom.h"
 #include "./input.h"
 #include "./general.h"
+#include "./config.h"
 #include "./game_init.h"
 
 SDL_Window *window = NULL;
@@ -30,7 +31,7 @@ int cubesLength = 0;
 Cube cubes[1000];
 
 double scoreVal;
-int highScoreVal = 0;
+int highScoreVal = 1000;
 bool newHighScore = false;
 bool showCursor = true;
 
@@ -45,9 +46,7 @@ static void prepareGame() {
 }
 
 static void init() {
-  SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
-  SDL_GetCurrentDisplayMode(0, &DM);
-  window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  window = SDL_CreateWindow("Blockamok", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
   setScalingVals();
@@ -69,15 +68,18 @@ static void gameLoop() {
 }
 
 int main(int arg, char *argv[]) {
+  SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
+  SDL_GetCurrentDisplayMode(0, &DM);
+  loadConfig("config.ini", DM.w, DM.h);
   init();
   // Call once at the start for initial render
   gameFrame((float)deltaTime, cubes, &cubesLength);
   draw(renderer);
 
-  int gameOffsetX = (SCREEN_WIDTH - GAME_WIDTH) / 2;
+  int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
   SDL_Rect gameViewport = { gameOffsetX, 0, GAME_WIDTH, GAME_HEIGHT };
-  SDL_Rect leftBar = { 0, 0, gameOffsetX, SCREEN_HEIGHT };
-  SDL_Rect rightBar = { gameOffsetX + GAME_WIDTH, 0, gameOffsetX, SCREEN_HEIGHT };
+  SDL_Rect leftBar = { 0, 0, gameOffsetX, WINDOW_HEIGHT };
+  SDL_Rect rightBar = { gameOffsetX + GAME_WIDTH, 0, gameOffsetX, WINDOW_HEIGHT };
 
   while (!quit) {
     last = now;
