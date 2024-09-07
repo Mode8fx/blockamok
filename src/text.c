@@ -189,6 +189,8 @@ static inline void setMessagePosRelativeToScreen(Message *message, float x, floa
 ///////////////////
 
 void initStaticMessages(SDL_Renderer *renderer) {
+  cleanUpText();
+
   bool compactView = GAME_HEIGHT <= 289;
   // Initialize TTF_Fonts
   SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
@@ -567,12 +569,13 @@ void cleanUpText() {
   for (int i = 0; i < INSTRUCTIONS_LENGTH_PART1; i++) {
     destroyMessage(&message_array_instructions_part1[i]);
   }
+  for (int i = 0; i < INSTRUCTIONS_LENGTH_PART2; i++) {
+    destroyMessage(&message_array_instructions_part2[i]);
+  }
   for (int i = 0; i < CREDITS_LENGTH; i++) {
     destroyMessage(&message_array_credits[i]);
   }
 
   destroyFont(Sans_42);
   destroyFont(Sans_38);
-
-  TTF_Quit();
 }

@@ -39,6 +39,8 @@ extern const char *btn_L;
 extern const char *btn_R;
 extern const char *btn_ZL;
 extern const char *btn_ZR;
+extern const char *btn_LS;
+extern const char *btn_RS;
 extern const char *btn_Start;
 extern const char *btn_Select;
 
@@ -54,23 +56,15 @@ extern const char *btn_Select;
 #define INPUT_R      (1 << 9)
 #define INPUT_ZL     (1 << 10)
 #define INPUT_ZR     (1 << 11)
-#define INPUT_START  (1 << 12)
-#define INPUT_SELECT (1 << 13)
+#define INPUT_LS     (1 << 12)
+#define INPUT_RS     (1 << 13)
+#define INPUT_START  (1 << 14)
+#define INPUT_SELECT (1 << 15)
 
 #define STICK_DEADZONE 3277
 #define STICK_FULLZONE 31129
-//#define STICK_THRESHOLD 16384
 #define STICK_THRESHOLD 0
 #define TRIGGER_DEADZONE 26215
-
-#define LEFT_PRESSED    (1 << 0)
-#define LEFT_DEPRESSED  (1 << 1)
-#define RIGHT_PRESSED   (1 << 2)
-#define RIGHT_DEPRESSED (1 << 3)
-#define UP_PRESSED      (1 << 4)
-#define UP_DEPRESSED    (1 << 5)
-#define DOWN_PRESSED    (1 << 6)
-#define DOWN_DEPRESSED  (1 << 7)
 
 extern bool stickIsUp(Stick stick);
 extern bool stickIsDown(Stick stick);

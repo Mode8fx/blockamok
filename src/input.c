@@ -291,6 +291,8 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_SDL2(INPUT_START, SDL_CONTROLLER_BUTTON_START);
 	mapInputToVar_SDL2(INPUT_L, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
 	mapInputToVar_SDL2(INPUT_R, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+	mapInputToVar_SDL2(INPUT_LS, SDL_CONTROLLER_BUTTON_LEFTSTICK);
+	mapInputToVar_SDL2(INPUT_RS, SDL_CONTROLLER_BUTTON_RIGHTSTICK);
 
 	int leftTrigger = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
 	int rightTrigger = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
@@ -329,6 +331,7 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_L, SDL_SCANCODE_L);
 	mapInputToVar_Keyboard(state, INPUT_R, SDL_SCANCODE_EQUALS);
 	mapInputToVar_Keyboard(state, INPUT_R, SDL_SCANCODE_R);
+	mapInputToVar_Keyboard(state, INPUT_RS, SDL_SCANCODE_F11);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN2);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_KP_ENTER);
@@ -451,6 +454,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_R = "=/R";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
+	const char *btn_LS = "?";
+	const char *btn_RS = "F11/R-Stick";
 	const char *btn_Start = "Enter/Start";
 	const char *btn_Select = "Esc/Select";
 #elif defined(GAMECUBE)
@@ -466,6 +471,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_R = "R";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
+	const char *btn_LS = "?";
+	const char *btn_RS = "?";
 	const char *btn_Start = "Start";
 	const char *btn_Select = "Z";
 #elif defined(WII)
@@ -481,6 +488,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_R = "A";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
+	const char *btn_LS = "?";
+	const char *btn_RS = "?";
 	const char *btn_Start = "+";
 	const char *btn_Select = "-";
 #elif defined(PSP) | defined(VITA)
@@ -496,6 +505,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_R = "R";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
+	const char *btn_LS = "?";
+	const char *btn_RS = "?";
 	const char *btn_Start = "Start";
 	const char *btn_Select = "Select";
 #elif defined(SWITCH)
@@ -511,6 +522,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_R = "R";
 	const char *btn_ZL = "ZL";
 	const char *btn_ZR = "ZR";
+	const char *btn_LS = "L-Stick";
+	const char *btn_RS = "R-Stick";
 	const char *btn_Start = "+";
 	const char *btn_Select = "-";
 #else
@@ -526,6 +539,8 @@ static void handleAllCurrentInputs() {
 	const char *btn_R = "R";
 	const char *btn_ZL = "ZL";
 	const char *btn_ZR = "ZR";
+	const char *btn_LS = "L-Stick";
+	const char *btn_RS = "R-Stick";
 	const char *btn_Start = "Start";
 	const char *btn_Select = "Select";
 #endif

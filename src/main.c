@@ -20,6 +20,7 @@ SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
 int gameState = GAME_STATE_STARTED;
+bool isFullscreen = false;
 
 Uint64 now = 0;
 Uint64 last = 0;
@@ -120,6 +121,19 @@ static void handleResetHighScore() {
 	}
 }
 
+static void handleFullscreenToggle() {
+  if (keyPressed(INPUT_RS)) {
+    if (isFullscreen) {
+      isFullscreen = false;
+      SDL_SetWindowFullscreen(window, 0);
+    }
+    else {
+      isFullscreen = true;
+      SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    }
+  }
+}
+
 int main(int arg, char *argv[]) {
   SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
   SDL_GetCurrentDisplayMode(0, &DM);
@@ -154,6 +168,7 @@ int main(int arg, char *argv[]) {
 
     handlePlayerInput();
     handleChangeSong();
+    handleFullscreenToggle();
 
     SDL_RenderSetViewport(renderer, &gameViewport);
 
@@ -266,7 +281,10 @@ int main(int arg, char *argv[]) {
   }
 
   cleanUpText();
+  TTF_Quit();
   cleanUpAudio();
+  Mix_CloseAudio();
+  Mix_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   systemSpecificClose();

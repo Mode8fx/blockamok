@@ -122,7 +122,4 @@ void cleanUpAudio() {
 	destroyChunk(sfx_thunk);
 	destroyChunk(sfx_ding_a);
 	destroyChunk(sfx_ding_b);
-
-	Mix_CloseAudio();
-	Mix_Quit();
 }
