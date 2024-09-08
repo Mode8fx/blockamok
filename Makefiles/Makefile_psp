@@ -8,13 +8,12 @@ OBJS		=	$(patsubst %.c, %.o, $(SRCS))
 
 PSPSDK=$(shell psp-config --pspsdk-path)
 
-CFLAGS = -G0 -O2 -DPSP -I$(PSPSDK)/../include/SDL2
+CFLAGS = `psp-pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer` -G0 -O2 -DPSP
 
-LIBDIR =
-LDFLAGS =
-LIBS = -lSDL2main -lpng -ljpeg -lSDL2_mixer -lSDL2_ttf -lSDL2 -lGL -lGLU -lglut -lfreetype -lz -lbz2 -lpspmp3 -lmad -logg -lvorbisenc -lvorbis -lvorbisfile -lmikmod -lharfbuzz \
-         -lpspvfpu -lpsphprm -lpspsdk -lpspctrl -lpspumd -lpsprtc -lpsppower -lpspgum -lpspgu -lpspaudiolib -lpspaudio \
-         -lm -lpspvram
+# LIBDIR = -I$(PSPSDK)/../lib/SDL2
+# LDFLAGS =-L$(LIBDIR)
+LIBS = `psp-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer` \
+        -lpspvfpu -lpsphprm -lpspsdk -lpspctrl -lpsprtc -lpsppower -lpspgum -lpspgu -lpspaudiolib -lpspaudio -lm -lpspvram
 
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = blockamok
