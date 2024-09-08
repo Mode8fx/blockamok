@@ -6,14 +6,12 @@ SRC_DIR		=	src
 SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 OBJS		=	$(patsubst %.c, %.o, $(SRCS))
 
-PSPSDK=$(shell psp-config --pspsdk-path)
-
-CFLAGS = `psp-pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer` -G0 -O2 -DPSP
+CFLAGS = $(shell psp-pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -G0 -O2 -DPSP
 
 # LIBDIR = -I$(PSPSDK)/../lib/SDL2
 # LDFLAGS =-L$(LIBDIR)
-LIBS = `psp-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer` \
-        -lpspvfpu -lpsphprm -lpspsdk -lpspctrl -lpsprtc -lpsppower -lpspgum -lpspgu -lpspaudiolib -lpspaudio -lm -lpspvram
+LIBS = $(shell psp-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer | sed 's/-pthread//g') \
+        -lpspsdk -lpsprtc -lpspgum -lpspaudiolib
 
 EXTRA_TARGETS = EBOOT.PBP
 PSP_EBOOT_TITLE = blockamok
@@ -21,4 +19,5 @@ PSP_EBOOT_ICON = release-resources/logo_icon_psp.png
 PSP_EBOOT_PIC1 = release-resources/background_psp.png
 # psp sound file: PSP_EBOOT_SND0=SND0.at3
 
+PSPSDK=$(shell psp-config --pspsdk-path)
 include $(PSPSDK)/lib/build.mak
