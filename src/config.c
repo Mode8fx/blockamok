@@ -9,6 +9,7 @@
 
 int WINDOW_WIDTH;
 int WINDOW_HEIGHT;
+#define DEFAULT_SCREEN_SIZE (screenHeight * 0.75)
 
 char rootDir[256];
 
@@ -61,7 +62,7 @@ void readSaveData() {
 static void writeDefaultConfig(int screenHeight) {
   FILE *file = fopen(configFile, "w");
   fprintf(file, "# Size must be between 240 and your screen's height\n");
-  fprintf(file, "WINDOW_SIZE=%d\n", (int)(screenHeight * 0.9));
+  fprintf(file, "WINDOW_SIZE=%d\n", (int)DEFAULT_SCREEN_SIZE);
   fclose(file);
 }
 
@@ -76,8 +77,8 @@ void loadConfig(int screenWidth, int screenHeight) {
   FILE *file = fopen(configFile, "r");
   if (file == NULL) {
     writeDefaultConfig(screenHeight);
-    WINDOW_WIDTH = (int)(screenHeight * 0.9);
-    WINDOW_HEIGHT = (int)(screenHeight * 0.9);
+    WINDOW_WIDTH = (int)DEFAULT_SCREEN_SIZE;
+    WINDOW_HEIGHT = (int)DEFAULT_SCREEN_SIZE;
     return;
   }
 
@@ -105,8 +106,8 @@ void loadConfig(int screenWidth, int screenHeight) {
   if (!validConfig) {
     // Invalid config, create a new one with default values
     writeDefaultConfig(screenHeight);
-    WINDOW_WIDTH = (int)(screenHeight * 0.9);
-    WINDOW_HEIGHT = (int)(screenHeight * 0.9);
+    WINDOW_WIDTH = (int)DEFAULT_SCREEN_SIZE;
+    WINDOW_HEIGHT = (int)DEFAULT_SCREEN_SIZE;
   }
 #endif
 }

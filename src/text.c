@@ -192,31 +192,7 @@ static inline void setMessagePosRelativeToScreen(Message *message, float x, floa
 // GAME-SPECIFIC //
 ///////////////////
 
-void initStaticMessages(SDL_Renderer *renderer) {
-  cleanUpText();
-
-  bool compactView = GAME_HEIGHT <= 289;
-  // Initialize TTF_Fonts
-  SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
-
-  int textSize_126 = (int)fmax(126 * GAME_HEIGHT / 1000, 36);
-  outlineSize_126 = (int)fmax(textSize_126 / 10, 3);
-  Sans_126 = TTF_OpenFontRW(rw, 0, textSize_126);
-
-  SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 13);
-  outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
-  Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
-
-  SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 11);
-  outlineSize_38 = (int)fmax(textSize_38 / 10, 3);
-  if (compactView) {
-    outlineSize_38 = 2;
-  }
-  Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
-
-  // Title Screen
+static void initStaticMessages_TitleScreen() {
   snprintf(message_titlescreen.text, sizeof(message_titlescreen.text), "Blockamok");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen, 0.5f, 0.4f);
@@ -238,8 +214,9 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_titlescreen_quit, 0.5f, 0.8f);
 
   refreshHighScoreText(renderer);
+}
 
-  // Game
+static void initStaticMessages_Game() {
   setMessagePosRelativeToScreenY(&message_score, 0.01f);
   message_score.outline_rect.y -= (int)fmax(GAME_HEIGHT / 240, 3);
 
@@ -249,7 +226,6 @@ void initStaticMessages(SDL_Renderer *renderer) {
   SDL_SetTextureAlphaMod(message_cursor.outline_texture, 64);
   SDL_SetTextureAlphaMod(message_cursor.text_texture, 64);
 
-	// Game Over Screen
   snprintf(message_gameover.text, sizeof(message_gameover.text), "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
@@ -258,7 +234,6 @@ void initStaticMessages(SDL_Renderer *renderer) {
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover_highscore, 1, color_orange, color_black);
   setMessagePosRelativeToScreen(&message_gameover_highscore, 0.5f, 0.75f);
 
-	// Pause Screen
   snprintf(message_paused.text, sizeof(message_paused.text), "PAUSED");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_paused, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused, 0.5f, 0.5f);
@@ -266,15 +241,16 @@ void initStaticMessages(SDL_Renderer *renderer) {
   snprintf(message_paused_quit.text, sizeof(message_paused_quit.text), "Press %s to quit", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_paused_quit, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused_quit, 0.5f, 0.65f);
+}
 
-  // Instructions Screen
+static void initStaticMessages_Instructions(bool compactView) {
   char *message_array_instructions_text_part1[] = {
-    "Lo Dodge the incoming blocks!",
-    malloc(TEXT_LINE_SIZE),
-    malloc(TEXT_LINE_SIZE),
-    malloc(TEXT_LINE_SIZE),
-    malloc(TEXT_LINE_SIZE)
-	};
+  "Lo Dodge the incoming blocks!",
+  malloc(TEXT_LINE_SIZE),
+  malloc(TEXT_LINE_SIZE),
+  malloc(TEXT_LINE_SIZE),
+  malloc(TEXT_LINE_SIZE)
+  };
   snprintf(message_array_instructions_text_part1[1], TEXT_LINE_SIZE, "MG Hold %s or %s to speed up.", btn_A, btn_B);
   snprintf(message_array_instructions_text_part1[2], TEXT_LINE_SIZE, "MG Press %s or %s to toggle cursor.", btn_X, btn_Y);
   snprintf(message_array_instructions_text_part1[3], TEXT_LINE_SIZE, "MG Press %s to pause.", btn_Start);
@@ -295,7 +271,8 @@ void initStaticMessages(SDL_Renderer *renderer) {
       "",
     };
     mapTextArrayToMessageArray(renderer, message_array_instructions_text_part2, message_array_instructions_part2, INSTRUCTIONS_LENGTH_PART2);
-  } else {
+  }
+  else {
     char *message_array_instructions_text_part2[] = {
       "Lo Two different movement types!",
       "Lo Press Left/Right to toggle:",
@@ -326,8 +303,9 @@ void initStaticMessages(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_array_instructions_part2[7], 0.5f, 0.8f);
   setMessagePosRelativeToScreen(&message_array_instructions_part2[8], 0.5f, 0.875f);
   setMessagePosRelativeToScreen(&message_array_instructions_part2[9], 0.5f, 0.95f);
+}
 
-  // Credits Screen
+static void initStaticMessages_Credits(bool compactView) {
   if (!compactView) {
     char *message_array_credits_text[] = {
       "Lo BLOCKAMOK v2.0",
@@ -382,13 +360,14 @@ void initStaticMessages(SDL_Renderer *renderer) {
       "MW https://github.com/Mode8fx/blockamok",
       "",
       "",
-      "MG One last thing... to reset your high score,",
-      "MG go back to the title screen and press:",
+      "MG One last thing: to reset your high score,",
+      "MG go back to the title screen and press",
       "Mr Up B Down B Left B Right B"
     };
     CREDITS_LENGTH = 55;
     mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
-  } else {
+  }
+  else {
     char *message_array_credits_text[] = {
       "Lo BLOCKAMOK v2.0",
       "",
@@ -448,14 +427,43 @@ void initStaticMessages(SDL_Renderer *renderer) {
       "MW /Mode8fx/blockamok",
       "",
       "",
-      "MG One last thing... to reset your",
+      "MG One last thing: to reset your",
       "MG high score, go back to the",
-      "MG title screen and press:",
+      "MG title screen and press",
       "Mr Up B Down B Left B Right B"
     };
     CREDITS_LENGTH = 62;
     mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   }
+}
+
+void initStaticMessages(SDL_Renderer *renderer) {
+  cleanUpText();
+  bool compactView = GAME_HEIGHT <= 289;
+
+  SDL_RWops *rw = SDL_RWFromMem(Mono_ttf, Mono_ttf_len);
+
+  int textSize_126 = (int)fmax(126 * GAME_HEIGHT / 1000, 36);
+  outlineSize_126 = (int)fmax(textSize_126 / 10, 3);
+  Sans_126 = TTF_OpenFontRW(rw, 0, textSize_126);
+
+  SDL_RWseek(rw, 0, RW_SEEK_SET);
+  int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 13);
+  outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
+  Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
+
+  SDL_RWseek(rw, 0, RW_SEEK_SET);
+  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 11);
+  outlineSize_38 = (int)fmax(textSize_38 / 10, 3);
+  if (compactView) {
+    outlineSize_38 = 2;
+  }
+  Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
+
+  initStaticMessages_TitleScreen();
+  initStaticMessages_Game();
+  initStaticMessages_Instructions(compactView);
+  initStaticMessages_Credits(compactView);
 
   destroyFont(Sans_126); // no longer needed
 }
