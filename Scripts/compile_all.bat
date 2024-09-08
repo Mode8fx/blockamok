@@ -29,11 +29,11 @@ set MAKEFILES_WSL=/mnt%MAKEFILES_DKP%
 
 :: Makefile: Windows x64
 set MAKEFILE_MSYS_WINDOWS=%MAKEFILES_MSYS%/Makefile_pc
-set OUTPUT_WINDOWS=%OUTPUT_DIR%-x64/Blockamok.exe
+set OUTPUT_WINDOWS=%OUTPUT_DIR%-windows-x64/Blockamok.exe
 
 :: Makefile: Windows x86
 set MAKEFILE_MSYS_WINDOWS_X86=%MAKEFILES_MSYS%/Makefile_pc_x86
-set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-x86/Blockamok.exe
+set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-windows-x86/Blockamok.exe
 
 :: Makefile: Linux
 set MAKEFILE_WSL_LINUX=%MAKEFILES_WSL%/Makefile_linux
@@ -62,7 +62,7 @@ set OUTPUT_PSP=%OUTPUT_DIR%-psp/PSP/GAME/Blockamok/EBOOT.PBP
 
 :: Makefile: Vita
 set MAKEFILE_WSL_VITA=%MAKEFILES_WSL%/make_vita.sh
-set OUTPUT_VITA=%OUTPUT_DIR_BASE%/Blockamok.vpk
+set OUTPUT_VITA=%OUTPUT_DIR_BASE%/Blockamok-vita.vpk
 
 :: Makefile: Xbox (original)
 set MAKEFILE_WSL_XBOX=%MAKEFILES_WSL%/Makefile_xbox
