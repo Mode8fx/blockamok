@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "./config.h"
 #include "./draw.h"
 #include "./text.h"
 #include "./audio.h"
@@ -13,7 +14,6 @@
 #include "./math_custom.h"
 #include "./input.h"
 #include "./general.h"
-#include "./config.h"
 #include "./game_init.h"
 
 SDL_Window *window = NULL;
@@ -55,7 +55,7 @@ static void handleWindowResize(SDL_Event *event) {
     WINDOW_HEIGHT = MIN_WINDOW_SIZE;
     needsReset = true;
   }
-  if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * max(WINDOW_WIDTH, WINDOW_HEIGHT)) {
+  if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * fmax(WINDOW_WIDTH, WINDOW_HEIGHT)) {
     if (WINDOW_WIDTH > WINDOW_HEIGHT) {
       WINDOW_WIDTH = WINDOW_HEIGHT;
     }

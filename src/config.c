@@ -67,8 +67,8 @@ static void writeDefaultConfig(int screenHeight) {
 
 void loadConfig(int screenWidth, int screenHeight) {
 #if defined(ANDROID)
-	WINDOW_WIDTH = max(screenWidth, screenHeight);
-	WINDOW_HEIGHT = min(screenWidth, screenHeight);
+	WINDOW_WIDTH = (int)fmax(screenWidth, screenHeight);
+	WINDOW_HEIGHT = (int)fmin(screenWidth, screenHeight);
 #elif !defined(PC)
 	WINDOW_WIDTH = screenWidth;
 	WINDOW_HEIGHT = screenHeight;

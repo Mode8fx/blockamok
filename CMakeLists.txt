@@ -3,6 +3,10 @@ project(blockamok C)
 
 add_executable(blockamok
 	"src/main.c"
+	"src/audio.c"
+	"src/audio.h"
+	"src/config.c"
+	"src/config.h"
 	"src/draw.c"
 	"src/draw.h"
 	"src/game.c"

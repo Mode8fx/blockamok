@@ -1,4 +1,5 @@
 #include "./general.h"
+#include <stdio.h>
 
 void systemSpecificOpen() {
 #if defined(WII_U)
@@ -7,8 +8,7 @@ void systemSpecificOpen() {
 	WHBGetSdCardMountPath();
 	char sdPathStr[256];
 	const char *sdPathStart = WHBGetSdCardMountPath();
-	strcpy(sdPathStr, sdPathStart);
-	strcat(sdPathStr, "/wiiu/apps/blockamok");
+	snprintf(sdPathStr, sizeof(sdPathStr), "%s/wiiu/apps/blockamok", sdPathStart);
 	const char *sdPath = sdPathStr;
 	chdir(sdPath);
 #elif defined(VITA)

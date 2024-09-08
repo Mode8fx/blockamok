@@ -1,7 +1,7 @@
 @echo off
 
 :: Manual sleep amounts (because `start /wait` doesn't work...)
-set SLEEP_COMPILE=15
+set SLEEP_COMPILE=18
 set SLEEP_COMPILE_SHORT=5
 set SLEEP_CLEAN=2
 
@@ -37,7 +37,7 @@ set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-x86/Blockamok.exe
 
 :: Makefile: Linux
 set MAKEFILE_WSL_LINUX=%MAKEFILES_WSL%/Makefile_linux
-set OUTPUT_LINUX=%OUTPUT_DIR_BASE%/Blockamok_linux
+set OUTPUT_LINUX=%OUTPUT_DIR_BASE%/Blockamok-linux
 
 :: Makefile: Gamecube
 set MAKEFILE_DKP_GC=%MAKEFILES_DKP%/Makefile_gc

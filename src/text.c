@@ -94,7 +94,7 @@ static inline void renderAndDestroyMessage(SDL_Renderer *renderer, Message *mess
 	SDL_DestroyTexture(message->outline_texture);
 }
 
-static void mapTextArrayToMessageArray(SDL_Renderer *renderer, const char *textArray[], Message *messageArray, Sint16 numMessages) {
+static void mapTextArrayToMessageArray(SDL_Renderer *renderer, char *textArray[], Message *messageArray, Sint16 numMessages) {
   for (Sint16 i = 0; i < numMessages; i++) {
 		if (textArray[i][0] == '\0') {
       textArray[i] = "    ";
@@ -105,7 +105,11 @@ static void mapTextArrayToMessageArray(SDL_Renderer *renderer, const char *textA
 		char flag_color = textArray[i][1];
 		SDL_Color text_color;
 		const char *flag_text = &textArray[i][3];
+#ifdef _MSC_VER
     strncpy_s(messageArray[i].text, sizeof(messageArray[i].text), flag_text, _TRUNCATE);
+#else
+    strncpy(messageArray[i].text, flag_text, sizeof(messageArray[i].text) - 1);
+#endif
     messageArray[i].text[sizeof(messageArray[i].text) - 1] = '\0';
 		switch (flag_font) {
 		  case 'G':
