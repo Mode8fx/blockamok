@@ -31,6 +31,9 @@ void initFilePaths() {
 }
 
 void writeSaveData() {
+#if defined(LINUX) || defined(VITA)
+  mkdir(rootDir, 0777);
+#endif
   FILE *file = fopen(saveFile, "wb");
   if (file != NULL) {
     char emptyBytes[122] = {0}; // In case I want to add more to the save data in a future update

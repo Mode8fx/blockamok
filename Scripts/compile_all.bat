@@ -10,7 +10,8 @@ set REPO=D:/GitHub/Blockamok
 set REPO_DKP=/d/GitHub/Blockamok
 set REPO_WSL=/mnt%REPO_DKP%
 set REPO_MSYS=%REPO_DKP%
-set OUTPUT_DIR=%REPO%/dist/new_version/Blockamok
+set OUTPUT_DIR_BASE=%REPO%/dist/new_version
+set OUTPUT_DIR=%OUTPUT_DIR_BASE%/Blockamok
 set RELEASE_RESOURCES=%REPO%/release-resources
 
 :: Path: devkitPro
@@ -36,7 +37,7 @@ set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-x86/Blockamok.exe
 
 :: Makefile: Linux
 set MAKEFILE_WSL_LINUX=%MAKEFILES_WSL%/Makefile_linux
-set OUTPUT_LINUX=%OUTPUT_DIR%-linux/Blockamok
+set OUTPUT_LINUX=%OUTPUT_DIR_BASE%/Blockamok_linux
 
 :: Makefile: Gamecube
 set MAKEFILE_DKP_GC=%MAKEFILES_DKP%/Makefile_gc
@@ -61,7 +62,7 @@ set OUTPUT_PSP=%OUTPUT_DIR%-psp/PSP/GAME/Blockamok/EBOOT.PBP
 
 :: Makefile: Vita
 set MAKEFILE_WSL_VITA=%MAKEFILES_WSL%/make_vita.sh
-set OUTPUT_VITA=%OUTPUT_DIR%-vita/VPK/Blockamok.vpk
+set OUTPUT_VITA=%OUTPUT_DIR_BASE%/Blockamok.vpk
 
 :: Makefile: Xbox (original)
 set MAKEFILE_WSL_XBOX=%MAKEFILES_WSL%/Makefile_xbox
