@@ -24,4 +24,7 @@ void draw(SDL_Renderer *renderer);
 
 void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength);
 
+extern inline void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength);
+extern inline void drawEssentialsWithAlpha(SDL_Renderer *renderer, Cube cubes[], int cubesLength, Uint8 alpha);
+
 void drawCube(SDL_Renderer *renderer, Cube cube);

@@ -167,6 +167,7 @@
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\math_custom.c" />
     <ClCompile Include="src\text.c" />
+    <ClCompile Include="src\text_options.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="release-resources\resource.h" />

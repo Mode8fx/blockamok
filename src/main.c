@@ -176,8 +176,7 @@ int main(int arg, char *argv[]) {
 
     switch (gameState) {
       case GAME_STATE_STARTED:
-        draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer, false);
         fadeInFromBlack(renderer);
         if (now - startingTick > INIT_FADE_LENGTH) {
@@ -193,38 +192,52 @@ int main(int arg, char *argv[]) {
           playSFX(SFX_ZOOM);
           gameStartTime = SDL_GetTicks();
           gameState = GAME_STATE_PLAYING;
-        } else if (keyPressed(INPUT_X)) {
-          gameState = GAME_STATE_INSTRUCTIONS;
-				} else if (keyPressed(INPUT_Y)) {
-          credits_paused = false;
-					credits_startTime = SDL_GetTicks();
-					gameState = GAME_STATE_CREDITS;
         } else if (keyPressed(INPUT_SELECT)) {
-          quit = true;
+					openPage(renderer, &optionPage_Main, true);
+          gameState = GAME_STATE_OPTIONS;
         }
-        draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer, true);
         break;
+
+      case GAME_STATE_OPTIONS:
+        if (keyPressed(INPUT_A)) {
+          switch (optionPage_Main.index) {
+            case 4:
+              credits_paused = false;
+              credits_startTime = SDL_GetTicks();
+              break;
+            case 5:
+              highScoreVal = DEFAULT_HIGH_SCORE;
+              refreshHighScoreText(renderer);
+              writeSaveData();
+              playSFX(SFX_THUNK);
+              highScoreResetIndex = 0;
+              break;
+            case 7:
+              quit = true;
+              writeSaveData();
+              break;
+            default:
+              break;
+          }
+        }
+				drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, &optionPage_Main, true);
+				break;
 
       case GAME_STATE_INSTRUCTIONS:
         if (keyPressed(INPUT_LEFT) || keyPressed(INPUT_RIGHT)) {
 					isAnalog = !isAnalog;
-        } else if (keyPressed(INPUT_B) || keyPressed(INPUT_START) || keyPressed(INPUT_SELECT)) {
-          writeSaveData();
-          gameState = GAME_STATE_TITLE_SCREEN;
         }
-        draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, &optionPage_Empty, false);
         drawInstructionsText(renderer);
         break;
 
 			case GAME_STATE_CREDITS:
-        if (keyPressed(INPUT_B) || keyPressed(INPUT_START) || keyPressed(INPUT_SELECT)) {
-          gameState = GAME_STATE_TITLE_SCREEN;
-        }
-				draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, &optionPage_Empty, false);
         drawCreditsText(renderer, now);
         break;
 
@@ -241,8 +254,7 @@ int main(int arg, char *argv[]) {
             playSFX(SFX_DING_B);
           }
         }
-        draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
         drawScoreText(renderer);
         drawCursor(renderer);
         break;
@@ -255,15 +267,13 @@ int main(int arg, char *argv[]) {
           gameFrame((float)deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;
         }
-        draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
         drawScoreText(renderer);
         drawPausedText(renderer);
         break;
 
       case GAME_STATE_GAME_OVER:
-        draw(renderer);
-        drawCubes(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubesLength);
         drawScoreText(renderer);
         drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {

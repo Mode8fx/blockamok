@@ -22,12 +22,10 @@ SDL_Color color_blue = {128, 128, 255};
 
 Message message_titlescreen;
 Message message_titlescreen_play;
-Message message_titlescreen_instructions;
-Message message_titlescreen_credits;
-Message message_titlescreen_quit;
+Message message_titlescreen_options;
 Message message_titlescreen_highscore;
 Message message_score;
-Message message_cursor;
+Message message_game_cursor;
 Message message_gameover;
 Message message_gameover_highscore;
 Message message_paused;
@@ -63,7 +61,7 @@ static inline void destroyFont(TTF_Font *font) {
 	}
 }
 
-static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor) {
+inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor) {
   destroyMessage(message);
   
   // Create the outline
@@ -83,7 +81,7 @@ static inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int ou
   SDL_FreeSurface(textSurface);
 }
 
-static inline void renderMessage(SDL_Renderer *renderer, Message *message) {
+inline void renderMessage(SDL_Renderer *renderer, Message *message) {
   SDL_RenderCopy(renderer, message->outline_texture, NULL, &message->outline_rect);
   SDL_RenderCopy(renderer, message->text_texture, NULL, &message->text_rect);
 }
@@ -106,11 +104,11 @@ static void mapTextArrayToMessageArray(SDL_Renderer *renderer, char *textArray[]
 		SDL_Color text_color;
 		const char *flag_text = &textArray[i][3];
 #ifdef _MSC_VER
-    strncpy_s(messageArray[i].text, sizeof(messageArray[i].text), flag_text, _TRUNCATE);
+    strncpy_s(messageArray[i].text, TEXT_LINE_SIZE, flag_text, _TRUNCATE);
 #else
-    strncpy(messageArray[i].text, flag_text, sizeof(messageArray[i].text) - 1);
+    strncpy(messageArray[i].text, flag_text, TEXT_LINE_SIZE - 1);
 #endif
-    messageArray[i].text[sizeof(messageArray[i].text) - 1] = '\0';
+    messageArray[i].text[TEXT_LINE_SIZE - 1] = '\0';
 		switch (flag_font) {
 		  case 'G':
 			  font = Sans_126;
@@ -183,9 +181,18 @@ static inline void setMessagePosRelativeToScreenY(Message *message, float y) {
 	setMessagePosY(message, (int)(GAME_HEIGHT * y - message->text_rect.h * 0.5f));
 }
 
-static inline void setMessagePosRelativeToScreen(Message *message, float x, float y) {
+inline void setMessagePosRelativeToScreen(Message *message, float x, float y) {
 	setMessagePosRelativeToScreenX(message, x);
 	setMessagePosRelativeToScreenY(message, y);
+}
+
+static inline void setMessagePosRelativeToScreenX_LeftAlign(Message* message, float x) {
+  setMessagePosX(message, (int)(GAME_WIDTH * x));
+}
+
+inline void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y) {
+  setMessagePosRelativeToScreenX_LeftAlign(message, x);
+  setMessagePosRelativeToScreenY(message, y);
 }
 
 ///////////////////
@@ -193,25 +200,17 @@ static inline void setMessagePosRelativeToScreen(Message *message, float x, floa
 ///////////////////
 
 static void initStaticMessages_TitleScreen() {
-  snprintf(message_titlescreen.text, sizeof(message_titlescreen.text), "Blockamok");
+  snprintf(message_titlescreen.text, TEXT_LINE_SIZE, "Blockamok");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen, 0.5f, 0.4f);
 
-  snprintf(message_titlescreen_play.text, sizeof(message_titlescreen_play.text), "Press %s to fly", btn_Start);
+  snprintf(message_titlescreen_play.text, TEXT_LINE_SIZE, "Press %s to fly", btn_Start);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_play, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.575f);
+  setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.6f);
 
-  snprintf(message_titlescreen_instructions.text, sizeof(message_titlescreen_instructions.text), "Press %s for instructions", btn_X);
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_instructions, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_instructions, 0.5f, 0.65f);
-
-  snprintf(message_titlescreen_credits.text, sizeof(message_titlescreen_credits.text), "Press %s for credits", btn_Y);
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_credits, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_credits, 0.5f, 0.725f);
-
-  snprintf(message_titlescreen_quit.text, sizeof(message_titlescreen_quit.text), "Press %s to quit", btn_Select);
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_quit, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_quit, 0.5f, 0.8f);
+  snprintf(message_titlescreen_options.text, TEXT_LINE_SIZE, "Press %s for options", btn_Select);
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_options, 1, color_white, color_black);
+  setMessagePosRelativeToScreen(&message_titlescreen_options, 0.5f, 0.7f);
 
   refreshHighScoreText(renderer);
 }
@@ -220,25 +219,25 @@ static void initStaticMessages_Game() {
   setMessagePosRelativeToScreenY(&message_score, 0.01f);
   message_score.outline_rect.y -= (int)fmax(GAME_HEIGHT / 240, 3);
 
-  snprintf(message_cursor.text, sizeof(message_cursor.text), "+");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_cursor, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_cursor, 0.5f, 0.5f);
-  SDL_SetTextureAlphaMod(message_cursor.outline_texture, 64);
-  SDL_SetTextureAlphaMod(message_cursor.text_texture, 64);
+  snprintf(message_game_cursor.text, TEXT_LINE_SIZE, "+");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_cursor, 1, color_white, color_black);
+  setMessagePosRelativeToScreen(&message_game_cursor, 0.5f, 0.5f);
+  SDL_SetTextureAlphaMod(message_game_cursor.outline_texture, 64);
+  SDL_SetTextureAlphaMod(message_game_cursor.text_texture, 64);
 
-  snprintf(message_gameover.text, sizeof(message_gameover.text), "GAME OVER");
+  snprintf(message_gameover.text, TEXT_LINE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
 
-  snprintf(message_gameover_highscore.text, sizeof(message_gameover_highscore.text), "New High Score!");
+  snprintf(message_gameover_highscore.text, TEXT_LINE_SIZE, "New High Score!");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_gameover_highscore, 1, color_orange, color_black);
   setMessagePosRelativeToScreen(&message_gameover_highscore, 0.5f, 0.75f);
 
-  snprintf(message_paused.text, sizeof(message_paused.text), "PAUSED");
+  snprintf(message_paused.text, TEXT_LINE_SIZE, "PAUSED");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_paused, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused, 0.5f, 0.5f);
 
-  snprintf(message_paused_quit.text, sizeof(message_paused_quit.text), "Press %s to quit", btn_Select);
+  snprintf(message_paused_quit.text, TEXT_LINE_SIZE, "Press %s to quit", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_paused_quit, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused_quit, 0.5f, 0.65f);
 }
@@ -462,6 +461,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
 
   initStaticMessages_TitleScreen();
   initStaticMessages_Game();
+  initStaticMessages_Options(renderer);
   initStaticMessages_Instructions(compactView);
   initStaticMessages_Credits(compactView);
 
@@ -472,9 +472,7 @@ inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) 
 	renderMessage(renderer, &message_titlescreen);
   if (drawSecondaryText) {
     renderMessage(renderer, &message_titlescreen_play);
-    renderMessage(renderer, &message_titlescreen_instructions);
-    renderMessage(renderer, &message_titlescreen_credits);
-    renderMessage(renderer, &message_titlescreen_quit);
+    renderMessage(renderer, &message_titlescreen_options);
     renderMessage(renderer, &message_titlescreen_highscore);
   }
 }
@@ -534,7 +532,7 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint64 now) {
 }
 
 inline void drawScoreText(SDL_Renderer *renderer) {
-  snprintf(message_score.text, sizeof(message_score.text), "%d", (int)scoreVal);
+  snprintf(message_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_score, 1, color_white, color_black);
 	setMessagePosRelativeToScreenX(&message_score, 0.5f);
   renderMessage(renderer, &message_score);
@@ -542,7 +540,7 @@ inline void drawScoreText(SDL_Renderer *renderer) {
 
 inline void drawCursor(SDL_Renderer *renderer) {
   if (showCursor) {
-    renderMessage(renderer, &message_cursor);
+    renderMessage(renderer, &message_game_cursor);
   }
 }
 
@@ -559,20 +557,18 @@ inline void drawPausedText(SDL_Renderer *renderer) {
 }
 
 inline void refreshHighScoreText(SDL_Renderer *renderer) {
-  snprintf(message_titlescreen_highscore.text, sizeof(message_titlescreen_highscore.text), "High Score: %d", highScoreVal);
+  snprintf(message_titlescreen_highscore.text, TEXT_LINE_SIZE, "High Score: %d", highScoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_highscore, 1, color_orange, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.925f);
+  setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.9f);
 }
 
 void cleanUpText() {
   destroyMessage(&message_titlescreen);
   destroyMessage(&message_titlescreen_play);
-  destroyMessage(&message_titlescreen_instructions);
-  destroyMessage(&message_titlescreen_credits);
-  destroyMessage(&message_titlescreen_quit);
+  destroyMessage(&message_titlescreen_options);
   destroyMessage(&message_titlescreen_highscore);
   destroyMessage(&message_score);
-  destroyMessage(&message_cursor);
+  destroyMessage(&message_game_cursor);
   destroyMessage(&message_gameover);
   destroyMessage(&message_gameover_highscore);
   destroyMessage(&message_paused);

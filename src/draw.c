@@ -119,6 +119,19 @@ void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
   }
 }
 
+inline void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
+  draw(renderer);
+  drawCubes(renderer, cubes, cubesLength);
+}
+
+inline void drawEssentialsWithAlpha(SDL_Renderer *renderer, Cube cubes[], int cubesLength, Uint8 alpha) {
+  draw(renderer);
+  drawCubes(renderer, cubes, cubesLength);
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
+  SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
+  SDL_RenderFillRect(renderer, &rect);
+}
+
 static inline float fadeTowards(float current, float target, float amount) {
   if (current == target) {
     return current;

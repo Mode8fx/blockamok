@@ -20,6 +20,7 @@ add_executable(blockamok
 	"src/math_custom.c"
 	"src/math_custom.h"
 	"src/text.c"
+	"src/text_options.c"
 	"src/text.h"
 	"src/audio/falling_people.c"
 	"src/audio/falling_people.h"
