@@ -106,16 +106,18 @@ static int compareSize(const void *a, const void *b) {
   return (cube1[0].z < cube2[0].z) - (cube1[0].z > cube2[0].z);
 }
 
-int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
+int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   while (*cubesLength < CUBE_AMOUNT) {
     addNewCube(cubes, cubesLength);
   }
 
   bool speedingUp = (keyHeld(INPUT_A) || keyHeld(INPUT_B));
 
-  playerSpeed += deltaTime * SPEED_INCREASE * (speedingUp ? 3 : 1);
+  float deltaTimeDiv = (float)deltaTime / 12000;
 
-  float speed = playerSpeed * deltaTime;
+  playerSpeed += deltaTimeDiv * SPEED_INCREASE * (speedingUp ? 3 : 1);
+
+  float speed = playerSpeed * deltaTimeDiv;
 
   int cubesRemoved = 0;
 
@@ -123,7 +125,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
   float yDiff = 0;
 
   if (!isAnalog) {
-    float turnSpeed = (BASE_TURN_SPEED_TYPE_A + playerSpeed / 50) * deltaTime;
+    float turnSpeed = (BASE_TURN_SPEED_TYPE_A + playerSpeed / 50) * deltaTimeDiv;
     if (dirHeld_Up()) {
       yDiff = +turnSpeed;
     }
@@ -138,7 +140,7 @@ int gameFrame(float deltaTime, Cube cubes[], int *cubesLength) {
     }
   }
   else {
-    float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTime;
+    float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTimeDiv;
     xDiff = turnSpeed * -movementMagnitudeX / 32767;
 		yDiff = turnSpeed * -movementMagnitudeY / 32767;
   }

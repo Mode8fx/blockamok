@@ -50,7 +50,7 @@ extern SDL_Color color_red;
 extern SDL_Color color_blue;
 
 extern bool credits_paused;
-extern Uint64 credits_startTime;
+extern Uint32 credits_startTime;
 
 extern OptionPage optionPage_Main;
 extern OptionPage optionPage_Empty;
@@ -63,7 +63,7 @@ extern void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, f
 extern void initStaticMessages(SDL_Renderer *renderer);
 extern void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText);
 extern void drawInstructionsText(SDL_Renderer* renderer);
-extern void drawCreditsText(SDL_Renderer *renderer, Uint64 timer);
+extern void drawCreditsText(SDL_Renderer *renderer, Uint32 timer);
 extern void drawScoreText(SDL_Renderer *renderer);
 extern void drawCursor(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);

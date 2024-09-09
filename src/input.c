@@ -25,8 +25,8 @@ Uint32 heldKeys_last;
 
 double timer_buttonHold;
 double timer_buttonHold_repeater;
-#define REPEATER_FIRST_DELAY 0.5
-#define REPEATER_INTERVAL 0.033
+#define REPEATER_FIRST_DELAY 500
+#define REPEATER_INTERVAL 33
 
 bool quit = false;
 

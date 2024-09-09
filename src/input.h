@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <stdbool.h>
 
-extern double deltaTime;
+extern Uint32 deltaTime;
 
 extern SDL_GameController *controller;
 

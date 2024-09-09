@@ -498,19 +498,19 @@ inline void drawInstructionsText(SDL_Renderer *renderer) {
   }
 }
 
-inline void drawCreditsText(SDL_Renderer *renderer, Uint64 now) {
+inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
   if (keyPressed(INPUT_A)) {
 		credits_paused = !credits_paused;
   }
   if (keyHeld(INPUT_UP)) {
-    credits_startTime += (Uint64)(36000 * deltaTime);
+    credits_startTime += (3 * deltaTime);
   } else if (keyHeld(INPUT_DOWN)) {
-    credits_startTime -= (Uint64)(12000 * deltaTime);
+    credits_startTime -= deltaTime;
 	} else if (credits_paused) {
-    credits_startTime += (Uint64)(12000 * deltaTime);
+    credits_startTime += deltaTime;
   }
 
-  Uint64 timer = now - credits_startTime;
+  Uint32 timer = now - credits_startTime;
   float offset_timer = 0.15f * timer / 1000; // scroll speed
   if (CREDITS_LENGTH > 60) { // compact view
     offset_timer *= 1.1f;

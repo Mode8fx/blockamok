@@ -22,11 +22,11 @@ SDL_Renderer *renderer;
 int gameState = GAME_STATE_STARTED;
 bool isFullscreen = false;
 
-Uint64 now = 0;
-Uint64 last = 0;
-Uint64 gameStartTime = 0;
-double deltaTime = 0;
-Uint64 credits_startTime = 0;
+Uint32 now = 0;
+Uint32 last = 0;
+Uint32 gameStartTime = 0;
+Uint32 deltaTime = 0;
+Uint32 credits_startTime = 0;
 
 int cubesLength = 0;
 Cube cubes[1000];
@@ -102,7 +102,7 @@ static void init() {
 
 static inline void gameLoop() {
   if (gameState != GAME_STATE_GAME_OVER) {
-    gameState = gameFrame((float)deltaTime, cubes, &cubesLength);
+    gameState = gameFrame(deltaTime, cubes, &cubesLength);
   }
 }
 
@@ -146,13 +146,13 @@ int main(int arg, char *argv[]) {
   setScalingVals();
   initStaticMessages(renderer);
   // Call once at the start for initial render
-  gameFrame((float)deltaTime, cubes, &cubesLength);
+  gameFrame(deltaTime, cubes, &cubesLength);
   draw(renderer);
 
   while (!quit) {
     last = now;
     now = SDL_GetTicks();
-    deltaTime = (double)((now - last)) / 12000;
+    deltaTime = now - last;
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -193,7 +193,7 @@ int main(int arg, char *argv[]) {
           gameStartTime = SDL_GetTicks();
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {
-					openPage(renderer, &optionPage_Main, true);
+          openPage(renderer, &optionPage_Main, true);
           gameState = GAME_STATE_OPTIONS;
         }
         drawEssentials(renderer, cubes, cubesLength);
@@ -264,7 +264,7 @@ int main(int arg, char *argv[]) {
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {
           prepareGame();
-          gameFrame((float)deltaTime, cubes, &cubesLength);
+          gameFrame(deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         drawEssentials(renderer, cubes, cubesLength);
@@ -279,7 +279,7 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_START)) {
           newHighScore = false;
           prepareGame();
-          gameFrame((float)deltaTime, cubes, &cubesLength);
+          gameFrame(deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         break;

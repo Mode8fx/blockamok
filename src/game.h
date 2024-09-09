@@ -18,7 +18,7 @@
 #define GAME_STATE_OPTIONS 7
 
 extern int gameState;
-extern Uint64 gameStartTime;
+extern Uint32 gameStartTime;
 extern double scoreVal;
 extern int highScoreVal;
 extern bool newHighScore;
@@ -41,11 +41,11 @@ typedef struct Point {
 //typedef struct {
 //} Block;
 
-typedef Point* Cube;
+typedef Point *Cube;
 
-int gameFrame(float deltaTime, Cube cubes[], int* cubesLength);
+int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength);
 
-void gameInit(Cube cubes[], int* cubesLength);
+void gameInit(Cube cubes[], int *cubesLength);
 void removeCube(Cube cubes[], int i);
 void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN);
 
