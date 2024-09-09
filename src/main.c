@@ -194,13 +194,13 @@ int main(int arg, char *argv[]) {
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {
           openPage(renderer, &optionPage_Main, true);
-          gameState = GAME_STATE_OPTIONS;
+          gameState = GAME_STATE_OPTIONS_MAIN;
         }
         drawEssentials(renderer, cubes, cubesLength);
         drawTitleScreenText(renderer, true);
         break;
 
-      case GAME_STATE_OPTIONS:
+      case GAME_STATE_OPTIONS_MAIN:
         if (keyPressed(INPUT_A)) {
           switch (optionPage_Main.index) {
             case 4:
@@ -225,6 +225,11 @@ int main(int arg, char *argv[]) {
 				drawEssentials(renderer, cubes, cubesLength);
         handlePage(renderer, &optionPage_Main, true);
 				break;
+
+      case GAME_STATE_OPTIONS_GAME:
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, &optionPage_Game, true);
+        break;
 
       case GAME_STATE_INSTRUCTIONS:
         if (keyPressed(INPUT_LEFT) || keyPressed(INPUT_RIGHT)) {

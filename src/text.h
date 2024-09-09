@@ -27,6 +27,7 @@ typedef struct {
 	Sint8 index;
 	OptionChoice *optionChoices; // if there are no options, use a single empty Option
 	int nextState; // if - 1, ignore
+	bool oneDesc;
 } OptionLine;
 
 typedef struct {
@@ -53,6 +54,7 @@ extern bool credits_paused;
 extern Uint32 credits_startTime;
 
 extern OptionPage optionPage_Main;
+extern OptionPage optionPage_Game;
 extern OptionPage optionPage_Empty;
 
 extern void prepareMessage(SDL_Renderer* renderer, TTF_Font* font, int outlineSize, Message* message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);

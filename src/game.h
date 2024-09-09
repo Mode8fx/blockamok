@@ -15,7 +15,8 @@
 #define GAME_STATE_PAUSED 4
 #define GAME_STATE_GAME_OVER 5
 #define GAME_STATE_STARTED 6
-#define GAME_STATE_OPTIONS 7
+#define GAME_STATE_OPTIONS_MAIN 7
+#define GAME_STATE_OPTIONS_GAME 8
 
 extern int gameState;
 extern Uint32 gameStartTime;
