@@ -2,6 +2,7 @@
 #include "./draw.h"
 #include "./game.h"
 #include "./audio.h"
+#include "./text.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,11 +38,19 @@ void writeSaveData() {
 #endif
   FILE *file = fopen(saveFile, "wb");
   if (file != NULL) {
-    char emptyBytes[122] = {0}; // In case I want to add more to the save data in a future update
     fwrite(&highScoreVal, sizeof(highScoreVal), 1, file);
-    fwrite(&isAnalog, sizeof(isAnalog), 1, file);
     fwrite(&audioIndex, sizeof(audioIndex), 1, file);
-    fwrite(emptyBytes, sizeof(emptyBytes), 1, file);
+    fwrite(&OPTION_CUBE_FREQUENCY, sizeof(OPTION_CUBE_FREQUENCY), 1, file);
+    fwrite(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
+    fwrite(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
+
+    Uint8 numBytesUsed = sizeof(highScoreVal) + sizeof(audioIndex) + sizeof(OPTION_CUBE_FREQUENCY) + sizeof(OPTION_CUBE_SIZE) + sizeof(OPTION_CONTROL_TYPE);
+    Uint8 emptyBytesSize = 255 - numBytesUsed; // In case I want to add more to the save data in a future update
+    if (emptyBytesSize > 0) {
+      char *emptyBytes = (char *)calloc(emptyBytesSize, sizeof(char));
+      fwrite(emptyBytes, emptyBytesSize, 1, file);
+      free(emptyBytes); // Free the allocated memory
+    }
     fclose(file);
   }
 }
@@ -50,9 +59,11 @@ void readSaveData() {
   FILE *file = fopen(saveFile, "rb");
   if (file != NULL) {
     fread(&highScoreVal, sizeof(highScoreVal), 1, file);
-    fread(&isAnalog, sizeof(isAnalog), 1, file);
     fread(&audioIndex, sizeof(audioIndex), 1, file);
     audioIndex %= NUM_SONGS;
+    fread(&OPTION_CUBE_FREQUENCY, sizeof(OPTION_CUBE_FREQUENCY), 1, file);
+    fread(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
+    fread(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
     fclose(file);
   } else {
     writeSaveData();

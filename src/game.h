@@ -25,9 +25,11 @@ extern int highScoreVal;
 extern bool newHighScore;
 extern bool showCursor;
 
-extern bool isAnalog;
 extern Sint16 movementMagnitudeX;
 extern Sint16 movementMagnitudeY;
+
+extern Sint16 cubeAmount;
+extern float cubeSize;
 
 typedef struct {
   float z;
@@ -49,5 +51,6 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength);
 void gameInit(Cube cubes[], int *cubesLength);
 void removeCube(Cube cubes[], int i);
 void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN);
+extern void prepareGame();
 
 Cube newCube(Point c, float s);

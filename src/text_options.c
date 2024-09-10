@@ -116,16 +116,17 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.numLines = OPTION_PAGE_GAME_NUM_LINES;
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Game, 0, "Cube Amount", 4, 1, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Small", "Change the number of obstacles.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Normal", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "Large", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Very Large", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Game, 1, "Cube Size", 4, 1, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Small", "Change the size of the", "incoming obstacles.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 1, "Normal", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 2, "Large", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 3, "Very Large", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 2, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Very Easy", "Change the number of obstacles.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Easy", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "Normal", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Hard", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Very Hard", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 1, 2, "Very Large", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 1, 3, "Giant", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Game, 2, "Control Scheme", 2, 0, STAY, false);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "Type A", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
 	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "Type B", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
@@ -161,6 +162,13 @@ void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
 	if (keyPressed(INPUT_A)) {
 		if (page->optionLines[page->index].nextState != STAY) {
 			gameState = page->optionLines[page->index].nextState;
+			switch (gameState) {
+				case GAME_STATE_OPTIONS_GAME:
+					openPage(renderer, &optionPage_Game, true);
+					break;
+				default:
+					break;
+			}
 		}
 	} else if (keyPressed(INPUT_B)) {
 		gameState = page->prevState;
@@ -173,6 +181,7 @@ void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
 				break;
 			case GAME_STATE_TITLE_SCREEN:
 				writeSaveData();
+				prepareGame();
 				break;
 			default:
 				break;

@@ -14,7 +14,8 @@ const float PLAYER_INITIAL_SPEED = 100;
 const float BASE_TURN_SPEED_TYPE_A = 30; // effectively 42.43 when diagonal
 const float BASE_TURN_SPEED_TYPE_B = 36.21f;
 
-const int CUBE_AMOUNT = 600;
+Sint16 cubeAmount = 600;
+float cubeSize = 0.5f;
 
 const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 
@@ -24,11 +25,8 @@ const float SPEED_INCREASE = 350;
 const Sint8 SPEED_UP_MULT = 3;
 const float MAX_SPEED = 1500;
 
-const float CUBE_SIZE = 0.5;
-
 float playerSpeed;
 
-bool isAnalog;
 Sint16 movementMagnitudeX;
 Sint16 movementMagnitudeY;
 
@@ -38,7 +36,7 @@ static void addNewCube(Cube cubes[], int *cubesLength) {
     randF(-BOUNDS_Y, BOUNDS_Y),
     MAX_DEPTH
   };
-  cubes[(*cubesLength)++] = newCube(point, CUBE_SIZE);
+  cubes[(*cubesLength)++] = newCube(point, cubeSize);
 }
 
 static void addInitialCube(Cube cubes[], int *cubesLength) {
@@ -47,12 +45,12 @@ static void addInitialCube(Cube cubes[], int *cubesLength) {
     randF(-BOUNDS_Y, BOUNDS_Y),
     randF(0, MAX_DEPTH)
 	};
-  cubes[(*cubesLength)++] = newCube(point, CUBE_SIZE);
+  cubes[(*cubesLength)++] = newCube(point, cubeSize);
 }
 
 void gameInit(Cube cubes[], int *cubesLength) {
   playerSpeed = PLAYER_INITIAL_SPEED;
-  while ((*cubesLength) < CUBE_AMOUNT) {
+  while ((*cubesLength) < cubeAmount) {
     addInitialCube(cubes, cubesLength);
   }
 }
@@ -107,7 +105,7 @@ static int compareSize(const void *a, const void *b) {
 }
 
 int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
-  while (*cubesLength < CUBE_AMOUNT) {
+  while (*cubesLength < cubeAmount) {
     addNewCube(cubes, cubesLength);
   }
 
@@ -124,7 +122,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   float xDiff = 0;
   float yDiff = 0;
 
-  if (!isAnalog) {
+  if (OPTION_CONTROL_TYPE == 0) {
     float turnSpeed = (BASE_TURN_SPEED_TYPE_A + playerSpeed / 50) * deltaTimeDiv;
     if (dirHeld_Up()) {
       yDiff = +turnSpeed;
@@ -168,7 +166,8 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
 
       float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
       float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
-      if (cubes[i][0].z < 2 && middleX < 0.5 && middleY < 0.5 && (SDL_GetTicks() - gameStartTime) > 1000) {
+      // TODO: Polish collision for larger blocks
+      if (cubes[i][0].z < 2 && middleX < cubeSize && middleY < cubeSize && (SDL_GetTicks() - gameStartTime) > 1000) {
         playSFX(SFX_THUNK);
         if (scoreVal > highScoreVal) {
           highScoreVal = (int)scoreVal;

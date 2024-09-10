@@ -76,14 +76,47 @@ static void handleWindowResize(SDL_Event *event) {
 #endif
 }
 
-static void prepareGame() {
+void prepareGame() {
   for (int i = 0; i < cubesLength; i++) {
     removeCube(cubes, i);
   }
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
   srand((Uint32)time(NULL));
+  switch (OPTION_CUBE_FREQUENCY) {
+    case 0:
+      cubeAmount = 400;
+      break;
+    case 1:
+      cubeAmount = 500;
+      break;
+    case 2:
+      cubeAmount = 600;
+      break;
+    case 3:
+      cubeAmount = 700;
+      break;
+    default:
+      cubeAmount = 800;
+      break;
+  }
+  switch (OPTION_CUBE_SIZE) {
+    case 0:
+      cubeSize = 0.5f;
+      break;
+    case 1:
+      cubeSize = 0.625f;
+      break;
+    case 2:
+      cubeSize = 0.75f;
+      break;
+    default:
+      cubeSize = 0.875f;
+      break;
+  }
   gameInit(cubes, &cubesLength);
+  // Call once for initial render
+  gameFrame(deltaTime, cubes, &cubesLength);
 }
 
 static void init() {
@@ -95,9 +128,7 @@ static void init() {
   TTF_Init();
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   initAudio();
-  playMusicAtIndex(audioIndex);
   startingTick = SDL_GetTicks();
-  prepareGame();
 }
 
 static inline void gameLoop() {
@@ -141,12 +172,12 @@ int main(int arg, char *argv[]) {
   SDL_GetCurrentDisplayMode(0, &DM);
   initFilePaths();
   loadConfig(DM.w, DM.h);
-  readSaveData();
   init();
   setScalingVals();
   initStaticMessages(renderer);
-  // Call once at the start for initial render
-  gameFrame(deltaTime, cubes, &cubesLength);
+  readSaveData();
+  playMusicAtIndex(audioIndex);
+  prepareGame();
   draw(renderer);
 
   while (!quit) {
@@ -232,9 +263,6 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_INSTRUCTIONS:
-        if (keyPressed(INPUT_LEFT) || keyPressed(INPUT_RIGHT)) {
-					isAnalog = !isAnalog;
-        }
         drawEssentials(renderer, cubes, cubesLength);
         handlePage(renderer, &optionPage_Empty, false);
         drawInstructionsText(renderer);
@@ -269,7 +297,6 @@ int main(int arg, char *argv[]) {
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {
           prepareGame();
-          gameFrame(deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         drawEssentials(renderer, cubes, cubesLength);
@@ -284,7 +311,6 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_START)) {
           newHighScore = false;
           prepareGame();
-          gameFrame(deltaTime, cubes, &cubesLength);
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         break;
