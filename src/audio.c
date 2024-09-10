@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "./audio.h"
 #include "./audio/spaceranger_50k.h"
 #include "./audio/mano_-_darkness_in_the_night.h"
@@ -10,8 +12,6 @@
 #include "./audio/zoom3_short.h"
 #include "./input.h"
 #include "./config.h"
-
-#include <stdio.h>
 
 Sint8 audioIndex = 0;
 

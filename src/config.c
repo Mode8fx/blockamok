@@ -1,12 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "./config.h"
 #include "./draw.h"
 #include "./game.h"
 #include "./audio.h"
 #include "./text.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 int WINDOW_WIDTH;
 int WINDOW_HEIGHT;

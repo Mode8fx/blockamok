@@ -1,5 +1,6 @@
-#include "./general.h"
 #include <stdio.h>
+
+#include "./general.h"
 
 void systemSpecificOpen() {
 #if defined(WII_U)

@@ -1,9 +1,10 @@
+#include <stdio.h>
+
 #include "./text.h"
 #include "./game.h"
 #include "./input.h"
 #include "./config.h"
-
-#include <stdio.h>
+#include "./draw.h"
 
 #define EMPTY " "
 #define CURSOR_X 0.1f
@@ -140,6 +141,10 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 }
 
 void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
+	SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
+	SDL_RenderFillRect(renderer, &rect);
+
 	if (page->numLines > 1) {
 		if (keyPressed(INPUT_UP)) {
 			page->index = (page->index - 1) % page->numLines;
@@ -159,7 +164,7 @@ void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index + 1) % currentLine->numChoices;
 	}
-	if (keyPressed(INPUT_A)) {
+	if (keyPressed(INPUT_A) || keyPressed(INPUT_START)) {
 		if (page->optionLines[page->index].nextState != STAY) {
 			gameState = page->optionLines[page->index].nextState;
 			switch (gameState) {
@@ -170,7 +175,7 @@ void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
 					break;
 			}
 		}
-	} else if (keyPressed(INPUT_B)) {
+	} else if (keyPressed(INPUT_B) || keyPressed(INPUT_SELECT)) {
 		gameState = page->prevState;
 		switch (gameState) {
 			case GAME_STATE_OPTIONS_MAIN:

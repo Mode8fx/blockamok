@@ -1,6 +1,3 @@
-#include "./input.h"
-#include "./game.h"
-
 #if defined(WII)
 #include <wiiuse/wpad.h>
 #elif defined(GAMECUBE)
@@ -8,6 +5,9 @@
 #elif defined(PSP)
 #include <pspctrl.h>
 #endif
+
+#include "./input.h"
+#include "./game.h"
 
 SDL_GameController *controller = NULL;
 

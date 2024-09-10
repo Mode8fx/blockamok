@@ -1,9 +1,9 @@
+#include <math.h>
+#include <stdbool.h>
+
 #include "./draw.h"
 #include "./game.h"
 #include "./math_custom.h"
-
-#include <math.h>
-#include <stdbool.h>
 
 SDL_DisplayMode DM;
 
