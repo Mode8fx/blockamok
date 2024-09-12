@@ -295,6 +295,7 @@ int main(int arg, char *argv[]) {
   }
 
   cleanUpText();
+  cleanUpMenu();
   TTF_Quit();
   cleanUpAudio();
   Mix_CloseAudio();

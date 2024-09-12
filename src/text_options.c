@@ -46,9 +46,11 @@ static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int line
 	if (currLine->index == 0) {
 		currLine->index = choiceIndex;
 	}
-	currLine->optionChoices = (OptionChoice *)malloc(numChoices * sizeof(OptionChoice));
-	for (int i = 0; i < numChoices; i++) {
-		currLine->optionChoices[i] = (OptionChoice){ 0 };
+	if (currLine->optionChoices == NULL) {
+		currLine->optionChoices = (OptionChoice*)malloc(numChoices * sizeof(OptionChoice));
+		for (int i = 0; i < numChoices; i++) {
+			currLine->optionChoices[i] = (OptionChoice){ 0 };
+		}
 	}
 	currLine->nextState = nextState;
 	currLine->oneDesc = oneDesc;
@@ -147,8 +149,8 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Visual.prevState = GAME_STATE_OPTIONS_MAIN;
 	setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 5, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Electric Green", "Change the background color.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Ocean Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Void Black", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Lava Red", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 1, "Block Color", 5, 0, STAY, true);
@@ -212,10 +214,10 @@ static void onOptionChange_BackgroundColor() {
 		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
 		break;
 	case 1:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
 		break;
 	case 2:
-		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
+		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
 		break;
 	case 3:
 		backgroundColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
@@ -372,4 +374,35 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 	renderMessage(renderer, &currChoice->descLine1);
 	renderMessage(renderer, &currChoice->descLine2);
 	renderMessage(renderer, &currChoice->descLine3);
+}
+
+static inline void destroyMessage(Message *message) {
+	if (message->outline_texture != NULL) {
+		SDL_DestroyTexture(message->outline_texture);
+		message->outline_texture = NULL;
+	}
+	if (message->text_texture != NULL) {
+		SDL_DestroyTexture(message->text_texture);
+		message->text_texture = NULL;
+	}
+}
+
+static void freePage(OptionPage *page) {
+	if (page == NULL) return;
+	for (int i = 0; i < page->numLines; i++) {
+		destroyMessage(&page->optionLines[i].name);
+		for (int j = 0; j < page->optionLines[i].numChoices; j++) {
+			destroyMessage(&page->optionLines[i].optionChoices[j].name);
+			destroyMessage(&page->optionLines[i].optionChoices[j].descLine1);
+			destroyMessage(&page->optionLines[i].optionChoices[j].descLine2);
+			destroyMessage(&page->optionLines[i].optionChoices[j].descLine3);
+		}
+		free(page->optionLines[i].optionChoices);
+	}
+}
+
+void cleanUpMenu() {
+	freePage(&optionPage_Main);
+	freePage(&optionPage_Game);
+	freePage(&optionPage_Visual);
 }

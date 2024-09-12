@@ -87,3 +87,4 @@ extern void initStaticMessages_Options(SDL_Renderer *renderer);
 extern void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex);
 extern void onOptionChange_Fullscreen(SDL_Window *window, OptionPage *page);
 extern void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor);
+extern void cleanUpMenu();
