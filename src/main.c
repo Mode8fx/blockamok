@@ -82,7 +82,7 @@ void prepareGame() {
   }
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
-  srand((Uint32)time(NULL));
+  srand(now);
   gameInit(cubes, &cubesLength);
   // Call once for initial render
   gameFrame(deltaTime, cubes, &cubesLength);
@@ -125,7 +125,7 @@ static void handleFullscreenToggle() {
 #if defined(PC)
   if (keyPressed(INPUT_RS)) {
     OPTION_FULLSCREEN = !OPTION_FULLSCREEN;
-    onOptionChange_Fullscreen(window, &optionPage_Visual);
+    optionCallback_Fullscreen(window, &optionPage_Visual);
   }
 #endif
 }
@@ -140,7 +140,7 @@ int main(int arg, char *argv[]) {
   initStaticMessages(renderer);
   readSaveData();
   if (OPTION_FULLSCREEN) {
-    onOptionChange_Fullscreen(window, &optionPage_Visual);
+    optionCallback_Fullscreen(window, &optionPage_Visual);
   }
   playMusicAtIndex(OPTION_MUSIC);
   prepareGame();

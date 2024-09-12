@@ -134,11 +134,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
 	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 2, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Very Easy", "Change the number of obstacles.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Easy", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "Normal", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Hard", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Very Hard", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Very Low", "Change the number of obstacles.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Low", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "Medium", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Very High", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
@@ -201,7 +201,7 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
-static void onOptionChange_CubeFrequency() {
+static void optionCallback_CubeFrequency() {
 	switch (OPTION_CUBE_FREQUENCY) {
 	case 0:
 		cubeAmount = 400;
@@ -219,9 +219,10 @@ static void onOptionChange_CubeFrequency() {
 		cubeAmount = 800;
 		break;
 	}
+	prepareGame();
 }
 
-static void onOptionChange_CubeSize() {
+static void optionCallback_CubeSize() {
 	switch (OPTION_CUBE_SIZE) {
 	case 0:
 		cubeSize = 0.5f;
@@ -236,9 +237,10 @@ static void onOptionChange_CubeSize() {
 		cubeSize = 0.875f;
 		break;
 	}
+	prepareGame();
 }
 
-static void onOptionChange_BackgroundColor() {
+static void optionCallback_BackgroundColor() {
 	switch (OPTION_BACKGROUND_COLOR) {
 	case 0:
 		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
@@ -258,7 +260,7 @@ static void onOptionChange_BackgroundColor() {
 	}
 }
 
-static void onOptionChange_CubeColor() {
+static void optionCallback_CubeColor() {
 	switch (OPTION_CUBE_COLOR) {
 	case 0:
 		cubeColorFront = (SDL_Color){ .r = 200, .g = 250, .b = 120 };
@@ -283,22 +285,22 @@ static void onOptionChange_CubeColor() {
 	}
 }
 
-void onOptionChange_Fullscreen(SDL_Window *window, OptionPage *page) {
+void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
 	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
 	// TODO: Fix incorrect cursor placement (it still uses the old screen size?)
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
 // Handle specific callbacks here
-static void onOptionChange(SDL_Window *window, OptionPage *page) {
+static void optionCallback(SDL_Window *window, OptionPage *page) {
 	switch (page->pageID) {
 	case 2:
 		switch (page->index) {
 		case 0:
-			onOptionChange_CubeFrequency();
+			optionCallback_CubeFrequency();
 			break;
 		case 1:
-			onOptionChange_CubeSize();
+			optionCallback_CubeSize();
 			break;
 		default:
 			break;
@@ -307,17 +309,18 @@ static void onOptionChange(SDL_Window *window, OptionPage *page) {
 	case 3:
 		switch (page->index) {
 		case 0:
-			onOptionChange_BackgroundColor();
+			optionCallback_BackgroundColor();
 			break;
 		case 1:
-			onOptionChange_CubeColor();
+			optionCallback_CubeColor();
 			break;
 		case 2:
-			onOptionChange_Fullscreen(window, page);
+			optionCallback_Fullscreen(window, page);
 			break;
 		default:
 			break;
 		}
+		break;
 	case 4:
 		switch (page->index) {
 		case 0:
@@ -365,15 +368,16 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 	if (keyPressed(INPUT_LEFT)) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index - 1 + currentLine->numChoices) % currentLine->numChoices;
-		onOptionChange(window, page);
+		optionCallback(window, page);
 	} else if (keyPressed(INPUT_RIGHT)) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index + 1) % currentLine->numChoices;
-		onOptionChange(window, page);
+		optionCallback(window, page);
 	}
 
 	// Handle Confirm press
 	if (keyPressed(INPUT_A) || keyPressed(INPUT_START)) {
+		optionCallback(window, page);
 		if (page->optionLines[page->index].nextState != STAY) {
 			gameState = page->optionLines[page->index].nextState;
 			switch (gameState) {
@@ -402,7 +406,6 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 				break;
 			case GAME_STATE_TITLE_SCREEN:
 				writeSaveData();
-				prepareGame();
 				break;
 			default:
 				break;
