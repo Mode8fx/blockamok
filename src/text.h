@@ -31,6 +31,7 @@ typedef struct {
 } OptionLine;
 
 typedef struct {
+	Sint8 pageID;
 	Sint8 numLines;
 	Sint8 index;
 	OptionLine *optionLines;
@@ -55,13 +56,18 @@ extern Uint32 credits_startTime;
 
 extern OptionPage optionPage_Main;
 extern OptionPage optionPage_Game;
+extern OptionPage optionPage_Visual;
 extern OptionPage optionPage_Empty;
 
 #define OPTION_CUBE_FREQUENCY optionPage_Game.optionLines[0].index
 #define OPTION_CUBE_SIZE optionPage_Game.optionLines[1].index
 #define OPTION_CONTROL_TYPE optionPage_Game.optionLines[2].index
 
-extern void prepareMessage(SDL_Renderer* renderer, TTF_Font* font, int outlineSize, Message* message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
+#define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
+#define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index
+#define OPTION_FULLSCREEN optionPage_Visual.optionLines[2].index
+
+extern void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
 extern void renderMessage(SDL_Renderer *renderer, Message *message);
 extern void setMessagePosRelativeToScreen(Message *message, float x, float y);
 extern void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y);
@@ -79,4 +85,5 @@ extern void cleanUpText();
 
 extern void initStaticMessages_Options(SDL_Renderer *renderer);
 extern void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex);
-extern void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor);
+extern void onOptionChange_Fullscreen(SDL_Window *window, OptionPage *page);
+extern void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor);

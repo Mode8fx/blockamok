@@ -83,37 +83,6 @@ void prepareGame() {
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
   srand((Uint32)time(NULL));
-  switch (OPTION_CUBE_FREQUENCY) {
-    case 0:
-      cubeAmount = 400;
-      break;
-    case 1:
-      cubeAmount = 500;
-      break;
-    case 2:
-      cubeAmount = 600;
-      break;
-    case 3:
-      cubeAmount = 700;
-      break;
-    default:
-      cubeAmount = 800;
-      break;
-  }
-  switch (OPTION_CUBE_SIZE) {
-    case 0:
-      cubeSize = 0.5f;
-      break;
-    case 1:
-      cubeSize = 0.625f;
-      break;
-    case 2:
-      cubeSize = 0.75f;
-      break;
-    default:
-      cubeSize = 0.875f;
-      break;
-  }
   gameInit(cubes, &cubesLength);
   // Call once for initial render
   gameFrame(deltaTime, cubes, &cubesLength);
@@ -155,14 +124,8 @@ static void handleResetHighScore() {
 static void handleFullscreenToggle() {
 #if defined(PC)
   if (keyPressed(INPUT_RS)) {
-    if (isFullscreen) {
-      isFullscreen = false;
-      SDL_SetWindowFullscreen(window, 0);
-    }
-    else {
-      isFullscreen = true;
-      SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    }
+    OPTION_FULLSCREEN = !OPTION_FULLSCREEN;
+    onOptionChange_Fullscreen(window, &optionPage_Visual);
   }
 #endif
 }
@@ -176,6 +139,9 @@ int main(int arg, char *argv[]) {
   setScalingVals();
   initStaticMessages(renderer);
   readSaveData();
+  if (OPTION_FULLSCREEN) {
+    onOptionChange_Fullscreen(window, &optionPage_Visual);
+  }
   playMusicAtIndex(audioIndex);
   prepareGame();
   draw(renderer);
@@ -254,23 +220,28 @@ int main(int arg, char *argv[]) {
           }
         }
 				drawEssentials(renderer, cubes, cubesLength);
-        handlePage(renderer, &optionPage_Main, true);
+        handlePage(renderer, window, &optionPage_Main, true);
 				break;
 
       case GAME_STATE_OPTIONS_GAME:
         drawEssentials(renderer, cubes, cubesLength);
-        handlePage(renderer, &optionPage_Game, true);
+        handlePage(renderer, window, &optionPage_Game, true);
+        break;
+
+      case GAME_STATE_OPTIONS_VISUAL:
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, window, &optionPage_Visual, true);
         break;
 
       case GAME_STATE_INSTRUCTIONS:
         drawEssentials(renderer, cubes, cubesLength);
-        handlePage(renderer, &optionPage_Empty, false);
+        handlePage(renderer, window, &optionPage_Empty, false);
         drawInstructionsText(renderer);
         break;
 
 			case GAME_STATE_CREDITS:
         drawEssentials(renderer, cubes, cubesLength);
-        handlePage(renderer, &optionPage_Empty, false);
+        handlePage(renderer, window, &optionPage_Empty, false);
         drawCreditsText(renderer, now);
         break;
 

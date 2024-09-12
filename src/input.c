@@ -192,12 +192,13 @@ static inline void handleHoldTimer_execute() {
 			if (dirHeld_Down()) {
 				pressedKeys |= INPUT_DOWN;
 			}
-			if (dirHeld_Left()) {
-				pressedKeys |= INPUT_LEFT;
-			}
-			if (dirHeld_Right()) {
-				pressedKeys |= INPUT_RIGHT;
-			}
+			// The Visual Options menu would be very seizure-inducing if this were allowed
+			//if (dirHeld_Left()) {
+			//	pressedKeys |= INPUT_LEFT;
+			//}
+			//if (dirHeld_Right()) {
+			//	pressedKeys |= INPUT_RIGHT;
+			//}
 			timer_buttonHold_repeater -= REPEATER_INTERVAL;
 		}
 	}

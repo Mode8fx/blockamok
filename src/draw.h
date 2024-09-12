@@ -15,6 +15,10 @@ extern SDL_Rect gameViewport;
 extern SDL_Rect leftBar;
 extern SDL_Rect rightBar;
 
+extern SDL_Color backgroundColor;
+extern SDL_Color cubeColorFront;
+extern SDL_Color cubeColorSide;
+
 #define MAX_DEPTH 150
 extern float HALF_FOV_ANGLE_RADIANS;
 

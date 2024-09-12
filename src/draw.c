@@ -19,9 +19,10 @@ const int LEFT = 2;
 const int RIGHT = 3;
 const int FRONT = 4;
 
-const int BACKGROUND_R = 15;
-const int BACKGROUND_G = 255;
-const int BACKGROUND_B = 155;
+SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155 };
+
+SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120 };
+SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200 };
 
 //int TRANSFORMED_FRONT_I = FRONT * 5;
 
@@ -70,7 +71,7 @@ static void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePo
 }
 
 void draw(SDL_Renderer *renderer) {
-  SDL_SetRenderDrawColor(renderer, BACKGROUND_R, BACKGROUND_G, BACKGROUND_B, 255);
+  SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
   SDL_FPoint triangle1Points[3][2] = {
 		{WIDTH_NEG, HEIGHT_HALF},
 		{WIDTH_HALF, HEIGHT_NEG},
@@ -182,17 +183,11 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
   for (int f = 2; f < 5; f++) {
     int cubeI = faceOrder[f] * 5;
 
-    SDL_Color color, c;
+    SDL_Color color;
     if (f == FRONT) {
-      c.r = 200;
-      c.b = 120;
-      c.g = 250;
-      color = c;
+      color = cubeColorFront;
     } else {
-      c.r = 100;
-      c.b = 200;
-      c.g = 100;
-      color = c;
+      color = cubeColorSide;
     }
 
     float min = 150;

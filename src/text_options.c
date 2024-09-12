@@ -31,6 +31,10 @@ OptionPage optionPage_Game;
 #define OPTION_PAGE_GAME_NUM_LINES 3
 OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
+OptionPage optionPage_Visual;
+#define OPTION_PAGE_VISUAL_NUM_LINES 3
+OptionLine optionPage_Visual_Lines[OPTION_PAGE_VISUAL_NUM_LINES];
+
 OptionPage optionPage_Empty;
 OptionLine optionPage_Empty_Lines[1];
 #define STAY -1
@@ -39,7 +43,9 @@ static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int line
 	OptionLine *currLine = &page->optionLines[lineIndex];
 	snprintf(currLine->name.text, TEXT_LINE_SIZE, text);
 	currLine->numChoices = numChoices;
-	currLine->index = choiceIndex;
+	if (currLine->index == 0) {
+		currLine->index = choiceIndex;
+	}
 	currLine->optionChoices = (OptionChoice *)malloc(numChoices * sizeof(OptionChoice));
 	for (int i = 0; i < numChoices; i++) {
 		currLine->optionChoices[i] = (OptionChoice){ 0 };
@@ -89,12 +95,13 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	snprintf(message_menu_cursor.text, TEXT_LINE_SIZE, ">");
 	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &message_menu_cursor, 1, color_white, color_black);
 
+	optionPage_Main.pageID = 0;
 	optionPage_Main.numLines = OPTION_PAGE_MAIN_NUM_LINES;
 	optionPage_Main.optionLines = optionPage_Main_Lines;
 	optionPage_Main.prevState = GAME_STATE_TITLE_SCREEN;
 	setOptionPageLine(renderer, &optionPage_Main, 0, "Game Options", 1, 0, GAME_STATE_OPTIONS_GAME, true);
 	setOptionChoice(renderer,   &optionPage_Main, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 1, "Visuals", 1, 0, GAME_STATE_OPTIONS_MAIN, true);
+	setOptionPageLine(renderer, &optionPage_Main, 1, "Visuals", 1, 0, GAME_STATE_OPTIONS_VISUAL, true);
 	setOptionChoice(renderer,   &optionPage_Main, 1, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Main, 2, "Audio", 1, 0, GAME_STATE_OPTIONS_MAIN, true);
 	setOptionChoice(renderer,   &optionPage_Main, 2, 0, EMPTY, EMPTY, EMPTY, EMPTY);
@@ -109,11 +116,13 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionPageLine(renderer, &optionPage_Main, 7, "Quit", 1, 0, GAME_STATE_OPTIONS_MAIN, true);
 	setOptionChoice(renderer,   &optionPage_Main, 7, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 
+	optionPage_Empty.pageID = 1;
 	optionPage_Empty.optionLines = optionPage_Empty_Lines;
 	optionPage_Empty.prevState = GAME_STATE_OPTIONS_MAIN;
 	setOptionPageLine(renderer, &optionPage_Empty, 0, EMPTY, 1, 0, GAME_STATE_OPTIONS_MAIN, true);
 	setOptionChoice(renderer,   &optionPage_Empty, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 
+	optionPage_Game.pageID = 2;
 	optionPage_Game.numLines = OPTION_PAGE_GAME_NUM_LINES;
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
@@ -131,6 +140,26 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionPageLine(renderer, &optionPage_Game, 2, "Control Scheme", 2, 0, STAY, false);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "Type A", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
 	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "Type B", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
+
+	optionPage_Visual.pageID = 3;
+	optionPage_Visual.numLines = OPTION_PAGE_VISUAL_NUM_LINES;
+	optionPage_Visual.optionLines = optionPage_Visual_Lines;
+	optionPage_Visual.prevState = GAME_STATE_OPTIONS_MAIN;
+	setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 5, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Electric Green", "Change the background color.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Space Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Ocean Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Void Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Lava Red", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 1, "Block Color", 5, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 1, 0, "Lightning", "Change the color of obstacles.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 1, 1, "Plant", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Fullscreen", 2, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "On", EMPTY, EMPTY, EMPTY);
 }
 
 void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
@@ -140,11 +169,136 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
-void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
-	SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
-	SDL_RenderFillRect(renderer, &rect);
+static void onOptionChange_CubeFrequency() {
+	switch (OPTION_CUBE_FREQUENCY) {
+	case 0:
+		cubeAmount = 400;
+		break;
+	case 1:
+		cubeAmount = 500;
+		break;
+	case 2:
+		cubeAmount = 600;
+		break;
+	case 3:
+		cubeAmount = 700;
+		break;
+	default:
+		cubeAmount = 800;
+		break;
+	}
+}
 
+static void onOptionChange_CubeSize() {
+	switch (OPTION_CUBE_SIZE) {
+	case 0:
+		cubeSize = 0.5f;
+		break;
+	case 1:
+		cubeSize = 0.625f;
+		break;
+	case 2:
+		cubeSize = 0.75f;
+		break;
+	default:
+		cubeSize = 0.875f;
+		break;
+	}
+}
+
+static void onOptionChange_BackgroundColor() {
+	switch (OPTION_BACKGROUND_COLOR) {
+	case 0:
+		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
+		break;
+	case 1:
+		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		break;
+	case 2:
+		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
+		break;
+	case 3:
+		backgroundColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
+		break;
+	default:
+		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
+		break;
+	}
+}
+
+static void onOptionChange_CubeColor() {
+	switch (OPTION_CUBE_COLOR) {
+	case 0:
+		cubeColorFront = (SDL_Color){ .r = 200, .g = 250, .b = 120 };
+		cubeColorSide = (SDL_Color){ .r = 100, .g = 100, .b = 200 };
+		break;
+	case 1:
+		cubeColorFront = (SDL_Color){ .r = 0, .b = 150, .g = 255 };
+		cubeColorSide = (SDL_Color){ .r = 50, .b = 50, .g = 50 };
+		break;
+	case 2:
+		cubeColorFront = (SDL_Color){ .r = 255, .b = 100, .g = 100 };
+		cubeColorSide = (SDL_Color){ .r = 70, .b = 80, .g = 90 };
+		break;
+	case 3:
+		cubeColorFront = (SDL_Color){ .r = 170, .b = 255, .g = 195 };
+		cubeColorSide = (SDL_Color){ .r = 20, .b = 20, .g = 100 };
+		break;
+	default:
+		cubeColorFront = (SDL_Color){ .r = 255, .b = 0, .g = 150 };
+		cubeColorSide = (SDL_Color){ .r = 0, .b = 100, .g = 150 };
+		break;
+	}
+}
+
+void onOptionChange_Fullscreen(SDL_Window *window, OptionPage *page) {
+	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
+	// TODO: Fix incorrect cursor placement (it still uses the old screen size?)
+	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
+}
+
+// Handle specific callbacks here
+static void onOptionChange(SDL_Window *window, OptionPage *page) {
+	switch (page->pageID) {
+	case 2:
+		switch (page->index) {
+		case 0:
+			onOptionChange_CubeFrequency();
+			break;
+		case 1:
+			onOptionChange_CubeSize();
+			break;
+		default:
+			break;
+		}
+		break;
+	case 3:
+		switch (page->index) {
+		case 0:
+			onOptionChange_BackgroundColor();
+			break;
+		case 1:
+			onOptionChange_CubeColor();
+			break;
+		case 2:
+			onOptionChange_Fullscreen(window, page);
+			break;
+		default:
+			break;
+		}
+	default:
+		break;
+	}
+}
+
+void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor) {
+	if (page->pageID != 3) {
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
+		SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
+		SDL_RenderFillRect(renderer, &rect);
+	}
+
+	// Handle Up/Down input
 	if (page->numLines > 1) {
 		if (keyPressed(INPUT_UP)) {
 			page->index = (page->index - 1) % page->numLines;
@@ -157,13 +311,20 @@ void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
 			setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 		}
 	}
+
+	// Handle Left/Right input
+	bool optionChanged = false;
 	if (keyPressed(INPUT_LEFT)) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index - 1 + currentLine->numChoices) % currentLine->numChoices;
+		onOptionChange(window, page);
 	} else if (keyPressed(INPUT_RIGHT)) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index + 1) % currentLine->numChoices;
+		onOptionChange(window, page);
 	}
+
+	// Handle Confirm press
 	if (keyPressed(INPUT_A) || keyPressed(INPUT_START)) {
 		if (page->optionLines[page->index].nextState != STAY) {
 			gameState = page->optionLines[page->index].nextState;
@@ -171,10 +332,14 @@ void handlePage(SDL_Renderer *renderer, OptionPage *page, bool renderCursor) {
 				case GAME_STATE_OPTIONS_GAME:
 					openPage(renderer, &optionPage_Game, true);
 					break;
+				case GAME_STATE_OPTIONS_VISUAL:
+					openPage(renderer, &optionPage_Visual, true);
+					break;
 				default:
 					break;
 			}
 		}
+	// Handle Back press
 	} else if (keyPressed(INPUT_B) || keyPressed(INPUT_SELECT)) {
 		gameState = page->prevState;
 		switch (gameState) {
