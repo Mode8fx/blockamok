@@ -126,7 +126,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Empty.pageID = 1;
 	optionPage_Empty.optionLines = optionPage_Empty_Lines;
 	optionPage_Empty.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Empty, 0, EMPTY, 1, 0, GAME_STATE_OPTIONS_MAIN, true);
+	setOptionPageLine(renderer, &optionPage_Empty, 0, EMPTY, 1, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Empty, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 
 	optionPage_Game.pageID = 2;
@@ -289,6 +289,14 @@ void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
 	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
 	// TODO: Fix incorrect cursor placement (it still uses the old screen size?)
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
+}
+
+void optionCallback_All() {
+	// Fullscreen callback is omitted
+	optionCallback_CubeFrequency();
+	optionCallback_CubeSize();
+	optionCallback_BackgroundColor();
+	optionCallback_CubeColor();
 }
 
 // Handle specific callbacks here

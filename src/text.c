@@ -9,6 +9,8 @@
 
 TTF_Font *Sans_126 = NULL;
 int outlineSize_126;
+TTF_Font *Sans_63 = NULL;
+int outlineSize_63;
 TTF_Font *Sans_42 = NULL;
 int outlineSize_42;
 TTF_Font *Sans_38 = NULL;
@@ -20,7 +22,8 @@ SDL_Color color_orange = {255, 160, 0};
 SDL_Color color_red = {255, 92, 92};
 SDL_Color color_blue = {128, 128, 255};
 
-Message message_titlescreen;
+Message message_titlescreen_logo_1;
+Message message_titlescreen_logo_2;
 Message message_titlescreen_play;
 Message message_titlescreen_options;
 Message message_titlescreen_highscore;
@@ -198,17 +201,21 @@ inline void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, f
 ///////////////////
 
 static void initStaticMessages_TitleScreen() {
-  snprintf(message_titlescreen.text, TEXT_LINE_SIZE, "Blockamok");
-  prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen, 0.5f, 0.4f);
+  snprintf(message_titlescreen_logo_1.text, TEXT_LINE_SIZE, "Blockamok");
+  prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen_logo_1, 1, color_white, color_black);
+  setMessagePosRelativeToScreen(&message_titlescreen_logo_1, 0.5f, 0.4f);
+
+  snprintf(message_titlescreen_logo_2.text, TEXT_LINE_SIZE, "Remix");
+  prepareMessage(renderer, Sans_63, outlineSize_63, &message_titlescreen_logo_2, 1, color_black, color_white);
+  setMessagePosRelativeToScreen(&message_titlescreen_logo_2, 0.5f, 0.525f);
 
   snprintf(message_titlescreen_play.text, TEXT_LINE_SIZE, "Press %s to fly", btn_Start);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_play, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.6f);
+  setMessagePosRelativeToScreen(&message_titlescreen_play, 0.5f, 0.65f);
 
   snprintf(message_titlescreen_options.text, TEXT_LINE_SIZE, "Press %s for options", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_titlescreen_options, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_options, 0.5f, 0.7f);
+  setMessagePosRelativeToScreen(&message_titlescreen_options, 0.5f, 0.75f);
 
   refreshHighScoreText(renderer);
 }
@@ -268,14 +275,14 @@ static void initStaticMessages_Instructions(bool compactView) {
 static void initStaticMessages_Credits(bool compactView) {
   if (!compactView) {
     char *message_array_credits_text[] = {
-      "Lo BLOCKAMOK v2.0",
+      "Lo BLOCKAMOK REMIX",
       "",
       "Mr Carl Riis",
       "Mr Original game",
       "MW https://github.com/carltheperson/blockamok",
       "",
       "Mb Mode8fx",
-      "Mb v2.0 update and ports",
+      "Mb \"Remix\" update and ports",
       "MW https://github.com/Mode8fx/blockamok",
       "",
       "Lo MUSIC",
@@ -314,9 +321,9 @@ static void initStaticMessages_Credits(bool compactView) {
       "",
       "Lo THANKS FOR PLAYING!",
       "",
-      "MG Blockamok is available on a wide variety",
-      "MG of homebrew-enabled systems, old and new.",
-      "MG Play it everywhere!",
+      "MG Blockamok Remix is available on a wide",
+      "MG variety of homebrew-enabled systems,",
+      "MG old and new. Play it everywhere!",
       "MW https://github.com/Mode8fx/blockamok",
       "",
       "",
@@ -329,7 +336,7 @@ static void initStaticMessages_Credits(bool compactView) {
   }
   else {
     char *message_array_credits_text[] = {
-      "Lo BLOCKAMOK v2.0",
+      "Lo BLOCKAMOK REMIX",
       "",
       "Mr Carl Riis",
       "Mr Original game",
@@ -337,7 +344,7 @@ static void initStaticMessages_Credits(bool compactView) {
       "MW /carltheperson/blockamok",
       "",
       "Mb Mode8fx",
-      "Mb v2.0 update and ports",
+      "Mb \"Remix\" update and ports",
       "MW https://github.com",
       "MW /Mode8fx/blockamok",
       "",
@@ -379,8 +386,8 @@ static void initStaticMessages_Credits(bool compactView) {
       "",
       "Lo THANKS FOR PLAYING!",
       "",
-      "MG Blockamok is available on a wide",
-      "MG variety of homebrew-enabled",
+      "MG Blockamok Remix is available on a",
+      "MG wide variety of homebrew-enabled",
       "MG systems, old and new.",
       "MG Play it everywhere!",
       "MW https://github.com",
@@ -407,6 +414,10 @@ void initStaticMessages(SDL_Renderer *renderer) {
   outlineSize_126 = (int)fmax(textSize_126 / 10, 3);
   Sans_126 = TTF_OpenFontRW(rw, 0, textSize_126);
 
+  int textSize_63 = (int)fmax(63 * GAME_HEIGHT / 1000, 36);
+  outlineSize_63 = (int)fmax(textSize_63 / 10, 3);
+  Sans_63 = TTF_OpenFontRW(rw, 0, textSize_63);
+
   SDL_RWseek(rw, 0, RW_SEEK_SET);
   int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 13);
   outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
@@ -430,7 +441,8 @@ void initStaticMessages(SDL_Renderer *renderer) {
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
-	renderMessage(renderer, &message_titlescreen);
+  renderMessage(renderer, &message_titlescreen_logo_1);
+  renderMessage(renderer, &message_titlescreen_logo_2);
   if (drawSecondaryText) {
     renderMessage(renderer, &message_titlescreen_play);
     renderMessage(renderer, &message_titlescreen_options);
@@ -467,7 +479,7 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
   }
   for (int i = 0; i < CREDITS_LENGTH; i++) {
 		float offset_index = 0.06f * i; // spacing between lines
-    float startPosY = 1.0f + offset_index - offset_timer;
+    float startPosY = 1.03f + offset_index - offset_timer;
     if (startPosY < -0.1f) {
       if (i == CREDITS_LENGTH - 1 && startPosY < -0.5f) {
 				credits_startTime = now; // loop credits
@@ -513,7 +525,8 @@ inline void refreshHighScoreText(SDL_Renderer *renderer) {
 }
 
 void cleanUpText() {
-  destroyMessage(&message_titlescreen);
+  destroyMessage(&message_titlescreen_logo_1);
+  destroyMessage(&message_titlescreen_logo_2);
   destroyMessage(&message_titlescreen_play);
   destroyMessage(&message_titlescreen_options);
   destroyMessage(&message_titlescreen_highscore);

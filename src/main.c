@@ -139,6 +139,7 @@ int main(int arg, char *argv[]) {
   setScalingVals();
   initStaticMessages(renderer);
   readSaveData();
+  optionCallback_All();
   if (OPTION_FULLSCREEN) {
     optionCallback_Fullscreen(window, &optionPage_Visual);
   }
