@@ -57,6 +57,7 @@ extern Uint32 credits_startTime;
 extern OptionPage optionPage_Main;
 extern OptionPage optionPage_Game;
 extern OptionPage optionPage_Visual;
+extern OptionPage optionPage_Audio;
 extern OptionPage optionPage_Empty;
 
 #define OPTION_CUBE_FREQUENCY optionPage_Game.optionLines[0].index
@@ -66,6 +67,10 @@ extern OptionPage optionPage_Empty;
 #define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
 #define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index
 #define OPTION_FULLSCREEN optionPage_Visual.optionLines[2].index
+
+#define OPTION_MUSIC optionPage_Audio.optionLines[0].index
+#define OPTION_MUSIC_VOLUME optionPage_Audio.optionLines[1].index
+#define OPTION_SFX_VOLUME optionPage_Audio.optionLines[2].index
 
 extern void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
 extern void renderMessage(SDL_Renderer *renderer, Message *message);

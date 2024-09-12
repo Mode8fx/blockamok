@@ -12,8 +12,7 @@
 #include "./audio/zoom3_short.h"
 #include "./input.h"
 #include "./config.h"
-
-Sint8 audioIndex = 0;
+#include "./text.h"
 
 Mix_Music *bgm_1;
 Mix_Music *bgm_2;
@@ -66,16 +65,16 @@ void playMusicAtIndex(Sint8 index) {
 
 void handleChangeSong() {
 	if (keyPressed(INPUT_L)) {
-		audioIndex = (audioIndex - 1) % NUM_SONGS;
-		if (audioIndex < 0) {
-			audioIndex = NUM_SONGS - 1;
+		OPTION_MUSIC = (OPTION_MUSIC - 1) % NUM_SONGS;
+		if (OPTION_MUSIC < 0) {
+			OPTION_MUSIC = NUM_SONGS - 1;
 		}
 		writeSaveData();
-		playMusicAtIndex(audioIndex);
+		playMusicAtIndex(OPTION_MUSIC);
 	} else if (keyPressed(INPUT_R)) {
-		audioIndex = (audioIndex + 1) % NUM_SONGS;
+		OPTION_MUSIC = (OPTION_MUSIC + 1) % NUM_SONGS;
 		writeSaveData();
-		playMusicAtIndex(audioIndex);
+		playMusicAtIndex(OPTION_MUSIC);
 	}
 }
 

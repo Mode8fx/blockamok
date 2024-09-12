@@ -5,6 +5,7 @@
 #include "./input.h"
 #include "./config.h"
 #include "./draw.h"
+#include "./audio.h"
 
 #define EMPTY " "
 #define CURSOR_X 0.1f
@@ -34,6 +35,10 @@ OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 OptionPage optionPage_Visual;
 #define OPTION_PAGE_VISUAL_NUM_LINES 3
 OptionLine optionPage_Visual_Lines[OPTION_PAGE_VISUAL_NUM_LINES];
+
+OptionPage optionPage_Audio;
+#define OPTION_PAGE_AUDIO_NUM_LINES 3
+OptionLine optionPage_Audio_Lines[OPTION_PAGE_AUDIO_NUM_LINES];
 
 OptionPage optionPage_Empty;
 OptionLine optionPage_Empty_Lines[1];
@@ -105,7 +110,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Main, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Main, 1, "Visuals", 1, 0, GAME_STATE_OPTIONS_VISUAL, true);
 	setOptionChoice(renderer,   &optionPage_Main, 1, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 2, "Audio", 1, 0, GAME_STATE_OPTIONS_MAIN, true);
+	setOptionPageLine(renderer, &optionPage_Main, 2, "Audio", 1, 0, GAME_STATE_OPTIONS_AUDIO, true);
 	setOptionChoice(renderer,   &optionPage_Main, 2, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Main, 3, "Instructions", 1, 0, GAME_STATE_INSTRUCTIONS, true);
 	setOptionChoice(renderer,   &optionPage_Main, 3, 0, EMPTY, EMPTY, EMPTY, EMPTY);
@@ -162,6 +167,31 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionPageLine(renderer, &optionPage_Visual, 2, "Fullscreen", 2, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "On", EMPTY, EMPTY, EMPTY);
+
+	optionPage_Audio.pageID = 4;
+	optionPage_Audio.numLines = OPTION_PAGE_AUDIO_NUM_LINES;
+	optionPage_Audio.optionLines = optionPage_Audio_Lines;
+	optionPage_Audio.prevState = GAME_STATE_OPTIONS_MAIN;
+	setOptionPageLine(renderer, &optionPage_Audio, 0, "Music", 5, 0, STAY, false);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 0, "#1", "Raina ft. Coaxcable", "\"Spaceranger 50k\"", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 1, "#2", "Cobburn and Monty", "\"Falling Up\"", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 2, "#3", "Diomatic", "\"Falling People\"", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 3, "#4", "mano and ske", "\"Darkness in da Night\"", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 4, "#5", "Diáblo", "\"Dance 2 Insanity\"", EMPTY);
+	setOptionPageLine(renderer, &optionPage_Audio, 1, "Music Volume", 6, 5, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Audio, 1, 0, "0", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 1, 1, "1", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 1, 2, "2", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 1, 3, "3", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 1, 4, "4", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 1, 5, "5", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Audio, 2, "SFX Volume", 6, 5, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Audio, 2, 0, "0", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 2, 1, "1", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 2, 2, "2", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 2, 3, "3", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 2, 4, "4", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 2, 5, "5", EMPTY, EMPTY, EMPTY);
 }
 
 void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
@@ -288,6 +318,22 @@ static void onOptionChange(SDL_Window *window, OptionPage *page) {
 		default:
 			break;
 		}
+	case 4:
+		switch (page->index) {
+		case 0:
+			playMusicAtIndex(OPTION_MUSIC);
+			break;
+		case 1:
+			Mix_VolumeMusic((int)(OPTION_MUSIC_VOLUME * MIX_MAX_VOLUME / 5.0f));
+			break;
+		case 2:
+			Mix_Volume(-1, (int)(OPTION_SFX_VOLUME * MIX_MAX_VOLUME / 5.0f));
+			playSFX(SFX_DING_A);
+			break;
+		default:
+			break;
+		}
+		break;
 	default:
 		break;
 	}
@@ -336,6 +382,9 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 					break;
 				case GAME_STATE_OPTIONS_VISUAL:
 					openPage(renderer, &optionPage_Visual, true);
+					break;
+				case GAME_STATE_OPTIONS_AUDIO:
+					openPage(renderer, &optionPage_Audio, true);
 					break;
 				default:
 					break;

@@ -142,7 +142,7 @@ int main(int arg, char *argv[]) {
   if (OPTION_FULLSCREEN) {
     onOptionChange_Fullscreen(window, &optionPage_Visual);
   }
-  playMusicAtIndex(audioIndex);
+  playMusicAtIndex(OPTION_MUSIC);
   prepareGame();
   draw(renderer);
 
@@ -231,6 +231,11 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_OPTIONS_VISUAL:
         drawEssentials(renderer, cubes, cubesLength);
         handlePage(renderer, window, &optionPage_Visual, true);
+        break;
+
+      case GAME_STATE_OPTIONS_AUDIO:
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, window, &optionPage_Audio, true);
         break;
 
       case GAME_STATE_INSTRUCTIONS:

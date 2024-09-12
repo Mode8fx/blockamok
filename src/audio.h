@@ -9,7 +9,6 @@
 #define SFX_DING_B 3
 
 #define NUM_SONGS 5
-extern Sint8 audioIndex;
 
 extern void initAudio();
 extern void playMusicAtIndex(Sint8 index);

@@ -39,17 +39,20 @@ void writeSaveData() {
   FILE *file = fopen(saveFile, "wb");
   if (file != NULL) {
     fwrite(&highScoreVal, sizeof(highScoreVal), 1, file);
-    fwrite(&audioIndex, sizeof(audioIndex), 1, file);
     fwrite(&OPTION_CUBE_FREQUENCY, sizeof(OPTION_CUBE_FREQUENCY), 1, file);
     fwrite(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
     fwrite(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
     fwrite(&OPTION_BACKGROUND_COLOR, sizeof(OPTION_BACKGROUND_COLOR), 1, file);
     fwrite(&OPTION_CUBE_COLOR, sizeof(OPTION_CUBE_COLOR), 1, file);
     fwrite(&OPTION_FULLSCREEN, sizeof(OPTION_FULLSCREEN), 1, file);
+    fwrite(&OPTION_MUSIC, sizeof(OPTION_MUSIC), 1, file);
+    fwrite(&OPTION_MUSIC_VOLUME, sizeof(OPTION_MUSIC_VOLUME), 1, file);
+    fwrite(&OPTION_SFX_VOLUME, sizeof(OPTION_SFX_VOLUME), 1, file);
 
-    Uint8 numBytesUsed = sizeof(highScoreVal) + sizeof(audioIndex)
+    Uint8 numBytesUsed = sizeof(highScoreVal)
       + sizeof(OPTION_CUBE_FREQUENCY) + sizeof(OPTION_CUBE_SIZE) + sizeof(OPTION_CONTROL_TYPE)
-      + sizeof(OPTION_BACKGROUND_COLOR) + sizeof(OPTION_CUBE_COLOR) + sizeof(OPTION_FULLSCREEN);
+      + sizeof(OPTION_BACKGROUND_COLOR) + sizeof(OPTION_CUBE_COLOR) + sizeof(OPTION_FULLSCREEN)
+      + sizeof(OPTION_MUSIC) + sizeof(OPTION_MUSIC_VOLUME) + sizeof(OPTION_SFX_VOLUME);
     Uint8 emptyBytesSize = 255 - numBytesUsed; // In case I want to add more to the save data in a future update
     if (emptyBytesSize > 0) {
       char *emptyBytes = (char *)calloc(emptyBytesSize, sizeof(char));
@@ -64,14 +67,15 @@ void readSaveData() {
   FILE *file = fopen(saveFile, "rb");
   if (file != NULL) {
     fread(&highScoreVal, sizeof(highScoreVal), 1, file);
-    fread(&audioIndex, sizeof(audioIndex), 1, file);
-    audioIndex %= NUM_SONGS;
     fread(&OPTION_CUBE_FREQUENCY, sizeof(OPTION_CUBE_FREQUENCY), 1, file);
     fread(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
     fread(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
     fread(&OPTION_BACKGROUND_COLOR, sizeof(OPTION_BACKGROUND_COLOR), 1, file);
     fread(&OPTION_CUBE_COLOR, sizeof(OPTION_CUBE_COLOR), 1, file);
     fread(&OPTION_FULLSCREEN, sizeof(OPTION_FULLSCREEN), 1, file);
+    fread(&OPTION_MUSIC, sizeof(OPTION_MUSIC), 1, file);
+    fread(&OPTION_MUSIC_VOLUME, sizeof(OPTION_MUSIC_VOLUME), 1, file);
+    fread(&OPTION_SFX_VOLUME, sizeof(OPTION_SFX_VOLUME), 1, file);
     fclose(file);
   } else {
     writeSaveData();
