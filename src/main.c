@@ -24,7 +24,8 @@ bool isFullscreen = false;
 
 Uint32 now = 0;
 Uint32 last = 0;
-Uint32 gameStartTime = 0;
+Uint32 gameStart = 0;
+Uint32 invinceStart = 0;
 Uint32 deltaTime = 0;
 Uint32 credits_startTime = 0;
 
@@ -189,7 +190,8 @@ int main(int arg, char *argv[]) {
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
           playSFX(SFX_ZOOM);
-          gameStartTime = SDL_GetTicks();
+          gameStart = SDL_GetTicks();
+          invinceStart = gameStart;
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {
           openPage(renderer, &optionPage_Main, true);
@@ -279,7 +281,7 @@ int main(int arg, char *argv[]) {
           }
         }
         drawEssentials(renderer, cubes, cubesLength);
-        drawScoreText(renderer);
+        drawScoreAndLivesText(renderer);
         drawCursor(renderer);
         break;
 
@@ -291,13 +293,13 @@ int main(int arg, char *argv[]) {
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         drawEssentials(renderer, cubes, cubesLength);
-        drawScoreText(renderer);
+        drawScoreAndLivesText(renderer);
         drawPausedText(renderer);
         break;
 
       case GAME_STATE_GAME_OVER:
         drawEssentials(renderer, cubes, cubesLength);
-        drawScoreText(renderer);
+        drawScoreAndLivesText(renderer);
         drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {
           newHighScore = false;

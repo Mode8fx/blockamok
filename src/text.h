@@ -62,7 +62,8 @@ extern OptionPage optionPage_Empty;
 
 #define OPTION_CUBE_FREQUENCY optionPage_Game.optionLines[0].index
 #define OPTION_CUBE_SIZE optionPage_Game.optionLines[1].index
-#define OPTION_CONTROL_TYPE optionPage_Game.optionLines[2].index
+#define OPTION_LIVES optionPage_Game.optionLines[2].index
+#define OPTION_CONTROL_TYPE optionPage_Game.optionLines[3].index
 
 #define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
 #define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index
@@ -85,7 +86,7 @@ extern void drawInstructionsText(SDL_Renderer* renderer);
 extern void drawCreditsText(SDL_Renderer *renderer, Uint32 timer);
 extern void drawResetHighScoreText(SDL_Renderer *renderer);
 extern void drawQuitText(SDL_Renderer *renderer);
-extern void drawScoreText(SDL_Renderer *renderer);
+extern void drawScoreAndLivesText(SDL_Renderer *renderer);
 extern void drawCursor(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);
 extern void drawPausedText(SDL_Renderer *renderer);

@@ -27,7 +27,8 @@ Message message_titlescreen_logo_2;
 Message message_titlescreen_play;
 Message message_titlescreen_options;
 Message message_titlescreen_highscore;
-Message message_score;
+Message message_game_score;
+Message message_game_life;
 Message message_game_cursor;
 Message message_gameover;
 Message message_gameover_highscore;
@@ -225,14 +226,18 @@ static void initStaticMessages_TitleScreen() {
 }
 
 static void initStaticMessages_Game() {
-  setMessagePosRelativeToScreenY(&message_score, 0.01f);
-  message_score.outline_rect.y -= (int)fmax(GAME_HEIGHT / 240, 3);
+  setMessagePosRelativeToScreenY(&message_game_score, 0.01f);
+  message_game_score.outline_rect.y -= (int)fmax(GAME_HEIGHT / 240, 3);
 
   snprintf(message_game_cursor.text, TEXT_LINE_SIZE, "+");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_cursor, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_game_cursor, 0.5f, 0.5f);
   SDL_SetTextureAlphaMod(message_game_cursor.outline_texture, 64);
   SDL_SetTextureAlphaMod(message_game_cursor.text_texture, 64);
+
+  snprintf(message_game_life.text, TEXT_LINE_SIZE, ".");
+  prepareMessage(renderer, Sans_63, outlineSize_63, &message_game_life, 1, color_red, color_blue);
+  setMessagePosRelativeToScreenY(&message_game_life, 0.01f);
 
   snprintf(message_gameover.text, TEXT_LINE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
@@ -418,9 +423,9 @@ static void initStaticMessages_ResetHighScore() {
 static void initStaticMessages_Quit() {
   char *message_array_quit_text[] = {
 #if defined(SWITCH) || defined(WII_U)
-    "LW Exit to the homebrew menu?",
+    "LW Quit to homebrew menu?",
 #elif defined(WII)
-    "LW Exit to the Homebrew Channel?",
+    "LW Quit to Homebrew Channel?",
 #else
     "LW Are you sure you want to quit?",
 #endif
@@ -443,7 +448,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   outlineSize_126 = (int)fmax(textSize_126 / 10, 3);
   Sans_126 = TTF_OpenFontRW(rw, 0, textSize_126);
 
-  int textSize_63 = (int)fmax(63 * GAME_HEIGHT / 1000, 36);
+  int textSize_63 = (int)fmax(63 * GAME_HEIGHT / 1000, 18);
   outlineSize_63 = (int)fmax(textSize_63 / 10, 3);
   Sans_63 = TTF_OpenFontRW(rw, 0, textSize_63);
 
@@ -469,6 +474,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   initStaticMessages_Quit();
 
   destroyFont(Sans_126); // no longer needed
+  destroyFont(Sans_63); // no longer needed
 }
 
 inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
@@ -537,11 +543,20 @@ inline void drawQuitText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_array_quit[1]);
 }
 
-inline void drawScoreText(SDL_Renderer *renderer) {
-  snprintf(message_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_score, 1, color_white, color_black);
-	setMessagePosRelativeToScreenX(&message_score, 0.5f);
-  renderMessage(renderer, &message_score);
+inline void drawScoreAndLivesText(SDL_Renderer *renderer) {
+  snprintf(message_game_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
+  setMessagePosRelativeToScreenX(&message_game_score, 0.5f);
+  renderMessage(renderer, &message_game_score);
+
+  Uint32 invinceTimer = now - invinceStart;
+  if (invinceTimer <= INVINCE_TIME && invinceTimer / INVINCE_BLINK_TIME % 2 == 0 && gameStart != invinceStart) {
+    return;
+  }
+  for (int i = 0; i < numLives; i++) {
+    setMessagePosRelativeToScreenX_LeftAlign(&message_game_life, 0.85f + 0.03f * i);
+    renderMessage(renderer, &message_game_life);
+  }
 }
 
 inline void drawCursor(SDL_Renderer *renderer) {
@@ -574,7 +589,7 @@ void cleanUpText() {
   destroyMessage(&message_titlescreen_play);
   destroyMessage(&message_titlescreen_options);
   destroyMessage(&message_titlescreen_highscore);
-  destroyMessage(&message_score);
+  destroyMessage(&message_game_score);
   destroyMessage(&message_game_cursor);
   destroyMessage(&message_gameover);
   destroyMessage(&message_gameover_highscore);

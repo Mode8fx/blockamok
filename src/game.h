@@ -23,7 +23,9 @@
 #define GAME_STATE_QUIT 12
 
 extern int gameState;
-extern Uint32 gameStartTime;
+extern Uint32 now;
+extern Uint32 gameStart;
+extern Uint32 invinceStart;
 extern double scoreVal;
 extern int highScoreVal;
 extern bool newHighScore;
@@ -34,6 +36,10 @@ extern Sint16 movementMagnitudeY;
 
 extern Sint16 cubeAmount;
 extern float cubeSize;
+extern Sint8 numLives;
+
+#define INVINCE_TIME 1000
+#define INVINCE_BLINK_TIME 111
 
 typedef struct {
   float z;

@@ -16,6 +16,7 @@ const float BASE_TURN_SPEED_TYPE_B = 36.21f;
 
 Sint16 cubeAmount = 600;
 float cubeSize = 0.5f;
+Sint8 numLives = 3;
 
 const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 
@@ -53,6 +54,7 @@ void gameInit(Cube cubes[], int *cubesLength) {
   while ((*cubesLength) < cubeAmount) {
     addInitialCube(cubes, cubesLength);
   }
+  numLives = OPTION_LIVES + 1;
 }
 
 void removeCube(Cube cubes[], int i) {
@@ -167,15 +169,24 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
       float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
       float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
       // TODO: Polish collision for larger blocks
-      if (cubes[i][0].z < 2 && middleX < cubeSize && middleY < cubeSize && (SDL_GetTicks() - gameStartTime) > 1000) {
+      if (cubes[i][0].z < 2 && middleX < cubeSize && middleY < cubeSize && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
         playSFX(SFX_THUNK);
-        if (scoreVal > highScoreVal) {
-          highScoreVal = (int)scoreVal;
-          newHighScore = true;
-          refreshHighScoreText(renderer);
-          writeSaveData();
+        if (--numLives > 0) {
+          playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED / 4);
+          if (playerSpeed < PLAYER_INITIAL_SPEED) {
+            playerSpeed = PLAYER_INITIAL_SPEED;
+            invinceStart = SDL_GetTicks();
+          }
+
+        } else {
+          if (scoreVal > highScoreVal) {
+            highScoreVal = (int)scoreVal;
+            newHighScore = true;
+            refreshHighScoreText(renderer);
+            writeSaveData();
+          }
+          return GAME_STATE_GAME_OVER;
         }
-        return GAME_STATE_GAME_OVER;
       }
     }
   }

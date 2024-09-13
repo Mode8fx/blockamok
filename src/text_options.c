@@ -29,7 +29,7 @@ OptionPage optionPage_Main;
 OptionLine optionPage_Main_Lines[OPTION_PAGE_MAIN_NUM_LINES];
 
 OptionPage optionPage_Game;
-#define OPTION_PAGE_GAME_NUM_LINES 3
+#define OPTION_PAGE_GAME_NUM_LINES 4
 OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
 OptionPage optionPage_Visual;
@@ -146,9 +146,13 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 2, "Very Large", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 3, "Giant", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Game, 2, "Control Scheme", 2, 0, STAY, false);
-	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "Type A", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
-	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "Type B", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
+	setOptionPageLine(renderer, &optionPage_Game, 2, "Lives", 3, 2, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "1", "Change how many hits you can take.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "2", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 2, 2, "3", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Game, 3, "Control Scheme", 2, 0, STAY, false);
+	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Type A", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
+	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "Type B", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
 
 	optionPage_Visual.pageID = 3;
 	optionPage_Visual.numLines = OPTION_PAGE_VISUAL_NUM_LINES;

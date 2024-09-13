@@ -41,6 +41,7 @@ void writeSaveData() {
     fwrite(&highScoreVal, sizeof(highScoreVal), 1, file);
     fwrite(&OPTION_CUBE_FREQUENCY, sizeof(OPTION_CUBE_FREQUENCY), 1, file);
     fwrite(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
+    fwrite(&OPTION_LIVES, sizeof(OPTION_LIVES), 1, file);
     fwrite(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
     fwrite(&OPTION_BACKGROUND_COLOR, sizeof(OPTION_BACKGROUND_COLOR), 1, file);
     fwrite(&OPTION_CUBE_COLOR, sizeof(OPTION_CUBE_COLOR), 1, file);
@@ -50,7 +51,7 @@ void writeSaveData() {
     fwrite(&OPTION_SFX_VOLUME, sizeof(OPTION_SFX_VOLUME), 1, file);
 
     Uint8 numBytesUsed = sizeof(highScoreVal)
-      + sizeof(OPTION_CUBE_FREQUENCY) + sizeof(OPTION_CUBE_SIZE) + sizeof(OPTION_CONTROL_TYPE)
+      + sizeof(OPTION_CUBE_FREQUENCY) + sizeof(OPTION_CUBE_SIZE) + sizeof(OPTION_LIVES) + sizeof(OPTION_CONTROL_TYPE)
       + sizeof(OPTION_BACKGROUND_COLOR) + sizeof(OPTION_CUBE_COLOR) + sizeof(OPTION_FULLSCREEN)
       + sizeof(OPTION_MUSIC) + sizeof(OPTION_MUSIC_VOLUME) + sizeof(OPTION_SFX_VOLUME);
     Uint8 emptyBytesSize = 255 - numBytesUsed; // In case I want to add more to the save data in a future update
@@ -69,6 +70,7 @@ void readSaveData() {
     fread(&highScoreVal, sizeof(highScoreVal), 1, file);
     fread(&OPTION_CUBE_FREQUENCY, sizeof(OPTION_CUBE_FREQUENCY), 1, file);
     fread(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
+    fread(&OPTION_LIVES, sizeof(OPTION_LIVES), 1, file);
     fread(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
     fread(&OPTION_BACKGROUND_COLOR, sizeof(OPTION_BACKGROUND_COLOR), 1, file);
     fread(&OPTION_CUBE_COLOR, sizeof(OPTION_CUBE_COLOR), 1, file);
