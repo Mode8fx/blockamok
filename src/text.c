@@ -326,14 +326,9 @@ static void initStaticMessages_Credits(bool compactView) {
       "MG Blockamok Remix is available on a wide",
       "MG variety of homebrew-enabled systems,",
       "MG old and new. Play it everywhere!",
-      "MW https://github.com/Mode8fx/blockamok",
-      "",
-      "",
-      "MG One last thing: to reset your high score,",
-      "MG go back to the title screen and press",
-      "Mr Up B Down B Left B Right B"
+      "MW https://github.com/Mode8fx/blockamok"
     };
-    CREDITS_LENGTH = 55;
+    CREDITS_LENGTH = 50;
     mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   }
   else {
@@ -393,15 +388,9 @@ static void initStaticMessages_Credits(bool compactView) {
       "MG systems, old and new.",
       "MG Play it everywhere!",
       "MW https://github.com",
-      "MW /Mode8fx/blockamok",
-      "",
-      "",
-      "MG One last thing: to reset your",
-      "MG high score, go back to the",
-      "MG title screen and press",
-      "Mr Up B Down B Left B Right B"
+      "MW /Mode8fx/blockamok"
     };
-    CREDITS_LENGTH = 62;
+    CREDITS_LENGTH = 56;
     mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   }
 }
