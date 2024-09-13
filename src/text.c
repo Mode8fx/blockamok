@@ -226,8 +226,9 @@ static void initStaticMessages_TitleScreen() {
 }
 
 static void initStaticMessages_Game() {
-  setMessagePosRelativeToScreenY(&message_game_score, 0.01f);
-  message_game_score.outline_rect.y -= (int)fmax(GAME_HEIGHT / 240, 3);
+  snprintf(message_game_score.text, TEXT_LINE_SIZE, "12345");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
+  setMessagePosRelativeToScreenY(&message_game_score, 0.03f);
 
   snprintf(message_game_cursor.text, TEXT_LINE_SIZE, "+");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_cursor, 1, color_white, color_black);
@@ -590,6 +591,7 @@ void cleanUpText() {
   destroyMessage(&message_titlescreen_options);
   destroyMessage(&message_titlescreen_highscore);
   destroyMessage(&message_game_score);
+  destroyMessage(&message_game_life);
   destroyMessage(&message_game_cursor);
   destroyMessage(&message_gameover);
   destroyMessage(&message_gameover_highscore);
