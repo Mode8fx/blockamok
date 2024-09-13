@@ -1,5 +1,5 @@
 OBJ_DIR = ./build_windows
-EXE=Blockamok.exe
+EXE=BlockamokRemix.exe
 
 SRC_DIR		=	src
 SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)

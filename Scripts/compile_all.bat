@@ -11,7 +11,7 @@ set REPO_DKP=/d/GitHub/Blockamok
 set REPO_WSL=/mnt%REPO_DKP%
 set REPO_MSYS=%REPO_DKP%
 set OUTPUT_DIR_BASE=%REPO%/dist/new_version
-set OUTPUT_DIR=%OUTPUT_DIR_BASE%/Blockamok
+set OUTPUT_DIR=%OUTPUT_DIR_BASE%/BlockamokRemix
 set RELEASE_RESOURCES=%REPO%/release-resources
 
 :: Path: devkitPro
@@ -29,40 +29,40 @@ set MAKEFILES_WSL=/mnt%MAKEFILES_DKP%
 
 :: Makefile: Windows x64
 set MAKEFILE_MSYS_WINDOWS=%MAKEFILES_MSYS%/Makefile_pc
-set OUTPUT_WINDOWS=%OUTPUT_DIR%-windows-x64/Blockamok.exe
+set OUTPUT_WINDOWS=%OUTPUT_DIR%-windows-x64/BlockamokRemix.exe
 
 :: Makefile: Windows x86
 set MAKEFILE_MSYS_WINDOWS_X86=%MAKEFILES_MSYS%/Makefile_pc_x86
-set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-windows-x86/Blockamok.exe
+set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-windows-x86/BlockamokRemix.exe
 
 :: Makefile: Linux
 set MAKEFILE_WSL_LINUX=%MAKEFILES_WSL%/Makefile_linux
-set OUTPUT_LINUX=%OUTPUT_DIR_BASE%/Blockamok-linux
+set OUTPUT_LINUX=%OUTPUT_DIR_BASE%/BlockamokRemix-linux
 
 :: Makefile: Gamecube
 set MAKEFILE_DKP_GC=%MAKEFILES_DKP%/Makefile_gc
-set OUTPUT_GC=%OUTPUT_DIR%-gamecube/Blockamok/boot.dol
+set OUTPUT_GC=%OUTPUT_DIR%-gamecube/BlockamokRemix/boot.dol
 
 :: Makefile: Wii
 set MAKEFILE_DKP_WII=%MAKEFILES_DKP%/Makefile_wii
-set OUTPUT_WII=%OUTPUT_DIR%-wii/apps/Blockamok/boot.dol
+set OUTPUT_WII=%OUTPUT_DIR%-wii/apps/BlockamokRemix/boot.dol
 
 :: Makefile: Wii U
 set MAKEFILE_DKP_WII_U=%MAKEFILES_DKP%/make_wii_u.sh
-set OUTPUT_WII_U=%OUTPUT_DIR%-wiiu/wiiu/apps/Blockamok/Blockamok.rpx
-set OUTPUT_WII_U_WUHB=%OUTPUT_DIR%-wiiu/wiiu/apps/Blockamok.wuhb
+set OUTPUT_WII_U=%OUTPUT_DIR%-wiiu/wiiu/apps/BlockamokRemix/BlockamokRemix.rpx
+set OUTPUT_WII_U_WUHB=%OUTPUT_DIR%-wiiu/wiiu/apps/BlockamokRemix.wuhb
 
 :: Makefile: Switch
 set MAKEFILE_DKP_SWITCH=%MAKEFILES_DKP%/Makefile_switch
-set OUTPUT_SWITCH=%OUTPUT_DIR%-switch/switch/Blockamok/Blockamok.nro
+set OUTPUT_SWITCH=%OUTPUT_DIR%-switch/switch/BlockamokRemix/BlockamokRemix.nro
 
 :: Makefile: PSP
 set MAKEFILE_WSL_PSP=%MAKEFILES_WSL%/Makefile_psp
-set OUTPUT_PSP=%OUTPUT_DIR%-psp/PSP/GAME/Blockamok/EBOOT.PBP
+set OUTPUT_PSP=%OUTPUT_DIR%-psp/PSP/GAME/BlockamokRemix/EBOOT.PBP
 
 :: Makefile: Vita
 set MAKEFILE_WSL_VITA=%MAKEFILES_WSL%/make_vita.sh
-set OUTPUT_VITA=%OUTPUT_DIR_BASE%/Blockamok-vita.vpk
+set OUTPUT_VITA=%OUTPUT_DIR_BASE%/BlockamokRemix-vita.vpk
 
 :: Makefile: Xbox (original)
 set MAKEFILE_WSL_XBOX=%MAKEFILES_WSL%/Makefile_xbox
@@ -94,7 +94,7 @@ echo Windows x64: Compiling with MSYS2...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make -f %MAKEFILE_MSYS_WINDOWS%"
 sleep %SLEEP_COMPILE%
 echo Windows x64: Moving compiled exe to %OUTPUT_WINDOWS%...
-mv %REPO%/Blockamok.exe %OUTPUT_WINDOWS%
+mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS%
 echo Windows x64: Cleaning up...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make clean -f %MAKEFILE_MSYS_WINDOWS%"
 sleep %SLEEP_CLEAN%
@@ -107,7 +107,7 @@ echo Windows x86: Compiling with MSYS2...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make -f %MAKEFILE_MSYS_WINDOWS_X86%"
 sleep %SLEEP_COMPILE%
 echo Windows x86: Moving compiled exe to %OUTPUT_WINDOWS_X86%...
-mv %REPO%/Blockamok.exe %OUTPUT_WINDOWS_X86%
+mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS_X86%
 echo Windows x86: Cleaning up...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make clean -f %MAKEFILE_MSYS_WINDOWS_X86%"
 sleep %SLEEP_CLEAN%
@@ -118,7 +118,7 @@ goto :eof
 echo Linux: Compiling with WSL...
 wsl -e sh -c "cd %REPO_WSL% && make -f %MAKEFILE_WSL_LINUX% > /dev/null 2>&1"
 echo Linux: Moving compiled binary to %OUTPUT_LINUX%...
-mv %REPO%/blockamok %OUTPUT_LINUX%
+mv %REPO%/blockamokremix %OUTPUT_LINUX%
 echo Linux: Cleaning up...
 wsl -e sh -c "cd %REPO_WSL% && make clean -f %MAKEFILE_WSL_LINUX% > /dev/null 2>&1"
 echo.
@@ -153,9 +153,9 @@ echo Wii U: Compiling with devkitPro...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; sh %MAKEFILE_DKP_WII_U%"
 sleep %SLEEP_COMPILE%
 echo Wii U: Moving compiled rpx to %OUTPUT_WII_U%...
-mv %REPO%/build_wii_u/blockamok.rpx %OUTPUT_WII_U%
+mv %REPO%/build_wii_u/blockamokremix.rpx %OUTPUT_WII_U%
 echo Wii U: Creating WUHB in %OUTPUT_WII_U_WUHB%...
-start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %OUTPUT_WII_U% %OUTPUT_WII_U_WUHB% --name=\"Blockamok\" --short-name=\"Blockamok\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_128.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
+start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %OUTPUT_WII_U% %OUTPUT_WII_U_WUHB% --name=\"Blockamok Remix\" --short-name=\"Blockamok Remix\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_128.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
 sleep %SLEEP_COMPILE_SHORT%
 echo Wii U: Cleaning up...
 rm -r %REPO%/build_wii_u
@@ -168,7 +168,7 @@ echo Switch: Compiling with devkitPro...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make -f %MAKEFILE_DKP_SWITCH%"
 sleep %SLEEP_COMPILE%
 echo Switch: Moving compiled nro to %OUTPUT_SWITCH%...
-mv %REPO%/Blockamok.nro %OUTPUT_SWITCH%
+mv %REPO%/BlockamokRemix.nro %OUTPUT_SWITCH%
 echo Switch: Cleaning up...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make clean -f %MAKEFILE_DKP_SWITCH%"
 sleep %SLEEP_CLEAN%
@@ -179,7 +179,7 @@ goto :eof
 echo Vita: Compiling with WSL...
 wsl -e sh -c "cd %REPO_WSL% && sh %MAKEFILE_WSL_VITA% > /dev/null 2>&1"
 echo Vita: Moving compiled vpk to %OUTPUT_VITA%...
-mv %REPO%/build_vita/blockamok.vpk %OUTPUT_VITA%
+mv %REPO%/build_vita/blockamokremix.vpk %OUTPUT_VITA%
 echo Vita: Cleaning up...
 rm -r %REPO%/build_vita
 echo.
@@ -189,7 +189,7 @@ goto :eof
 echo RG35XX: Compiling with WSL...
 wsl -e sh -c "cd %REPO_WSL% && sh %MAKEFILE_WSL_RG35XX% > /dev/null 2>&1"
 echo RG35XX: Moving compiled binary to %OUTPUT_RG35XX%...
-mv %REPO%/build_rg35xx/blockamok %OUTPUT_RG35XX%
+mv %REPO%/build_rg35xx/blockamokremix %OUTPUT_RG35XX%
 echo RG35XX: Cleaning up...
 rm -r %REPO%/build_rg35xx
 echo.
@@ -200,7 +200,7 @@ goto :eof
 echo PSP: Compiling with WSL...
 wsl -e sh -c "cd %REPO_WSL% && make -f %MAKEFILE_WSL_PSP% > /dev/null 2>&1"
 echo PSP: Moving compiled binary to %OUTPUT_PSP%...
-mv %REPO%/blockamok %OUTPUT_PSP%
+mv %REPO%/blockamokremix %OUTPUT_PSP%
 echo PSP: Cleaning up...
 wsl -e sh -c "cd %REPO_WSL% && make clean -f %MAKEFILE_WSL_PSP% > /dev/null 2>&1"
 echo.
@@ -211,6 +211,6 @@ goto :eof
 rem echo Xbox: Compiling with WSL...
 rem wsl -e sh -c "cd ~/nxdk/bin && ./activate && cd %REPO_WSL% && make -f %MAKEFILE_WSL_XBOX% > /dev/null 2>&1"
 rem echo Xbox: Moving compiled binary to %OUTPUT_XBOX%...
-rem mv %REPO%/build_xbox/blockamok %OUTPUT_XBOX%
+rem mv %REPO%/build_xbox/blockamokremix %OUTPUT_XBOX%
 rem echo.
 goto :eof

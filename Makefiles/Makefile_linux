@@ -1,5 +1,5 @@
 OBJ_DIR = ./build_linux
-EXE = blockamok
+EXE = blockamokremix
 
 SRC_DIR = src
 SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)

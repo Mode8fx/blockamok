@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
-project(blockamok C)
+project(blockamokremix C)
 
-add_executable(blockamok
+add_executable(blockamokremix
 	"src/main.c"
 	"src/audio.c"
 	"src/audio.h"
@@ -50,17 +50,12 @@ if (WIIU)
 	add_definitions(-DWII_U)
 	add_definitions(-DNINTENDO_LAYOUT)
 
-	target_link_libraries(blockamok -L${DEVKITPRO}/portlibs/wiiu/lib -L${DEVKITPRO}/portlibs/ppc/lib -L${DEVKITPRO}/wut/lib)
-	# pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET SDL2)
-	# pkg_check_modules(SDL2_mixer REQUIRED IMPORTED_TARGET SDL2_mixer)
-	# pkg_check_modules(SDL2_ttf REQUIRED IMPORTED_TARGET SDL2_ttf)
-	# target_link_libraries(blockamok PkgConfig::SDL2 PkgConfig::SDL2_mixer PkgConfig::SDL2_ttf)
-	# target_link_libraries(blockamok -lSDL2_ttf -lSDL2_mixer -lmodplug -lvorbisfile -lvorbis -logg -lSDL2 -lfreetype -lpng -lmpg123 -lbz2 -ljpeg -lz -lwut)
+	target_link_libraries(blockamokremix -L${DEVKITPRO}/portlibs/wiiu/lib -L${DEVKITPRO}/portlibs/ppc/lib -L${DEVKITPRO}/wut/lib)
 	PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 	PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
 	PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
 	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2MIXER_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
-	TARGET_LINK_LIBRARIES(blockamok ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES})
+	TARGET_LINK_LIBRARIES(blockamokremix ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES})
 
 	set(SDL2_INCLUDE_DIRS
 	"${DEVKITPRO}/portlibs/wiiu/include/SDL2;\
@@ -70,9 +65,9 @@ if (WIIU)
 	)
 	include_directories(${SDL2_INCLUDE_DIRS})
 
-	wut_create_rpx(blockamok)
+	wut_create_rpx(blockamokremix)
 
-	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/blockamok.rpx"
+	install(FILES "${CMAKE_CURRENT_BINARY_DIR}/blockamokremix.rpx"
 			DESTINATION "${CMAKE_INSTALL_PREFIX}")
 
 elseif (VITA)
@@ -80,7 +75,7 @@ elseif (VITA)
 	add_definitions(-DVITA)
 	add_definitions(-DPRELOAD_SOUNDS)
 	
-	set(VITA_APP_NAME "Blockamok")
+	set(VITA_APP_NAME "BlockamokRemix")
 	set(VITA_TITLEID  "BLOC52665")
 	set(VITA_VERSION  "01.00")
 	
@@ -88,12 +83,9 @@ elseif (VITA)
 	PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
 	PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
 	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2MIXER_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
-	TARGET_LINK_LIBRARIES(blockamok ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES})
+	TARGET_LINK_LIBRARIES(blockamokremix ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES})
 
-	# target_link_libraries(blockamok SDL2_ttf SDL2_mixer SDL2 freetype png png16 bz2 jpeg z mikmod modplug mpg123 xmp FLAC vorbisfile vorbis ogg webp pthread)
-	# find_package(SDL2 REQUIRED)
-	# target_link_libraries(blockamok SDL2_ttf SDL2_mixer SDL2)
-	target_link_libraries(blockamok
+	target_link_libraries(blockamokremix
 		SceDisplay_stub
 		SceCtrl_stub
 		SceAudio_stub
@@ -109,8 +101,8 @@ elseif (VITA)
 
 	include_directories("${VITASDK}/arm-vita-eabi/include;${VITASDK}/arm-vita-eabi/include/SDL2;")
 
-	vita_create_self(blockamok.self blockamok)
-	vita_create_vpk(blockamok.vpk ${VITA_TITLEID} blockamok.self
+	vita_create_self(blockamokremix.self blockamokremix)
+	vita_create_vpk(blockamokremix.vpk ${VITA_TITLEID} blockamokremix.self
 		VERSION ${VITA_VERSION}
 		NAME ${VITA_APP_NAME}
 		FILE release-resources/logo_icon_128.png sce_sys/icon0.png

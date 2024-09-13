@@ -1,6 +1,6 @@
 PSP_LARGE_MEMORY=1
 
-TARGET		=	blockamok
+TARGET		=	blockamokremix
 BUILD		=	build_psp
 SRC_DIR		=	src
 SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
@@ -14,7 +14,7 @@ LIBS = $(shell psp-pkg-config --libs sdl2 SDL2_ttf SDL2_mixer | sed 's/-pthread/
         -lpspsdk -lpsprtc -lpspgum -lpspaudiolib
 
 EXTRA_TARGETS = EBOOT.PBP
-PSP_EBOOT_TITLE = blockamok
+PSP_EBOOT_TITLE = blockamokremix
 PSP_EBOOT_ICON = release-resources/logo_icon_psp.png
 PSP_EBOOT_PIC1 = release-resources/background_psp.png
 # psp sound file: PSP_EBOOT_SND0=SND0.at3

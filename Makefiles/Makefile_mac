@@ -12,7 +12,7 @@ satisfy_vscode_mac:
 all_default: compile run
 
 compile:
-	gcc src/*.c `pkg-config --cflags --libs SDL2_ttf` -o blockamok
+	gcc src/*.c `pkg-config --cflags --libs SDL2_ttf` -o blockamokremix
 
 run:
-	./blockamok
+	./blockamokremix
