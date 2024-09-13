@@ -120,9 +120,9 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Main, 4, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Main, 5, "Reset High Score", 1, 0, GAME_STATE_RESET_HIGH_SCORE, true);
 	setOptionChoice(renderer,   &optionPage_Main, 5, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 6, "Reset Settings", 1, 0, GAME_STATE_OPTIONS_MAIN, true);
+	setOptionPageLine(renderer, &optionPage_Main, 6, "Reset Settings", 1, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Main, 6, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 7, "Quit", 1, 0, GAME_STATE_OPTIONS_MAIN, true);
+	setOptionPageLine(renderer, &optionPage_Main, 7, "Quit", 1, 0, GAME_STATE_QUIT, true);
 	setOptionChoice(renderer,   &optionPage_Main, 7, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 
 	optionPage_Empty.pageID = 1;

@@ -213,10 +213,6 @@ int main(int arg, char *argv[]) {
               playSFX(SFX_THUNK);
               forceIndexReset = false;
               break;
-            case 7:
-              quit = true;
-              writeSaveData();
-              break;
             default:
               break;
           }
@@ -257,6 +253,16 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubesLength);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawResetHighScoreText(renderer);
+        break;
+
+      case GAME_STATE_QUIT:
+        if (keyPressed(INPUT_START)) {
+          quit = true;
+          writeSaveData();
+        }
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, window, &optionPage_Empty, false);
+        drawQuitText(renderer);
         break;
 
       case GAME_STATE_PLAYING:

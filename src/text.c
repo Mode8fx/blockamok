@@ -39,6 +39,8 @@ Sint8 CREDITS_LENGTH;
 Message message_array_credits[65];
 #define RESET_HIGH_SCORE_LENGTH 5
 Message message_array_reset_high_score[RESET_HIGH_SCORE_LENGTH];
+#define QUIT_LENGTH 2
+Message message_array_quit[QUIT_LENGTH];
 
 bool credits_paused = false;
 
@@ -413,6 +415,24 @@ static void initStaticMessages_ResetHighScore() {
   setMessagePosRelativeToScreen(&message_array_reset_high_score[4], 0.5f, 0.65f);
 }
 
+static void initStaticMessages_Quit() {
+  char *message_array_quit_text[] = {
+#if defined(SWITCH) || defined(WII_U)
+    "LW Exit to the homebrew menu?",
+#elif defined(WII)
+    "LW Exit to the Homebrew Channel?",
+#else
+    "LW Are you sure you want to quit?",
+#endif
+  malloc(TEXT_LINE_SIZE),
+  };
+  snprintf(message_array_quit_text[1], TEXT_LINE_SIZE, "Mr Press %s to quit", btn_Start);
+  mapTextArrayToMessageArray(renderer, message_array_quit_text, message_array_quit, QUIT_LENGTH);
+
+  setMessagePosRelativeToScreen(&message_array_quit[0], 0.5f, 0.45f);
+  setMessagePosRelativeToScreen(&message_array_quit[1], 0.5f, 0.55f);
+}
+
 void initStaticMessages(SDL_Renderer *renderer) {
   cleanUpText();
   bool compactView = GAME_HEIGHT <= 289;
@@ -446,6 +466,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   initStaticMessages_Instructions(compactView);
   initStaticMessages_Credits(compactView);
   initStaticMessages_ResetHighScore();
+  initStaticMessages_Quit();
 
   destroyFont(Sans_126); // no longer needed
 }
@@ -509,6 +530,11 @@ inline void drawResetHighScoreText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_array_reset_high_score[2]);
   renderMessage(renderer, &message_array_reset_high_score[3]);
   renderMessage(renderer, &message_array_reset_high_score[4]);
+}
+
+inline void drawQuitText(SDL_Renderer *renderer) {
+  renderMessage(renderer, &message_array_quit[0]);
+  renderMessage(renderer, &message_array_quit[1]);
 }
 
 inline void drawScoreText(SDL_Renderer *renderer) {
