@@ -44,11 +44,13 @@ OptionPage optionPage_Empty;
 OptionLine optionPage_Empty_Lines[1];
 #define STAY -1
 
+bool forceIndexReset = false;
+
 static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
 	OptionLine *currLine = &page->optionLines[lineIndex];
 	snprintf(currLine->name.text, TEXT_LINE_SIZE, text);
 	currLine->numChoices = numChoices;
-	if (currLine->index == 0) {
+	if (currLine->index == 0 || forceIndexReset) {
 		currLine->index = choiceIndex;
 	}
 	if (currLine->optionChoices == NULL) {
@@ -291,12 +293,27 @@ void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
+static void optionCallback_Music() {
+	playMusicAtIndex(OPTION_MUSIC);
+}
+
+static void optionCallback_MusicVolume() {
+	Mix_VolumeMusic((int)(OPTION_MUSIC_VOLUME * MIX_MAX_VOLUME / 5.0f));
+}
+
+static void optionCallback_SFXVolume() {
+	Mix_Volume(-1, (int)(OPTION_SFX_VOLUME * MIX_MAX_VOLUME / 5.0f));
+}
+
 void optionCallback_All() {
 	// Fullscreen callback is omitted
 	optionCallback_CubeFrequency();
 	optionCallback_CubeSize();
 	optionCallback_BackgroundColor();
 	optionCallback_CubeColor();
+	optionCallback_Music();
+	optionCallback_MusicVolume();
+	optionCallback_SFXVolume();
 }
 
 // Handle specific callbacks here
@@ -332,13 +349,13 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 	case 4:
 		switch (page->index) {
 		case 0:
-			playMusicAtIndex(OPTION_MUSIC);
+			optionCallback_Music();
 			break;
 		case 1:
-			Mix_VolumeMusic((int)(OPTION_MUSIC_VOLUME * MIX_MAX_VOLUME / 5.0f));
+			optionCallback_MusicVolume();
 			break;
 		case 2:
-			Mix_Volume(-1, (int)(OPTION_SFX_VOLUME * MIX_MAX_VOLUME / 5.0f));
+			optionCallback_SFXVolume();
 			playSFX(SFX_DING_A);
 			break;
 		default:

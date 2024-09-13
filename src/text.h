@@ -72,6 +72,8 @@ extern OptionPage optionPage_Empty;
 #define OPTION_MUSIC_VOLUME optionPage_Audio.optionLines[1].index
 #define OPTION_SFX_VOLUME optionPage_Audio.optionLines[2].index
 
+extern bool forceIndexReset;
+
 extern void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
 extern void renderMessage(SDL_Renderer *renderer, Message *message);
 extern void setMessagePosRelativeToScreen(Message *message, float x, float y);

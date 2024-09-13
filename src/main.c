@@ -143,7 +143,6 @@ int main(int arg, char *argv[]) {
   if (OPTION_FULLSCREEN) {
     optionCallback_Fullscreen(window, &optionPage_Visual);
   }
-  playMusicAtIndex(OPTION_MUSIC);
   prepareGame();
   draw(renderer);
 
@@ -211,6 +210,13 @@ int main(int arg, char *argv[]) {
               writeSaveData();
               playSFX(SFX_THUNK);
               highScoreResetIndex = 0;
+              break;
+            case 6:
+              forceIndexReset = true;
+              initStaticMessages(renderer);
+              optionCallback_All();
+              playSFX(SFX_THUNK);
+              forceIndexReset = false;
               break;
             case 7:
               quit = true;
