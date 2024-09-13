@@ -289,8 +289,6 @@ static void optionCallback_CubeColor() {
 
 void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
 	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
-	// TODO: Fix incorrect cursor placement (it still uses the old screen size?)
-	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
 static void optionCallback_Music() {
@@ -380,10 +378,8 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 			if (page->index < 0) {
 				page->index = page->numLines - 1;
 			}
-			setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 		} else if (keyPressed(INPUT_DOWN)) {
 			page->index = (page->index + 1) % page->numLines;
-			setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 		}
 	}
 
@@ -435,7 +431,8 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 				break;
 		}
 	}
-
+	// Not ideal, but easiest way to handle window resize
+	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 
 	if (renderCursor) {
 		renderMessage(renderer, &message_menu_cursor);
