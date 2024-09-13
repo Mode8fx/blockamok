@@ -50,7 +50,7 @@ static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int line
 	OptionLine *currLine = &page->optionLines[lineIndex];
 	snprintf(currLine->name.text, TEXT_LINE_SIZE, text);
 	currLine->numChoices = numChoices;
-	if (currLine->index == 0 || forceIndexReset) {
+	if (currLine->index == 0 || (forceIndexReset) && !(page->pageID == 4 && lineIndex == 0)) { // don't reset music index
 		currLine->index = choiceIndex;
 	}
 	if (currLine->optionChoices == NULL) {
@@ -306,12 +306,11 @@ static void optionCallback_SFXVolume() {
 }
 
 void optionCallback_All() {
-	// Fullscreen callback is omitted
+	// Fullscreen and Music callbacks are omitted
 	optionCallback_CubeFrequency();
 	optionCallback_CubeSize();
 	optionCallback_BackgroundColor();
 	optionCallback_CubeColor();
-	optionCallback_Music();
 	optionCallback_MusicVolume();
 	optionCallback_SFXVolume();
 }
