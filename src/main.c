@@ -40,7 +40,7 @@ bool showCursor = true;
 Sint8 highScoreResetIndex = 0;
 #define HIGH_SCORE_RESET_SEQUENCE_LENGTH 8
 static const int highScoreResetSequence[HIGH_SCORE_RESET_SEQUENCE_LENGTH] = {
-  INPUT_UP, INPUT_B, INPUT_DOWN, INPUT_B, INPUT_LEFT, INPUT_B, INPUT_RIGHT, INPUT_B
+  INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT
 };
 
 static void handleWindowResize(SDL_Event *event) {
@@ -115,6 +115,8 @@ static void handleResetHighScore() {
       writeSaveData();
 			playSFX(SFX_THUNK);
       highScoreResetIndex = 0;
+      gameState = GAME_STATE_OPTIONS_MAIN;
+      openPage(renderer, &optionPage_Main, false);
     }
 	} else if (pressedKeys != 0) {
     highScoreResetIndex = 0;
@@ -184,7 +186,6 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_TITLE_SCREEN:
-        handleResetHighScore();
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
           playSFX(SFX_ZOOM);
@@ -204,13 +205,6 @@ int main(int arg, char *argv[]) {
             case 4:
               credits_paused = false;
               credits_startTime = SDL_GetTicks();
-              break;
-            case 5:
-              highScoreVal = DEFAULT_HIGH_SCORE;
-              refreshHighScoreText(renderer);
-              writeSaveData();
-              playSFX(SFX_THUNK);
-              highScoreResetIndex = 0;
               break;
             case 6:
               forceIndexReset = true;
@@ -256,6 +250,13 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubesLength);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawCreditsText(renderer, now);
+        break;
+
+      case GAME_STATE_RESET_HIGH_SCORE:
+        handleResetHighScore();
+        drawEssentials(renderer, cubes, cubesLength);
+        handlePage(renderer, window, &optionPage_Empty, false);
+        drawResetHighScoreText(renderer);
         break;
 
       case GAME_STATE_PLAYING:

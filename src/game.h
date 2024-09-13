@@ -19,6 +19,7 @@
 #define GAME_STATE_OPTIONS_GAME 8
 #define GAME_STATE_OPTIONS_VISUAL 9
 #define GAME_STATE_OPTIONS_AUDIO 10
+#define GAME_STATE_RESET_HIGH_SCORE 11
 
 extern int gameState;
 extern Uint32 gameStartTime;

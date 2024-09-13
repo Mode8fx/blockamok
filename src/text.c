@@ -37,6 +37,8 @@ Message message_paused_quit;
 Message message_array_instructions[INSTRUCTIONS_LENGTH];
 Sint8 CREDITS_LENGTH;
 Message message_array_credits[65];
+#define RESET_HIGH_SCORE_LENGTH 5
+Message message_array_reset_high_score[RESET_HIGH_SCORE_LENGTH];
 
 bool credits_paused = false;
 
@@ -404,6 +406,24 @@ static void initStaticMessages_Credits(bool compactView) {
   }
 }
 
+static void initStaticMessages_ResetHighScore() {
+  char *message_array_reset_high_score_text[] = {
+  "LW Are you sure you want to",
+  "LW reset your high score?",
+  "",
+  "LW If so, press",
+  malloc(TEXT_LINE_SIZE),
+  };
+  snprintf(message_array_reset_high_score_text[4], TEXT_LINE_SIZE, "Mr Up Down Left Right Up Down Left Right");
+  mapTextArrayToMessageArray(renderer, message_array_reset_high_score_text, message_array_reset_high_score, RESET_HIGH_SCORE_LENGTH);
+
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[0], 0.5f, 0.35f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[1], 0.5f, 0.425f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[2], 0.5f, 0.5f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[3], 0.5f, 0.575f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[4], 0.5f, 0.65f);
+}
+
 void initStaticMessages(SDL_Renderer *renderer) {
   cleanUpText();
   bool compactView = GAME_HEIGHT <= 289;
@@ -436,6 +456,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   initStaticMessages_Options(renderer);
   initStaticMessages_Instructions(compactView);
   initStaticMessages_Credits(compactView);
+  initStaticMessages_ResetHighScore();
 
   destroyFont(Sans_126); // no longer needed
 }
@@ -491,6 +512,14 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
 		setMessagePosRelativeToScreen(&message_array_credits[i], 0.5f, startPosY);
 		renderMessage(renderer, &message_array_credits[i]);
   }
+}
+
+inline void drawResetHighScoreText(SDL_Renderer *renderer) {
+  renderMessage(renderer, &message_array_reset_high_score[0]);
+  renderMessage(renderer, &message_array_reset_high_score[1]);
+  renderMessage(renderer, &message_array_reset_high_score[2]);
+  renderMessage(renderer, &message_array_reset_high_score[3]);
+  renderMessage(renderer, &message_array_reset_high_score[4]);
 }
 
 inline void drawScoreText(SDL_Renderer *renderer) {
