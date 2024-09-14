@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 
 #include "./text.h"
 #include "./game.h"
@@ -186,7 +186,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Audio, 0, 1, "#2", "Cobburn and Monty", "\"Falling Up\"", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Audio, 0, 2, "#3", "Diomatic", "\"Falling People\"", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Audio, 0, 3, "#4", "mano and ske", "\"Darkness in da Night\"", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 4, "#5", "Di�blo", "\"Dance 2 Insanity\"", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 4, "#5", "Diáblo", "\"Dance 2 Insanity\"", EMPTY);
 	setOptionPageLine(renderer, &optionPage_Audio, 1, "Music Volume", 6, 5, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Audio, 1, 0, "0", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Audio, 1, 1, "1", EMPTY, EMPTY, EMPTY);
@@ -232,18 +232,23 @@ static void optionCallback_CubeFrequency() {
 }
 
 static void optionCallback_CubeSize() {
+	// Approximate formula: y = −0.144x^2 + 0.4084x + 0.33235
 	switch (OPTION_CUBE_SIZE) {
 	case 0:
 		cubeSize = 0.5f;
+		cubeSizeLimit = 0.5f;
 		break;
 	case 1:
 		cubeSize = 0.625f;
+		cubeSizeLimit = 0.533f;
 		break;
 	case 2:
 		cubeSize = 0.75f;
+		cubeSizeLimit = 0.556f;
 		break;
 	default:
 		cubeSize = 0.875f;
+		cubeSizeLimit = 0.58f;
 		break;
 	}
 	prepareGame();

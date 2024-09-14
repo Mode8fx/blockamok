@@ -16,6 +16,7 @@ const float BASE_TURN_SPEED_TYPE_B = 36.21f;
 
 Sint16 cubeAmount = 600;
 float cubeSize = 0.5f;
+float cubeSizeLimit = 0.5f;
 Sint8 numLives = 3;
 
 const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
@@ -76,21 +77,25 @@ void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN
 static void flipCubeIfOutOfBounds(Cube cubes[], int i) {
   int p;
   if (cubes[i][0].x < -BOUNDS_X) {
+    float BOUNDS_X_MULT = BOUNDS_X * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].x += BOUNDS_X * 2;
+      cubes[i][p].x += BOUNDS_X_MULT;
     }
   } else if (cubes[i][0].x > BOUNDS_X) {
+    float BOUNDS_X_MULT = BOUNDS_X * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].x -= BOUNDS_X * 2;
+      cubes[i][p].x -= BOUNDS_X_MULT;
     }
   }
   if (cubes[i][0].y < -BOUNDS_Y) {
+    float BOUNDS_Y_MULT = BOUNDS_Y * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].y += BOUNDS_X * 2;
+      cubes[i][p].y += BOUNDS_Y_MULT;
     }
   } else if (cubes[i][0].y > BOUNDS_Y) {
+    float BOUNDS_Y_MULT = BOUNDS_Y * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].y -= BOUNDS_Y * 2;
+      cubes[i][p].y -= BOUNDS_Y_MULT;
     }
   }
 }
@@ -117,6 +122,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   if (playerSpeed > MAX_SPEED) {
     playerSpeed = MAX_SPEED;
   }
+  playerSpeed = 10;
 
   float speed = playerSpeed * deltaTimeDiv;
 
@@ -167,7 +173,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
       float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
       float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
       // TODO: Polish collision for larger blocks
-      if (cubes[i][0].z < 2 && middleX < cubeSize && middleY < cubeSize && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
+      if (cubes[i][0].z < 2 && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
         playSFX(SFX_THUNK);
         if (--numLives > 0) {
           playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
