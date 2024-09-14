@@ -189,6 +189,7 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_TITLE_SCREEN:
         if (keyPressed(INPUT_START)) {
           scoreVal = 0;
+          numLives = OPTION_LIVES + 1;
           playSFX(SFX_ZOOM);
           gameStart = SDL_GetTicks();
           invinceStart = gameStart;
@@ -281,7 +282,7 @@ int main(int arg, char *argv[]) {
           }
         }
         drawEssentials(renderer, cubes, cubesLength);
-        drawScoreAndLivesText(renderer);
+        drawGameText(renderer);
         drawCursor(renderer);
         break;
 
@@ -293,13 +294,13 @@ int main(int arg, char *argv[]) {
           gameState = GAME_STATE_TITLE_SCREEN;
         }
         drawEssentials(renderer, cubes, cubesLength);
-        drawScoreAndLivesText(renderer);
+        drawGameText(renderer);
         drawPausedText(renderer);
         break;
 
       case GAME_STATE_GAME_OVER:
         drawEssentials(renderer, cubes, cubesLength);
-        drawScoreAndLivesText(renderer);
+        drawGameText(renderer);
         drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {
           newHighScore = false;

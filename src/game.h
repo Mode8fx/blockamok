@@ -31,6 +31,14 @@ extern int highScoreVal;
 extern bool newHighScore;
 extern bool showCursor;
 
+#define MAX_SPEED 1500.0f
+#define MAX_SPEED_INT (int)MAX_SPEED
+extern float playerSpeed;
+extern bool speedingUp;
+#define SPEED_UP_MULT 3
+#define TRUE_MAX_SPEED (MAX_SPEED * SPEED_UP_MULT)
+#define TRUE_MAX_SPEED_INT (int)TRUE_MAX_SPEED
+
 extern Sint16 movementMagnitudeX;
 extern Sint16 movementMagnitudeY;
 

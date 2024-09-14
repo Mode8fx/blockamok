@@ -30,6 +30,7 @@ Message message_titlescreen_highscore;
 Message message_game_score;
 Message message_game_life;
 Message message_game_cursor;
+Message message_game_speed;
 Message message_gameover;
 Message message_gameover_highscore;
 Message message_paused;
@@ -201,6 +202,15 @@ inline void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, f
   setMessagePosRelativeToScreenY(message, y);
 }
 
+static inline void setMessagePosRelativeToScreenX_RightAlign(Message *message, float x) {
+  setMessagePosX(message, (int)(GAME_WIDTH * x - message->text_rect.w));
+}
+
+static inline void setMessagePosRelativeToScreen_RightAlign(Message *message, float x, float y) {
+  setMessagePosRelativeToScreenX_RightAlign(message, x);
+  setMessagePosRelativeToScreenY(message, y);
+}
+
 ///////////////////
 // GAME-SPECIFIC //
 ///////////////////
@@ -239,6 +249,10 @@ static void initStaticMessages_Game() {
   snprintf(message_game_life.text, TEXT_LINE_SIZE, ".");
   prepareMessage(renderer, Sans_63, outlineSize_63, &message_game_life, 1, color_red, color_blue);
   setMessagePosRelativeToScreenY(&message_game_life, 0.01f);
+
+  snprintf(message_game_speed.text, TEXT_LINE_SIZE, "12345 MPH");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed, 1, color_white, color_black);
+  setMessagePosRelativeToScreenY(&message_game_speed, 0.95f);
 
   snprintf(message_gameover.text, TEXT_LINE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
@@ -544,20 +558,29 @@ inline void drawQuitText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_array_quit[1]);
 }
 
-inline void drawScoreAndLivesText(SDL_Renderer *renderer) {
+inline void drawGameText(SDL_Renderer *renderer) {
   snprintf(message_game_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
   setMessagePosRelativeToScreenX(&message_game_score, 0.5f);
   renderMessage(renderer, &message_game_score);
 
   Uint32 invinceTimer = now - invinceStart;
-  if (invinceTimer <= INVINCE_TIME && invinceTimer / INVINCE_BLINK_TIME % 2 == 0 && gameStart != invinceStart) {
-    return;
+  if (invinceTimer > INVINCE_TIME || invinceTimer / INVINCE_BLINK_TIME % 2 == 1 || gameStart == invinceStart) {
+    for (int i = 0; i < numLives; i++) {
+      setMessagePosRelativeToScreenX_LeftAlign(&message_game_life, 0.85f + 0.03f * i);
+      renderMessage(renderer, &message_game_life);
+    }
   }
-  for (int i = 0; i < numLives; i++) {
-    setMessagePosRelativeToScreenX_LeftAlign(&message_game_life, 0.85f + 0.03f * i);
-    renderMessage(renderer, &message_game_life);
+
+  SDL_Color speedColor = color_white;
+  float printedSpeed = playerSpeed * (speedingUp ? SPEED_UP_MULT : 1);
+  if (printedSpeed >= (speedingUp ? TRUE_MAX_SPEED_INT : MAX_SPEED_INT)) {
+    speedColor = color_orange;
   }
+  snprintf(message_game_speed.text, TEXT_LINE_SIZE, "%d MPH", (int)printedSpeed);
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed, 1, speedColor, color_black);
+  setMessagePosRelativeToScreenX_RightAlign(&message_game_speed, 0.95f);
+  renderMessage(renderer, &message_game_speed);
 }
 
 inline void drawCursor(SDL_Renderer *renderer) {
@@ -604,8 +627,6 @@ void cleanUpText() {
   for (int i = 0; i < CREDITS_LENGTH; i++) {
     destroyMessage(&message_array_credits[i]);
   }
-
-  // TODO: Clean up menu messages
 
   destroyFont(Sans_42);
   destroyFont(Sans_38);

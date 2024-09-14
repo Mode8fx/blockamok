@@ -67,7 +67,8 @@ extern OptionPage optionPage_Empty;
 
 #define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
 #define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index
-#define OPTION_FULLSCREEN optionPage_Visual.optionLines[2].index
+#define OPTION_SPEEDOMETER optionPage_Visual.optionLines[2].index
+#define OPTION_FULLSCREEN optionPage_Visual.optionLines[3].index
 
 #define OPTION_MUSIC optionPage_Audio.optionLines[0].index
 #define OPTION_MUSIC_VOLUME optionPage_Audio.optionLines[1].index
@@ -86,7 +87,7 @@ extern void drawInstructionsText(SDL_Renderer* renderer);
 extern void drawCreditsText(SDL_Renderer *renderer, Uint32 timer);
 extern void drawResetHighScoreText(SDL_Renderer *renderer);
 extern void drawQuitText(SDL_Renderer *renderer);
-extern void drawScoreAndLivesText(SDL_Renderer *renderer);
+extern void drawGameText(SDL_Renderer *renderer);
 extern void drawCursor(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);
 extern void drawPausedText(SDL_Renderer *renderer);

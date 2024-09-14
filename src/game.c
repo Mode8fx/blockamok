@@ -23,10 +23,9 @@ const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 const float BOUNDS_X = 12;
 const float BOUNDS_Y = 12;
 const float SPEED_INCREASE = 350;
-const Sint8 SPEED_UP_MULT = 3;
-const float MAX_SPEED = 1500;
 
 float playerSpeed;
+bool speedingUp;
 
 Sint16 movementMagnitudeX;
 Sint16 movementMagnitudeY;
@@ -54,7 +53,6 @@ void gameInit(Cube cubes[], int *cubesLength) {
   while ((*cubesLength) < cubeAmount) {
     addInitialCube(cubes, cubesLength);
   }
-  numLives = OPTION_LIVES + 1;
 }
 
 void removeCube(Cube cubes[], int i) {
@@ -111,11 +109,14 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
     addNewCube(cubes, cubesLength);
   }
 
-  bool speedingUp = (keyHeld(INPUT_A) || keyHeld(INPUT_B));
+  speedingUp = (keyHeld(INPUT_A) || keyHeld(INPUT_B));
 
   float deltaTimeDiv = (float)deltaTime / 12000;
 
   playerSpeed += deltaTimeDiv * SPEED_INCREASE * (speedingUp ? 3 : 1);
+  if (playerSpeed > MAX_SPEED) {
+    playerSpeed = MAX_SPEED;
+  }
 
   float speed = playerSpeed * deltaTimeDiv;
 
@@ -142,19 +143,19 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   else {
     float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTimeDiv;
     xDiff = turnSpeed * -movementMagnitudeX / 32767;
-		yDiff = turnSpeed * -movementMagnitudeY / 32767;
+    yDiff = turnSpeed * -movementMagnitudeY / 32767;
   }
 
-  float zSpeed = -speed;
+  float zSpeed = speed;
   if (speedingUp) {
     zSpeed *= SPEED_UP_MULT;
-  }
-  if (zSpeed < -MAX_SPEED) {
-    zSpeed = -MAX_SPEED;
+    if (zSpeed > MAX_SPEED) {
+      zSpeed = MAX_SPEED;
+    }
   }
 
   for (int i = 0; i < (*cubesLength); i++) {
-    if ((cubes[i][0].z + zSpeed) < 1.5) {
+    if ((cubes[i][0].z - zSpeed) < 1.5) {
       removeCube(cubes, i);
       cubesRemoved += 1;
     } else {
@@ -163,7 +164,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
         cubes[i][p].x += xDiff;
         cubes[i][p].y += yDiff;
 
-        cubes[i][p].z += zSpeed;
+        cubes[i][p].z -= zSpeed;
       }
 
       float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
@@ -172,12 +173,11 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
       if (cubes[i][0].z < 2 && middleX < cubeSize && middleY < cubeSize && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
         playSFX(SFX_THUNK);
         if (--numLives > 0) {
-          playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED / 4);
+          playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
           if (playerSpeed < PLAYER_INITIAL_SPEED) {
             playerSpeed = PLAYER_INITIAL_SPEED;
-            invinceStart = SDL_GetTicks();
           }
-
+          invinceStart = SDL_GetTicks();
         } else {
           if (scoreVal > highScoreVal) {
             highScoreVal = (int)scoreVal;
@@ -191,7 +191,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
     }
   }
 
-	scoreVal -= zSpeed; // zSpeed is negative
+	scoreVal += zSpeed;
 
   rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
 

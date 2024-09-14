@@ -33,7 +33,7 @@ OptionPage optionPage_Game;
 OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
 OptionPage optionPage_Visual;
-#define OPTION_PAGE_VISUAL_NUM_LINES 3
+#define OPTION_PAGE_VISUAL_NUM_LINES 4
 OptionLine optionPage_Visual_Lines[OPTION_PAGE_VISUAL_NUM_LINES];
 
 OptionPage optionPage_Audio;
@@ -170,9 +170,12 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Fullscreen", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Speedometer", 2, 1, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "On", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 3, "Fullscreen", 2, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "On", EMPTY, EMPTY, EMPTY);
 
 	optionPage_Audio.pageID = 4;
 	optionPage_Audio.numLines = OPTION_PAGE_AUDIO_NUM_LINES;
