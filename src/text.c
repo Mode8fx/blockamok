@@ -642,6 +642,7 @@ void cleanUpText() {
   destroyMessage(&message_game_score);
   destroyMessage(&message_game_life);
   destroyMessage(&message_game_cursor);
+  destroyMessage(&message_game_speed);
   destroyMessage(&message_gameover);
   destroyMessage(&message_gameover_highscore);
   destroyMessage(&message_paused);

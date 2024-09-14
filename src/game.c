@@ -173,10 +173,6 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
     // top edge of cube on cursor is 0, bottom edge is cubeSize
     float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
     bool closeToCube = cubes[i][0].z < 2;
-    if (shouldRemove) {
-      removeCube(cubes, i);
-      cubesRemoved += 1;
-    }
     if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
       playSFX(SFX_THUNK);
       if (--numLives > 0) {
@@ -197,6 +193,10 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
         qsort(cubes, *cubesLength, sizeof(Cube*), compareSize);
         return GAME_STATE_GAME_OVER;
       }
+    }
+    if (shouldRemove) {
+      removeCube(cubes, i);
+      cubesRemoved += 1;
     }
   }
 

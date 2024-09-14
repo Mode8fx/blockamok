@@ -341,11 +341,11 @@ static void optionCallback_CubeColor() {
 		break;
 	case 3:
 		cubeColorFront = (SDL_Color){ .r = 170, .b = 255, .g = 195 };
-		cubeColorSide = (SDL_Color){ .r = 20, .b = 20, .g = 100 };
+		cubeColorSide = (SDL_Color){ .r = 120, .b = 180, .g = 135 };
 		break;
 	default:
 		cubeColorFront = (SDL_Color){ .r = 255, .b = 0, .g = 150 };
-		cubeColorSide = (SDL_Color){ .r = 0, .b = 100, .g = 150 };
+		cubeColorSide = (SDL_Color){ .r = 180, .b = 0, .g = 105 };
 		break;
 	}
 }
