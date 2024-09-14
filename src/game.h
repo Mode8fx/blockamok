@@ -44,6 +44,7 @@ extern Sint16 movementMagnitudeY;
 
 extern Sint16 cubeAmount;
 extern float cubeSize;
+extern float cubeSizeHalf;
 extern float cubeSizeLimit;
 extern Sint8 numLives;
 

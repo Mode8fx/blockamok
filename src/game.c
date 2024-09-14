@@ -16,14 +16,15 @@ const float BASE_TURN_SPEED_TYPE_B = 36.21f;
 
 Sint16 cubeAmount = 600;
 float cubeSize = 0.5f;
+float cubeSizeHalf = 0.25f;
 float cubeSizeLimit = 0.5f;
 Sint8 numLives = 3;
 
-const unsigned long cubeMemSize = CUBE_POINTS_N * sizeof(Point);
+const Sint16 cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 
 const float BOUNDS_X = 12;
 const float BOUNDS_Y = 12;
-const float SPEED_INCREASE = 350;
+const Sint16 SPEED_INCREASE = 350;
 
 float playerSpeed;
 bool speedingUp;
@@ -167,8 +168,10 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
       cubes[i][p].z -= zSpeed;
     }
 
+    // left edge of cube on cursor is cubeSize/2, right edge is -cubeSize/2
     float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
-    float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
+    // top edge of cube on cursor is 0, bottom edge is cubeSize
+    float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
     bool closeToCube = cubes[i][0].z < 2;
     if (shouldRemove) {
       removeCube(cubes, i);

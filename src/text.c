@@ -272,20 +272,20 @@ static void initStaticMessages_Game() {
 }
 
 static void initStaticMessages_Instructions(bool compactView) {
-  char *message_array_instructions_text_part1[] = {
+  char *message_array_instructions_text[] = {
   "Lo Dodge the incoming blocks!",
   malloc(TEXT_LINE_SIZE),
   malloc(TEXT_LINE_SIZE),
   malloc(TEXT_LINE_SIZE),
   malloc(TEXT_LINE_SIZE),
-  "Lo Check the Game Options menu",
+  "Lo Check the Options menu",
   "Lo to customize your game!"
   };
-  snprintf(message_array_instructions_text_part1[1], TEXT_LINE_SIZE, "MG Hold %s or %s to speed up.", btn_A, btn_B);
-  snprintf(message_array_instructions_text_part1[2], TEXT_LINE_SIZE, "MG Press %s or %s to toggle cursor.", btn_X, btn_Y);
-  snprintf(message_array_instructions_text_part1[3], TEXT_LINE_SIZE, "MG Press %s to pause.", btn_Start);
-  snprintf(message_array_instructions_text_part1[4], TEXT_LINE_SIZE, "MG Press %s or %s to change music.", btn_L, btn_R);
-  mapTextArrayToMessageArray(renderer, message_array_instructions_text_part1, message_array_instructions, INSTRUCTIONS_LENGTH);
+  snprintf(message_array_instructions_text[1], TEXT_LINE_SIZE, "MG Hold %s or %s to speed up.", btn_A, btn_B);
+  snprintf(message_array_instructions_text[2], TEXT_LINE_SIZE, "MG Press %s or %s to toggle cursor.", btn_X, btn_Y);
+  snprintf(message_array_instructions_text[3], TEXT_LINE_SIZE, "MG Press %s to pause.", btn_Start);
+  snprintf(message_array_instructions_text[4], TEXT_LINE_SIZE, "MG Press %s or %s to change music.", btn_L, btn_R);
+  mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, INSTRUCTIONS_LENGTH);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
   setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.225f);

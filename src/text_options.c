@@ -238,23 +238,27 @@ static void optionCallback_CubeFrequency() {
 }
 
 static void optionCallback_CubeSize() {
-	// Approximate formula: y = −0.144x^2 + 0.4084x + 0.33235
+	// Approximate formula: y = -0.512x^2 + 0.7616x + 0.3422
 	switch (OPTION_CUBE_SIZE) {
 	case 0:
 		cubeSize = 0.5f;
-		cubeSizeLimit = 0.5f;
+		cubeSizeHalf = 0.25f;
+		cubeSizeLimit = 0.5f; // from formula: 0.5006 (should definitely be 0.5)
 		break;
 	case 1:
 		cubeSize = 0.625f;
-		cubeSizeLimit = 0.533f;
+		cubeSizeHalf = 0.3125f;
+		cubeSizeLimit = 0.532f; // from formula: 0.5302
 		break;
 	case 2:
 		cubeSize = 0.75f;
-		cubeSizeLimit = 0.556f;
+		cubeSizeHalf = 0.375f;
+		cubeSizeLimit = 0.554f; // from formula: 0.5558
 		break;
 	default:
 		cubeSize = 0.875f;
-		cubeSizeLimit = 0.58f;
+		cubeSizeHalf = 0.4375f;
+		cubeSizeLimit = 0.578f; // from formula 0.5774
 		break;
 	}
 	prepareGame();
