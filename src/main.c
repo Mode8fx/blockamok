@@ -32,7 +32,7 @@ Uint32 credits_startTime = 0;
 int cubesLength = 0;
 Cube cubes[1000];
 
-double scoreVal;
+float scoreVal;
 #define DEFAULT_HIGH_SCORE 1000
 int highScoreVal = DEFAULT_HIGH_SCORE;
 bool newHighScore = false;

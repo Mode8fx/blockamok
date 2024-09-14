@@ -26,7 +26,7 @@ extern int gameState;
 extern Uint32 now;
 extern Uint32 gameStart;
 extern Uint32 invinceStart;
-extern double scoreVal;
+extern float scoreVal;
 extern int highScoreVal;
 extern bool newHighScore;
 extern bool showCursor;

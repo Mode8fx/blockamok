@@ -157,38 +157,42 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   }
 
   for (int i = 0; i < (*cubesLength); i++) {
-    if ((cubes[i][0].z - zSpeed) < 1.5) {
+    bool shouldRemove = (cubes[i][0].z - zSpeed) < 1.5;
+
+    flipCubeIfOutOfBounds(cubes, i);
+    for (int p = 0; p < 20; p++) {
+      cubes[i][p].x += xDiff;
+      cubes[i][p].y += yDiff;
+
+      cubes[i][p].z -= zSpeed;
+    }
+
+    float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
+    float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
+    bool closeToCube = cubes[i][0].z < 2;
+    if (shouldRemove) {
       removeCube(cubes, i);
       cubesRemoved += 1;
-    } else {
-      flipCubeIfOutOfBounds(cubes, i);
-      for (int p = 0; p < 20; p++) {
-        cubes[i][p].x += xDiff;
-        cubes[i][p].y += yDiff;
-
-        cubes[i][p].z -= zSpeed;
-      }
-
-      float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
-      float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + 0.25f); // the +0.25f shifts the collision point downwards
-      // TODO: Polish collision for larger blocks
-      if (cubes[i][0].z < 2 && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
-        playSFX(SFX_THUNK);
-        if (--numLives > 0) {
-          playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
-          if (playerSpeed < PLAYER_INITIAL_SPEED) {
-            playerSpeed = PLAYER_INITIAL_SPEED;
-          }
-          invinceStart = SDL_GetTicks();
-        } else {
-          if (scoreVal > highScoreVal) {
-            highScoreVal = (int)scoreVal;
-            newHighScore = true;
-            refreshHighScoreText(renderer);
-            writeSaveData();
-          }
-          return GAME_STATE_GAME_OVER;
+    }
+    if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
+      playSFX(SFX_THUNK);
+      if (--numLives > 0) {
+        playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
+        if (playerSpeed < PLAYER_INITIAL_SPEED) {
+          playerSpeed = PLAYER_INITIAL_SPEED;
         }
+        invinceStart = SDL_GetTicks();
+      } else {
+        if (scoreVal > highScoreVal) {
+          highScoreVal = (int)scoreVal;
+          newHighScore = true;
+          refreshHighScoreText(renderer);
+          writeSaveData();
+        }
+        rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
+        *cubesLength -= cubesRemoved;
+        qsort(cubes, *cubesLength, sizeof(Cube*), compareSize);
+        return GAME_STATE_GAME_OVER;
       }
     }
   }
@@ -196,9 +200,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
 	scoreVal += zSpeed;
 
   rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
-
   *cubesLength -= cubesRemoved;
-
   qsort(cubes, *cubesLength, sizeof(Cube *), compareSize);
 
   return GAME_STATE_PLAYING;
