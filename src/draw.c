@@ -44,6 +44,9 @@ float WIDTH_DOUBLE;
 float WIDTH_HALF;
 float WIDTH_NEG;
 
+#define MIN_FADE 150
+#define MAX_FADE 190
+
 void setScalingVals() {
   int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
   gameViewport = (SDL_Rect){ .x = gameOffsetX, .y = 0, .w = GAME_WIDTH, .h = GAME_HEIGHT };
@@ -97,21 +100,17 @@ static inline float screenY(float y) {
 }
 
 static bool isPointOutsideFront(int f, int frontI) {
-  float x = (float)transformedCube[f].x;
-  float y = (float)transformedCube[f].y;
-  float frontStartX = (float)transformedCube[frontI].x;
-  float frontEndX = (float)transformedCube[frontI + 2].x;
-  float frontStartY = (float)transformedCube[frontI].y;
-  float frontEndY = (float)transformedCube[frontI + 2].y;
-  bool outWithX = x < frontStartX || x > frontEndX;
-	if (outWithX) {
-		return true;
-	}
-  bool outWithY = y < frontStartY || y > frontEndY;
-  if (outWithY) {
-    return true;
-  }
-  return false;
+  //int x = transformedCube[f].x;
+  //int y = transformedCube[f].y;
+  //int frontStartX = transformedCube[frontI].x;
+  //int frontEndX = transformedCube[frontI + 2].x;
+  //int frontStartY = transformedCube[frontI].y;
+  //int frontEndY = transformedCube[frontI + 2].y;
+
+  //return (x < frontStartX || x > frontEndX || y < frontStartY || y > frontEndY);
+
+  return transformedCube[f].x < transformedCube[frontI].x || transformedCube[f].x > transformedCube[frontI + 2].x
+    || transformedCube[f].y < transformedCube[frontI].y || transformedCube[f].y > transformedCube[frontI + 2].y;
 }
 
 void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
@@ -134,15 +133,8 @@ inline void drawEssentialsWithAlpha(SDL_Renderer *renderer, Cube cubes[], int cu
 }
 
 static inline float fadeTowards(float current, float target, float amount) {
-  if (current == target) {
-    return current;
-  }
-  float toDiff = fabsf((current - target) * amount);
-  if (current > target) {
-    return current - toDiff;
-  } else {
-    return current + toDiff;
-  }
+  float diff = (target - current) * amount;
+  return current + diff;
 }
 
 void drawCube(SDL_Renderer *renderer, Cube cube) {
@@ -190,11 +182,8 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
       color = cubeColorSide;
     }
 
-    float min = 150;
-    float max = 190;
-
     float z = (cube[(cubeI / 5) * 4].z) + fabsf(cube[(cubeI / 5) * 4].x) * 7 + fabsf(cube[(cubeI / 5) * 4].y) * 7;
-    float fadeAmount = z < min ? 0 : fminf((z - min) / (max - min), 1);
+    float fadeAmount = z < MIN_FADE ? 0 : fminf((z - MIN_FADE) / (MAX_FADE - MIN_FADE), 1.0f);
 
     color.a = (Uint8)fadeTowards(255, 0, fadeAmount);
 
@@ -205,8 +194,8 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     triangle2[1].color = color;
     triangle2[2].color = color;
 
-    triangle1[0].position.x = (float)transformedCube[cubeI + 0].x;
-    triangle1[0].position.y = (float)transformedCube[cubeI + 0].y;
+    triangle1[0].position.x = (float)transformedCube[cubeI].x;
+    triangle1[0].position.y = (float)transformedCube[cubeI].y;
     triangle1[1].position.x = (float)transformedCube[cubeI + 1].x;
     triangle1[1].position.y = (float)transformedCube[cubeI + 1].y;
     triangle1[2].position.x = (float)transformedCube[cubeI + 2].x;
@@ -229,7 +218,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     SDL_RenderGeometry(renderer, NULL, triangle1, 3, NULL, 0);
     SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
-    fadeAmount = fminf(fadeAmount * 1.5f, 1);
+    fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)fadeTowards(255, 0, fadeAmount));
     SDL_RenderDrawLines(renderer, linePoints, 5);
   }
