@@ -286,6 +286,10 @@ static void initStaticMessages_Instructions(bool compactView) {
   snprintf(message_array_instructions_text[3], TEXT_LINE_SIZE, "MG Press %s to pause.", btn_Start);
   snprintf(message_array_instructions_text[4], TEXT_LINE_SIZE, "MG Press %s or %s to change music.", btn_L, btn_R);
   mapTextArrayToMessageArray(renderer, message_array_instructions_text, message_array_instructions, INSTRUCTIONS_LENGTH);
+  free(message_array_instructions_text[1]);
+  free(message_array_instructions_text[2]);
+  free(message_array_instructions_text[3]);
+  free(message_array_instructions_text[4]);
 
   setMessagePosRelativeToScreen(&message_array_instructions[0], 0.5f, 0.15f);
   setMessagePosRelativeToScreen(&message_array_instructions[1], 0.5f, 0.225f);
@@ -427,6 +431,7 @@ static void initStaticMessages_ResetHighScore() {
   };
   snprintf(message_array_reset_high_score_text[4], TEXT_LINE_SIZE, "Mr Up Down Left Right Up Down Left Right");
   mapTextArrayToMessageArray(renderer, message_array_reset_high_score_text, message_array_reset_high_score, RESET_HIGH_SCORE_LENGTH);
+  free(message_array_reset_high_score_text[4]);
 
   setMessagePosRelativeToScreen(&message_array_reset_high_score[0], 0.5f, 0.35f);
   setMessagePosRelativeToScreen(&message_array_reset_high_score[1], 0.5f, 0.425f);
@@ -448,6 +453,7 @@ static void initStaticMessages_Quit() {
   };
   snprintf(message_array_quit_text[1], TEXT_LINE_SIZE, "Mr Press %s to quit", btn_A);
   mapTextArrayToMessageArray(renderer, message_array_quit_text, message_array_quit, QUIT_LENGTH);
+  free(message_array_quit_text[1]);
 
   setMessagePosRelativeToScreen(&message_array_quit[0], 0.5f, 0.45f);
   setMessagePosRelativeToScreen(&message_array_quit[1], 0.5f, 0.55f);
