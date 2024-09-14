@@ -122,7 +122,6 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   if (playerSpeed > MAX_SPEED) {
     playerSpeed = MAX_SPEED;
   }
-  playerSpeed = 10;
 
   float speed = playerSpeed * deltaTimeDiv;
 
