@@ -29,11 +29,11 @@ set MAKEFILES_WSL=/mnt%MAKEFILES_DKP%
 
 :: Makefile: Windows x64
 set MAKEFILE_MSYS_WINDOWS=%MAKEFILES_MSYS%/Makefile_pc
-set OUTPUT_WINDOWS=%OUTPUT_DIR%-windows-x64/BlockamokRemix.exe
+set OUTPUT_WINDOWS_X64=%OUTPUT_DIR%-windows-x64/BlockamokRemix/BlockamokRemix.exe
 
 :: Makefile: Windows x86
 set MAKEFILE_MSYS_WINDOWS_X86=%MAKEFILES_MSYS%/Makefile_pc_x86
-set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-windows-x86/BlockamokRemix.exe
+set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-windows-x86/BlockamokRemix/BlockamokRemix.exe
 
 :: Makefile: Linux
 set MAKEFILE_WSL_LINUX=%MAKEFILES_WSL%/Makefile_linux
@@ -75,6 +75,8 @@ set MAKEFILE_WSL_RG35XX=%MAKEFILES_WSL%/make_rg35xx.sh
 :: Running compilation commands...
 rem call :compile_windows_x64
 rem call :compile_windows_x86
+call :copy_windows_x64_vs
+call :copy_windows_x86_vs
 call :compile_linux
 call :compile_gc
 call :compile_wii
@@ -93,8 +95,8 @@ goto :eof
 echo Windows x64: Compiling with MSYS2...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make -f %MAKEFILE_MSYS_WINDOWS%"
 sleep %SLEEP_COMPILE%
-echo Windows x64: Moving compiled exe to %OUTPUT_WINDOWS%...
-mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS%
+echo Windows x64: Moving compiled exe to %OUTPUT_WINDOWS_X64%...
+mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS_X64%
 echo Windows x64: Cleaning up...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make clean -f %MAKEFILE_MSYS_WINDOWS%"
 sleep %SLEEP_CLEAN%
@@ -111,6 +113,18 @@ mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS_X86%
 echo Windows x86: Cleaning up...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make clean -f %MAKEFILE_MSYS_WINDOWS_X86%"
 sleep %SLEEP_CLEAN%
+echo.
+goto :eof
+
+:copy_windows_x64_vs
+echo Windows x64: Copying compiled Visual Studio build...
+cp %REPO%/x64/Release/blockamok.exe %OUTPUT_WINDOWS_X64%
+echo.
+goto :eof
+
+:copy_windows_x86_vs
+echo Windows x86: Copying compiled Visual Studio build...
+cp %REPO%/Release/blockamok.exe %OUTPUT_WINDOWS_X86%
 echo.
 goto :eof
 
@@ -168,7 +182,7 @@ echo Switch: Compiling with devkitPro...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make -f %MAKEFILE_DKP_SWITCH%"
 sleep %SLEEP_COMPILE%
 echo Switch: Moving compiled nro to %OUTPUT_SWITCH%...
-mv %REPO%/BlockamokRemix.nro %OUTPUT_SWITCH%
+mv %REPO%/blockamok.nro %OUTPUT_SWITCH%
 echo Switch: Cleaning up...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make clean -f %MAKEFILE_DKP_SWITCH%"
 sleep %SLEEP_CLEAN%

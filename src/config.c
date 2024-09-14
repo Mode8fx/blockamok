@@ -19,13 +19,13 @@ char configFile[256];
 
 void initFilePaths() {
 #if defined(VITA)
-  snprintf(rootDir, sizeof(rootDir), "ux0:data/Blockamok/");
+  snprintf(rootDir, sizeof(rootDir), "ux0:data/BlockamokRemix/");
 #elif defined(WII)
-  snprintf(rootDir, sizeof(rootDir), "sd:/apps/Blockamok/");
+  snprintf(rootDir, sizeof(rootDir), "sd:/apps/BlockamokRemix/");
 #elif defined(GAMECUBE)
-  snprintf(rootDir, sizeof(rootDir), "/Blockamok/");
+  snprintf(rootDir, sizeof(rootDir), "/BlockamokRemix/");
 #elif defined(LINUX)
-  snprintf(rootDir, sizeof(rootDir), "%s/.blockamok/", getenv("HOME"));
+  snprintf(rootDir, sizeof(rootDir), "%s/.BlockamokRemix/", getenv("HOME"));
 // else, rootDir remains empty
 #endif
   snprintf(saveFile, sizeof(saveFile), "%s%s", rootDir, "save.bin");

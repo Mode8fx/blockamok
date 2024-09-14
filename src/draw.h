@@ -27,7 +27,7 @@ extern float HALF_FOV_ANGLE_RADIANS;
 
 void setScalingVals();
 
-inline void draw(SDL_Renderer *renderer);
+extern inline void draw(SDL_Renderer *renderer);
 
 void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength);
 

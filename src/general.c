@@ -9,7 +9,7 @@ void systemSpecificOpen() {
 	WHBGetSdCardMountPath();
 	char sdPathStr[256];
 	const char *sdPathStart = WHBGetSdCardMountPath();
-	snprintf(sdPathStr, sizeof(sdPathStr), "%s/wiiu/apps/blockamok", sdPathStart);
+	snprintf(sdPathStr, sizeof(sdPathStr), "%s/wiiu/apps/BlockamokRemix", sdPathStart);
 	const char *sdPath = sdPathStr;
 	chdir(sdPath);
 #elif defined(VITA)
@@ -17,7 +17,7 @@ void systemSpecificOpen() {
 	SDL_setenv("VITA_DISABLE_TOUCH_BACK", "1", 1);
 #elif defined(SWITCH)
 	/* Set SD Card mount path */
-	chdir("/switch/blockamok");
+	chdir("/switch/BlockamokRemix");
 #elif defined(WII) || defined(GAMECUBE)
 	/* Initialize SD Card */
 	fatInitDefault();
