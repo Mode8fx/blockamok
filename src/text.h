@@ -67,8 +67,9 @@ extern OptionPage optionPage_Empty;
 
 #define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
 #define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index
-#define OPTION_SPEEDOMETER optionPage_Visual.optionLines[2].index
-#define OPTION_FULLSCREEN optionPage_Visual.optionLines[3].index
+#define OPTION_OVERLAY_COLOR optionPage_Visual.optionLines[2].index
+#define OPTION_SPEEDOMETER optionPage_Visual.optionLines[3].index
+#define OPTION_FULLSCREEN optionPage_Visual.optionLines[4].index
 
 #define OPTION_MUSIC optionPage_Audio.optionLines[0].index
 #define OPTION_MUSIC_VOLUME optionPage_Audio.optionLines[1].index

@@ -10,6 +10,8 @@ SDL_DisplayMode DM;
 SDL_Rect gameViewport;
 SDL_Rect leftBar;
 SDL_Rect rightBar;
+SDL_Rect leftBorder;
+SDL_Rect rightBorder;
 
 float HALF_FOV_ANGLE_RADIANS;
 
@@ -20,9 +22,9 @@ const int RIGHT = 3;
 const int FRONT = 4;
 
 SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155 };
-
 SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120 };
 SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200 };
+SDL_Color overlayColor = { .r = 15, .g = 255, .b = 155 };
 
 //int TRANSFORMED_FRONT_I = FRONT * 5;
 
@@ -52,6 +54,9 @@ void setScalingVals() {
   gameViewport = (SDL_Rect){ .x = gameOffsetX, .y = 0, .w = GAME_WIDTH, .h = GAME_HEIGHT };
   leftBar = (SDL_Rect){ .x = 0, .y = 0, .w = gameOffsetX, .h = WINDOW_HEIGHT };
   rightBar = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = gameOffsetX + 10, .h = WINDOW_HEIGHT };
+  leftBorder = (SDL_Rect){ .x = 0, .y = 0, .w = WINDOW_HEIGHT / 100, .h = WINDOW_HEIGHT };
+  leftBorder.x = gameOffsetX - leftBorder.w;
+  rightBorder = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = WINDOW_HEIGHT / 100, .h = WINDOW_HEIGHT };
 
   HEIGHT_DOUBLE = GAME_HEIGHT * 2.0f;
   HEIGHT_HALF = GAME_HEIGHT * 0.5f;

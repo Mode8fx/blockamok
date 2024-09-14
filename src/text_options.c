@@ -34,9 +34,9 @@ OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
 OptionPage optionPage_Visual;
 #if defined(PC)
-#define OPTION_PAGE_VISUAL_NUM_LINES 4
+#define OPTION_PAGE_VISUAL_NUM_LINES 5
 #else
-#define OPTION_PAGE_VISUAL_NUM_LINES 3
+#define OPTION_PAGE_VISUAL_NUM_LINES 4
 #endif
 OptionLine optionPage_Visual_Lines[OPTION_PAGE_VISUAL_NUM_LINES];
 
@@ -105,6 +105,8 @@ static void setOptionChoice(SDL_Renderer *renderer, OptionPage *page, int lineIn
 }
 
 void initStaticMessages_Options(SDL_Renderer *renderer) {
+	bool compactView = GAME_HEIGHT <= 289;
+
 	snprintf(message_menu_cursor.text, TEXT_LINE_SIZE, ">");
 	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &message_menu_cursor, 1, color_white, color_black);
 
@@ -162,7 +164,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Visual.numLines = OPTION_PAGE_VISUAL_NUM_LINES;
 	optionPage_Visual.optionLines = optionPage_Visual_Lines;
 	optionPage_Visual.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 5, 0, STAY, true);
+	if (compactView) {
+		setOptionPageLine(renderer, &optionPage_Visual, 0, "BG Color", 5, 0, STAY, true);
+	} else {
+		setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 5, 0, STAY, true);
+	}
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Electric Green", "Change the background color.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
@@ -174,13 +180,24 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Speedometer", 2, 1, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "On", EMPTY, EMPTY, EMPTY);
-#if defined(PC)
-	setOptionPageLine(renderer, &optionPage_Visual, 3, "Fullscreen", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 6, 5, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Electric Green", "Change the overlay color", "on non-square displays.", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Void Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Lava Red", EMPTY, EMPTY, EMPTY);
+	if (compactView) {
+		setOptionChoice(renderer, &optionPage_Visual, 2, 5, "Match BG", EMPTY, EMPTY, EMPTY);
+	} else {
+		setOptionChoice(renderer, &optionPage_Visual, 2, 5, "Match Background", EMPTY, EMPTY, EMPTY);
+	}
+	setOptionPageLine(renderer, &optionPage_Visual, 3, "Speedometer", 2, 1, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "On", EMPTY, EMPTY, EMPTY);
+#if defined(PC)
+	setOptionPageLine(renderer, &optionPage_Visual, 4, "Fullscreen", 2, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 4, 1, "On", EMPTY, EMPTY, EMPTY);
 #endif
 
 	optionPage_Audio.pageID = 4;
@@ -264,6 +281,29 @@ static void optionCallback_CubeSize() {
 	prepareGame();
 }
 
+static void optionCallback_OverlayColor() {
+	switch (OPTION_OVERLAY_COLOR) {
+	case 0:
+		overlayColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
+		break;
+	case 1:
+		overlayColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
+		break;
+	case 2:
+		overlayColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		break;
+	case 3:
+		overlayColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
+		break;
+	case 4:
+		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
+		break;
+	default:
+		overlayColor = backgroundColor;
+		break;
+	}
+}
+
 static void optionCallback_BackgroundColor() {
 	switch (OPTION_BACKGROUND_COLOR) {
 	case 0:
@@ -282,6 +322,7 @@ static void optionCallback_BackgroundColor() {
 		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
 		break;
 	}
+	optionCallback_OverlayColor();
 }
 
 static void optionCallback_CubeColor() {
@@ -331,6 +372,7 @@ void optionCallback_All() {
 	optionCallback_CubeSize();
 	optionCallback_BackgroundColor();
 	optionCallback_CubeColor();
+	optionCallback_OverlayColor();
 	optionCallback_MusicVolume();
 	optionCallback_SFXVolume();
 }
@@ -359,6 +401,9 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 			optionCallback_CubeColor();
 			break;
 		case 2:
+			optionCallback_OverlayColor();
+			break;
+		case 4:
 			optionCallback_Fullscreen(window, page);
 			break;
 		default:

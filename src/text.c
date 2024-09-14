@@ -38,9 +38,13 @@ Message message_paused_quit;
 #define INSTRUCTIONS_LENGTH 7
 Message message_array_instructions[INSTRUCTIONS_LENGTH];
 Sint8 CREDITS_LENGTH;
-Message message_array_credits[65];
-#define RESET_HIGH_SCORE_LENGTH 5
-Message message_array_reset_high_score[RESET_HIGH_SCORE_LENGTH];
+#define CREDITS_LENGTH_DEFAULT 50
+#define CREDITS_LENGTH_COMPACT 56
+Message message_array_credits[CREDITS_LENGTH_COMPACT];
+Sint8 RESET_HIGH_SCORE_LENGTH;
+#define RESET_HIGH_SCORE_LENGTH_DEFAULT 4
+#define RESET_HIGH_SCORE_LENGTH_COMPACT 5
+Message message_array_reset_high_score[RESET_HIGH_SCORE_LENGTH_COMPACT];
 #define QUIT_LENGTH 2
 Message message_array_quit[QUIT_LENGTH];
 
@@ -310,7 +314,7 @@ static void initStaticMessages_Credits(bool compactView) {
       "MW https://github.com/carltheperson/blockamok",
       "",
       "Mb Mode8fx",
-      "Mb \"Remix\" update and ports",
+      "Mb \"Remix\" edition and ports",
       "MW https://github.com/Mode8fx/blockamok",
       "",
       "Lo MUSIC",
@@ -354,7 +358,7 @@ static void initStaticMessages_Credits(bool compactView) {
       "MG old and new. Play it everywhere!",
       "MW https://github.com/Mode8fx/blockamok"
     };
-    CREDITS_LENGTH = 50;
+    CREDITS_LENGTH = CREDITS_LENGTH_DEFAULT;
     mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   }
   else {
@@ -416,28 +420,41 @@ static void initStaticMessages_Credits(bool compactView) {
       "MW https://github.com",
       "MW /Mode8fx/blockamok"
     };
-    CREDITS_LENGTH = 56;
+    CREDITS_LENGTH = CREDITS_LENGTH_COMPACT;
     mapTextArrayToMessageArray(renderer, message_array_credits_text, message_array_credits, CREDITS_LENGTH);
   }
 }
 
-static void initStaticMessages_ResetHighScore() {
-  char *message_array_reset_high_score_text[] = {
-  "LW Are you sure you want to",
-  "LW reset your high score?",
-  "",
-  "LW If so, press",
-  malloc(TEXT_LINE_SIZE),
-  };
-  snprintf(message_array_reset_high_score_text[4], TEXT_LINE_SIZE, "Mr Up Down Left Right Up Down Left Right");
-  mapTextArrayToMessageArray(renderer, message_array_reset_high_score_text, message_array_reset_high_score, RESET_HIGH_SCORE_LENGTH);
-  free(message_array_reset_high_score_text[4]);
+static void initStaticMessages_ResetHighScore(bool compactView) {
+  if (!compactView) {
+    char *message_array_reset_high_score_text[] = {
+    "LW Are you sure you want to",
+    "LW reset your high score?",
+    //"",
+    "LW If so, press",
+    "Mr Up Down Left Right Up Down Left Right",
+    };
+    RESET_HIGH_SCORE_LENGTH = RESET_HIGH_SCORE_LENGTH_DEFAULT;
+    mapTextArrayToMessageArray(renderer, message_array_reset_high_score_text, message_array_reset_high_score, RESET_HIGH_SCORE_LENGTH);
+  } else {
+    char *message_array_reset_high_score_text[] = {
+      "LW Are you sure you want to",
+      "LW reset your high score?",
+      //"",
+      "LW If so, press",
+      "Mr Up Down Left Right",
+      "Mr Up Down Left Right"
+    };
+    RESET_HIGH_SCORE_LENGTH = RESET_HIGH_SCORE_LENGTH_COMPACT;
+    mapTextArrayToMessageArray(renderer, message_array_reset_high_score_text, message_array_reset_high_score, RESET_HIGH_SCORE_LENGTH);
+  }
 
   setMessagePosRelativeToScreen(&message_array_reset_high_score[0], 0.5f, 0.35f);
   setMessagePosRelativeToScreen(&message_array_reset_high_score[1], 0.5f, 0.425f);
-  setMessagePosRelativeToScreen(&message_array_reset_high_score[2], 0.5f, 0.5f);
-  setMessagePosRelativeToScreen(&message_array_reset_high_score[3], 0.5f, 0.575f);
-  setMessagePosRelativeToScreen(&message_array_reset_high_score[4], 0.5f, 0.65f);
+  //setMessagePosRelativeToScreen(&message_array_reset_high_score[2], 0.5f, 0.5f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[2], 0.5f, 0.575f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[3], 0.5f, 0.65f);
+  setMessagePosRelativeToScreen(&message_array_reset_high_score[4], 0.5f, 0.725f);
 }
 
 static void initStaticMessages_Quit() {
@@ -491,7 +508,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   initStaticMessages_Options(renderer);
   initStaticMessages_Instructions(compactView);
   initStaticMessages_Credits(compactView);
-  initStaticMessages_ResetHighScore();
+  initStaticMessages_ResetHighScore(compactView);
   initStaticMessages_Quit();
 
   destroyFont(Sans_126); // no longer needed
@@ -532,7 +549,7 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
 
   Uint32 timer = now - credits_startTime;
   float offset_timer = 0.15f * timer / 1000; // scroll speed
-  if (CREDITS_LENGTH > 60) { // compact view
+  if (CREDITS_LENGTH == CREDITS_LENGTH_COMPACT) {
     offset_timer *= 1.1f;
   }
   for (int i = 0; i < CREDITS_LENGTH; i++) {
@@ -554,9 +571,12 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
 inline void drawResetHighScoreText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_array_reset_high_score[0]);
   renderMessage(renderer, &message_array_reset_high_score[1]);
+  //renderMessage(renderer, &message_array_reset_high_score[2]);
   renderMessage(renderer, &message_array_reset_high_score[2]);
   renderMessage(renderer, &message_array_reset_high_score[3]);
-  renderMessage(renderer, &message_array_reset_high_score[4]);
+  if (RESET_HIGH_SCORE_LENGTH == RESET_HIGH_SCORE_LENGTH_COMPACT) {
+    renderMessage(renderer, &message_array_reset_high_score[4]);
+  }
 }
 
 inline void drawQuitText(SDL_Renderer *renderer) {

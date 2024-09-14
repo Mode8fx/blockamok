@@ -317,9 +317,12 @@ int main(int arg, char *argv[]) {
     }
 
     SDL_RenderSetViewport(renderer, NULL);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
     SDL_RenderFillRect(renderer, &leftBar);
     SDL_RenderFillRect(renderer, &rightBar);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &leftBorder);
+    SDL_RenderFillRect(renderer, &rightBorder);
     SDL_RenderPresent(renderer);
   }
 
