@@ -446,7 +446,7 @@ static void initStaticMessages_Quit() {
 #endif
   malloc(TEXT_LINE_SIZE),
   };
-  snprintf(message_array_quit_text[1], TEXT_LINE_SIZE, "Mr Press %s to quit", btn_Start);
+  snprintf(message_array_quit_text[1], TEXT_LINE_SIZE, "Mr Press %s to quit", btn_A);
   mapTextArrayToMessageArray(renderer, message_array_quit_text, message_array_quit, QUIT_LENGTH);
 
   setMessagePosRelativeToScreen(&message_array_quit[0], 0.5f, 0.45f);

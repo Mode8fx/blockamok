@@ -83,7 +83,6 @@ void prepareGame() {
   }
   rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
   cubesLength = 0;
-  srand(now);
   gameInit(cubes, &cubesLength);
   // Call once for initial render
   gameFrame(deltaTime, cubes, &cubesLength);
@@ -147,6 +146,7 @@ int main(int arg, char *argv[]) {
   if (OPTION_FULLSCREEN) {
     optionCallback_Fullscreen(window, &optionPage_Visual);
   }
+  srand((Uint32)time(NULL));
   prepareGame();
   draw(renderer);
 
@@ -259,7 +259,7 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_QUIT:
-        if (keyPressed(INPUT_START)) {
+        if (keyPressed(INPUT_A)) {
           quit = true;
           writeSaveData();
         }

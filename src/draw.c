@@ -61,19 +61,20 @@ void setScalingVals() {
   WIDTH_NEG = -(float)GAME_WIDTH;
 
   HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) / 2;
-}
 
-static void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
-  triangle[0].position = trianglePoints[0];
-  triangle[1].position = trianglePoints[1];
-  triangle[2].position = trianglePoints[2];
   triangle[0].color = darkBackgroundTriangle;
   triangle[1].color = emptyBackgroundTriangle;
   triangle[2].color = darkBackgroundTriangle;
+}
+
+static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
+  triangle[0].position = trianglePoints[0];
+  triangle[1].position = trianglePoints[1];
+  triangle[2].position = trianglePoints[2];
   SDL_RenderGeometry(renderer, NULL, triangle, 3, NULL, 0);
 }
 
-void draw(SDL_Renderer *renderer) {
+inline void draw(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
   SDL_FPoint triangle1Points[3][2] = {
 		{WIDTH_NEG, HEIGHT_HALF},
@@ -173,6 +174,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 
   // No need to draw the first 2 faces. They are hidden behind the front
   for (int f = 2; f < 5; f++) {
+    int faceIndexMult = faceOrder[f] * 4;
     int cubeI = faceOrder[f] * 5;
 
     SDL_Color color;
@@ -182,7 +184,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
       color = cubeColorSide;
     }
 
-    float z = (cube[(cubeI / 5) * 4].z) + fabsf(cube[(cubeI / 5) * 4].x) * 7 + fabsf(cube[(cubeI / 5) * 4].y) * 7;
+    float z = (cube[faceIndexMult].z) + fabsf(cube[faceIndexMult].x) * 7 + fabsf(cube[faceIndexMult].y) * 7;
     float fadeAmount = z < MIN_FADE ? 0 : fminf((z - MIN_FADE) / (MAX_FADE - MIN_FADE), 1.0f);
 
     color.a = (Uint8)fadeTowards(255, 0, fadeAmount);
@@ -209,7 +211,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     triangle2[2].position.y = (float)transformedCube[cubeI + 4].y;
 
     SDL_Point linePoints[] = {
-      transformedCube[cubeI + 0],
+      transformedCube[cubeI],
       transformedCube[cubeI + 1],
       transformedCube[cubeI + 2],
       transformedCube[cubeI + 3],
