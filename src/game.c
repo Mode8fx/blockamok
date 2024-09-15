@@ -22,8 +22,6 @@ Sint8 numLives = 3;
 
 const Sint16 cubeMemSize = CUBE_POINTS_N * sizeof(Point);
 
-const float BOUNDS_X = 12;
-const float BOUNDS_Y = 12;
 const Sint16 SPEED_INCREASE = 350;
 
 float playerSpeed;
@@ -31,6 +29,8 @@ bool speedingUp;
 
 Sint16 movementMagnitudeX;
 Sint16 movementMagnitudeY;
+
+bool isInvincible = false;
 
 inline void addNewCube(Cube cubes[], int *cubesLength) {
   Point point = {
@@ -173,7 +173,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
     // top edge of cube on cursor is 0, bottom edge is cubeSize
     float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
     bool closeToCube = cubes[i][0].z < 2;
-    if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
+    if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME && !isInvincible) {
       // gameFrame() can be called when preparing game, so check for that first
       if (gameState != GAME_STATE_PLAYING) {
         if (shouldRemove) {

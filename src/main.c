@@ -44,6 +44,12 @@ static const int highScoreResetSequence[HIGH_SCORE_RESET_SEQUENCE_LENGTH] = {
   INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT
 };
 
+Sint8 invincibilityResetIndex = 0;
+#define INVINCIBILITY_SEQUENCE_LENGTH 11
+static const int invincibilitySequence[INVINCIBILITY_SEQUENCE_LENGTH] = {
+  INPUT_UP, INPUT_UP, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT
+};
+
 static void handleWindowResize(SDL_Event *event) {
 #if defined(PC)
   WINDOW_WIDTH = event->window.data1;
@@ -128,6 +134,24 @@ static void handleResetHighScore() {
 	} else if (pressedKeys != 0) {
     highScoreResetIndex = 0;
 	}
+}
+
+static void handleInvincibility() {
+  if (keyPressed(invincibilitySequence[invincibilityResetIndex])) {
+    invincibilityResetIndex++;
+    if (invincibilityResetIndex >= INVINCIBILITY_SEQUENCE_LENGTH) {
+      if (!isInvincible) {
+        isInvincible = true;
+        playSFX(SFX_DING_A);
+      } else {
+        isInvincible = false;
+        playSFX(SFX_DING_B);
+      }
+      invincibilityResetIndex = 0;
+    }
+  } else if (pressedKeys != 0) {
+    invincibilityResetIndex = 0;
+  }
 }
 
 static void handleFullscreenToggle() {
@@ -294,6 +318,7 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_PAUSED:
+        handleInvincibility();
         if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {

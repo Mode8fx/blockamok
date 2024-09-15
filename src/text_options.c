@@ -236,19 +236,19 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 static void optionCallback_CubeFrequency() {
 	switch (OPTION_CUBE_FREQUENCY) {
 	case 0:
-		cubeAmount = 400;
+		cubeAmount = (Sint16)(400 * CUBE_LIMIT_MULT);
 		break;
 	case 1:
-		cubeAmount = 500;
+		cubeAmount = (Sint16)(500 * CUBE_LIMIT_MULT);
 		break;
 	case 2:
-		cubeAmount = 600;
+		cubeAmount = (Sint16)(600 * CUBE_LIMIT_MULT);
 		break;
 	case 3:
-		cubeAmount = 700;
+		cubeAmount = (Sint16)(700 * CUBE_LIMIT_MULT);
 		break;
 	default:
-		cubeAmount = 800;
+		cubeAmount = (Sint16)(800 * CUBE_LIMIT_MULT);
 		break;
 	}
 	prepareGame();

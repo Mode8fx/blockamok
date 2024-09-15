@@ -35,7 +35,7 @@ extern bool showCursor;
 #define MAX_SPEED_INT (int)MAX_SPEED
 extern float playerSpeed;
 extern bool speedingUp;
-#define SPEED_UP_MULT 3
+#define SPEED_UP_MULT 2.2f
 #define TRUE_MAX_SPEED (MAX_SPEED * SPEED_UP_MULT)
 #define TRUE_MAX_SPEED_INT (int)TRUE_MAX_SPEED
 
@@ -47,6 +47,19 @@ extern float cubeSize;
 extern float cubeSizeHalf;
 extern float cubeSizeLimit;
 extern Sint8 numLives;
+
+extern bool isInvincible;
+
+// Weaker systems need to handle fewer cubes, and smaller bounds balance this out
+#if defined(PC)
+#define BOUNDS_X 12.0f
+#define BOUNDS_Y 12.0f
+#define CUBE_LIMIT_MULT 1.0f
+#else
+#define BOUNDS_X 8.3f
+#define BOUNDS_Y 8.3f
+#define CUBE_LIMIT_MULT 0.4784f // 8.3^2 / 12^2
+#endif
 
 #define CUBE_REMOVAL_DEPTH 1.5f
 
