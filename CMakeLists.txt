@@ -48,7 +48,6 @@ find_package(PkgConfig REQUIRED)
 if (WIIU)
 	include("${DEVKITPRO}/wut/share/wut.cmake" REQUIRED)
 	add_definitions(-DWII_U)
-	add_definitions(-DNINTENDO_LAYOUT)
 
 	target_link_libraries(blockamokremix -L${DEVKITPRO}/portlibs/wiiu/lib -L${DEVKITPRO}/portlibs/ppc/lib -L${DEVKITPRO}/wut/lib)
 	PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
@@ -73,9 +72,8 @@ if (WIIU)
 elseif (VITA)
 	include("${VITASDK}/share/vita.cmake" REQUIRED)
 	add_definitions(-DVITA)
-	add_definitions(-DPRELOAD_SOUNDS)
 	
-	set(VITA_APP_NAME "BlockamokRemix")
+	set(VITA_APP_NAME "Blockamok Remix")
 	set(VITA_TITLEID  "BLOC52665")
 	set(VITA_VERSION  "01.00")
 	

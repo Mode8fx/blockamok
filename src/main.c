@@ -110,6 +110,9 @@ static void init() {
   TTF_Init();
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   initAudio();
+#if !defined(PC)
+  SDL_ShowCursor(SDL_DISABLE);
+#endif
   startingTick = SDL_GetTicks();
 }
 
@@ -363,6 +366,7 @@ int main(int arg, char *argv[]) {
   Mix_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  SDL_Quit();
   systemSpecificClose();
 
   return 0;

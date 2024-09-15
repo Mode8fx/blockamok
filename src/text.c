@@ -77,7 +77,11 @@ inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSi
   
   // Create the outline
   TTF_SetFontOutline(font, outlineSize);
+#if defined(PSP)
+  SDL_Surface *outlineSurface = TTF_RenderUTF8_Blended(font, message->text, outlineColor);
+#else
   SDL_Surface *outlineSurface = TTF_RenderText_Solid(font, message->text, outlineColor);
+#endif
   message->outline_rect.w = (int)(outlineSurface->w * sizeMult);
   message->outline_rect.h = (int)(outlineSurface->h * sizeMult);
   message->outline_texture = SDL_CreateTextureFromSurface(renderer, outlineSurface);
@@ -85,7 +89,11 @@ inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSi
 
   // Create the main text
   TTF_SetFontOutline(font, 0);
+#if defined(PSP)
+  SDL_Surface *textSurface = TTF_RenderUTF8_Blended(font, message->text, textColor);
+#else
   SDL_Surface *textSurface = TTF_RenderText_Solid(font, message->text, textColor);
+#endif
   message->text_rect.w = (int)(textSurface->w * sizeMult);
   message->text_rect.h = (int)(textSurface->h * sizeMult);
   message->text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);

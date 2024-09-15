@@ -48,17 +48,10 @@ extern const char *btn_Select;
 #define INPUT_DOWN   (1 << 1)
 #define INPUT_LEFT   (1 << 2)
 #define INPUT_RIGHT  (1 << 3)
-#if defined(SWITCH)
-#define INPUT_A      (1 << 5)
-#define INPUT_B      (1 << 4)
-#define INPUT_X      (1 << 7)
-#define INPUT_Y      (1 << 6)
-#else
 #define INPUT_A      (1 << 4)
 #define INPUT_B      (1 << 5)
 #define INPUT_X      (1 << 6)
 #define INPUT_Y      (1 << 7)
-#endif
 #define INPUT_L      (1 << 8)
 #define INPUT_R      (1 << 9)
 #define INPUT_ZL     (1 << 10)

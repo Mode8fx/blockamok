@@ -78,11 +78,11 @@ rem call :compile_windows_x86
 call :copy_windows_x64_vs
 call :copy_windows_x86_vs
 call :compile_linux
-rem call :compile_gc
-rem call :compile_wii
+call :compile_gc
+call :compile_wii
 call :compile_wii_u
 call :compile_switch
-call :compile_vita
+rem call :compile_vita
 rem call :compile_rg35xx
 rem call :compile_psp
 
