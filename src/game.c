@@ -32,7 +32,7 @@ bool speedingUp;
 Sint16 movementMagnitudeX;
 Sint16 movementMagnitudeY;
 
-static void addNewCube(Cube cubes[], int *cubesLength) {
+inline void addNewCube(Cube cubes[], int *cubesLength) {
   Point point = {
     randF(-BOUNDS_X, BOUNDS_X),
     randF(-BOUNDS_Y, BOUNDS_Y),
@@ -158,7 +158,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   }
 
   for (int i = 0; i < (*cubesLength); i++) {
-    bool shouldRemove = (cubes[i][0].z - zSpeed) < 1.5;
+    bool shouldRemove = (cubes[i][0].z - zSpeed) < CUBE_REMOVAL_DEPTH;
 
     flipCubeIfOutOfBounds(cubes, i);
     for (int p = 0; p < 20; p++) {
@@ -174,6 +174,17 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
     float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
     bool closeToCube = cubes[i][0].z < 2;
     if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME) {
+      // gameFrame() can be called when preparing game, so check for that first
+      if (gameState != GAME_STATE_PLAYING) {
+        if (shouldRemove) {
+          removeCube(cubes, i);
+          cubesRemoved += 1;
+        }
+        rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
+        *cubesLength -= cubesRemoved;
+        qsort(cubes, *cubesLength, sizeof(Cube*), compareSize);
+        return gameState;
+      }
       playSFX(SFX_THUNK);
       if (--numLives > 0) {
         playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
@@ -182,6 +193,13 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
         }
         invinceStart = SDL_GetTicks();
       } else {
+        if (shouldRemove) {
+          float depthDiff = CUBE_REMOVAL_DEPTH - cubes[i][0].z;
+          for (int p = 0; p < 20; p++) {
+            cubes[i][p].z += depthDiff;
+          }
+        }
+        scoreVal += zSpeed;
         if (scoreVal > highScoreVal) {
           highScoreVal = (int)scoreVal;
           newHighScore = true;
@@ -201,7 +219,6 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   }
 
 	scoreVal += zSpeed;
-
   rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
   *cubesLength -= cubesRemoved;
   qsort(cubes, *cubesLength, sizeof(Cube *), compareSize);

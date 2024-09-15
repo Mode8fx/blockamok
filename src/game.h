@@ -48,6 +48,8 @@ extern float cubeSizeHalf;
 extern float cubeSizeLimit;
 extern Sint8 numLives;
 
+#define CUBE_REMOVAL_DEPTH 1.5f
+
 #define INVINCE_TIME 1000
 #define INVINCE_BLINK_TIME 111
 
@@ -66,6 +68,7 @@ typedef struct Point {
 
 typedef Point *Cube;
 
+extern inline void addNewCube(Cube cubes[], int *cubesLength);
 int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength);
 
 void gameInit(Cube cubes[], int *cubesLength);

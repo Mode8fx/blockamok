@@ -325,7 +325,7 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_LSHIFT);
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_RSHIFT);
 	mapInputToVar_Keyboard(state, INPUT_A, SDL_SCANCODE_KP_0);
-	mapInputToVar_Keyboard(state, INPUT_B, SDL_SCANCODE_BACKSPACE);
+	mapInputToVar_Keyboard(state, INPUT_B, SDL_SCANCODE_ESCAPE);
 	mapInputToVar_Keyboard(state, INPUT_X, SDL_SCANCODE_X);
 	mapInputToVar_Keyboard(state, INPUT_Y, SDL_SCANCODE_Y);
 	mapInputToVar_Keyboard(state, INPUT_L, SDL_SCANCODE_MINUS);
@@ -336,7 +336,7 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_RETURN2);
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_KP_ENTER);
-	mapInputToVar_Keyboard(state, INPUT_SELECT, SDL_SCANCODE_ESCAPE);
+	mapInputToVar_Keyboard(state, INPUT_SELECT, SDL_SCANCODE_BACKSPACE);
 #if defined(ANDROID)
 	mapInputToVar_Button_Keyboard(state, INPUT_START, SDLK_AC_BACK);
 #endif
@@ -448,7 +448,7 @@ static void handleAllCurrentInputs() {
 	const char *btn_Left = "Left";
 	const char *btn_Right = "Right";
 	const char *btn_A = "Shift/A";
-	const char *btn_B = "Backspace/B";
+	const char *btn_B = "Esc/B";
 	const char *btn_X = "X";
 	const char *btn_Y = "Y";
 	const char *btn_L = "-/L";
@@ -458,7 +458,7 @@ static void handleAllCurrentInputs() {
 	const char *btn_LS = "?";
 	const char *btn_RS = "F11/R-Stick";
 	const char *btn_Start = "Enter/Start";
-	const char *btn_Select = "Esc/Select";
+	const char *btn_Select = "Back/Select";
 #elif defined(GAMECUBE)
 	const char *btn_Up = "Up";
 	const char *btn_Down = "Down";

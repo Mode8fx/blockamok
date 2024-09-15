@@ -20,7 +20,7 @@ SDL_Window *window = NULL;
 SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
 int gameState = GAME_STATE_STARTED;
-bool isFullscreen = false;
+bool drawOverlayOnThisFrame = true;
 
 Uint32 now = 0;
 Uint32 last = 0;
@@ -74,6 +74,7 @@ static void handleWindowResize(SDL_Event *event) {
   }
   setScalingVals();
   initStaticMessages(renderer);
+  drawOverlayOnThisFrame = true;
 #endif
 }
 
@@ -161,6 +162,8 @@ int main(int arg, char *argv[]) {
     now = SDL_GetTicks();
     deltaTime = now - last;
 
+    SDL_RenderSetViewport(renderer, &gameViewport);
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT) {
@@ -178,8 +181,6 @@ int main(int arg, char *argv[]) {
     handlePlayerInput();
     handleChangeSong();
     handleFullscreenToggle();
-
-    SDL_RenderSetViewport(renderer, &gameViewport);
 
     switch (gameState) {
       case GAME_STATE_STARTED:
@@ -209,7 +210,7 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_OPTIONS_MAIN:
-        if (keyPressed(INPUT_A)) {
+        if (keyPressed(INPUT_A) || keyPressed(INPUT_START)) {
           switch (optionPage_Main.index) {
             case 4:
               credits_paused = false;
@@ -265,7 +266,7 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_QUIT:
-        if (keyPressed(INPUT_A)) {
+        if (keyPressed(INPUT_A) || keyPressed(INPUT_START)) {
           quit = true;
           writeSaveData();
         }
@@ -305,24 +306,27 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_GAME_OVER:
-        drawEssentials(renderer, cubes, cubesLength);
-        drawGameText(renderer);
-        drawGameOverText(renderer);
         if (keyPressed(INPUT_START)) {
           newHighScore = false;
           prepareGame();
           gameState = GAME_STATE_TITLE_SCREEN;
         }
+        drawEssentials(renderer, cubes, cubesLength);
+        drawGameText(renderer);
+        drawGameOverText(renderer);
         break;
     }
 
     SDL_RenderSetViewport(renderer, NULL);
-    SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
-    SDL_RenderFillRect(renderer, &leftBar);
-    SDL_RenderFillRect(renderer, &rightBar);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &leftBorder);
-    SDL_RenderFillRect(renderer, &rightBorder);
+    //if (drawOverlayOnThisFrame) {
+      SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
+      SDL_RenderFillRect(renderer, &leftBar);
+      SDL_RenderFillRect(renderer, &rightBar);
+      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+      SDL_RenderFillRect(renderer, &leftBorder);
+      SDL_RenderFillRect(renderer, &rightBorder);
+      //drawOverlayOnThisFrame = false;
+    //}
     SDL_RenderPresent(renderer);
   }
 

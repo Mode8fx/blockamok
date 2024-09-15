@@ -70,6 +70,8 @@ void setScalingVals() {
   triangle[0].color = darkBackgroundTriangle;
   triangle[1].color = emptyBackgroundTriangle;
   triangle[2].color = darkBackgroundTriangle;
+
+  drawOverlayOnThisFrame = true;
 }
 
 static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
