@@ -28,7 +28,13 @@ bool speedingUp;
 Sint16 movementMagnitudeX;
 Sint16 movementMagnitudeY;
 
-bool isInvincible = false;
+bool debugMode = false;
+
+#if defined(PC)
+float cubeBounds = DEFAULT_CUBE_BOUNDS;
+#else
+float cubeBounds = 9.0f;
+#endif
 
 void gameInit(Cube cubes[]) {
   playerSpeed = PLAYER_INITIAL_SPEED;
@@ -38,8 +44,8 @@ void gameInit(Cube cubes[]) {
 }
 
 void resetCube(Cube cubes[], int i) {
-  float relX = randF(-BOUNDS_X, BOUNDS_X) - cubes[i].points[0].x;
-  float relY = randF(-BOUNDS_Y, BOUNDS_Y) - cubes[i].points[0].y;
+  float relX = randF(-cubeBounds, cubeBounds) - cubes[i].points[0].x;
+  float relY = randF(-cubeBounds, cubeBounds) - cubes[i].points[0].y;
   for (int p = 0; p < 8; p++) {
     cubes[i].points[p].x += relX;
     cubes[i].points[p].y += relY;
@@ -61,26 +67,26 @@ void resetCube(Cube cubes[], int i) {
 
 static void flipCubeIfOutOfBounds(Cube cubes[], int i) {
   int p;
-  if (cubes[i].points[0].x < -BOUNDS_X) {
-    float BOUNDS_X_MULT = BOUNDS_X * 2;
+  if (cubes[i].points[0].x < -cubeBounds) {
+    float cubeBounds_MULT = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].x += BOUNDS_X_MULT;
+      cubes[i].points[p].x += cubeBounds_MULT;
     }
-  } else if (cubes[i].points[0].x > BOUNDS_X) {
-    float BOUNDS_X_MULT = BOUNDS_X * 2;
+  } else if (cubes[i].points[0].x > cubeBounds) {
+    float cubeBounds_MULT = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].x -= BOUNDS_X_MULT;
+      cubes[i].points[p].x -= cubeBounds_MULT;
     }
   }
-  if (cubes[i].points[0].y < -BOUNDS_Y) {
-    float BOUNDS_Y_MULT = BOUNDS_Y * 2;
+  if (cubes[i].points[0].y < -cubeBounds) {
+    float cubeBounds_MULT = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].y += BOUNDS_Y_MULT;
+      cubes[i].points[p].y += cubeBounds_MULT;
     }
-  } else if (cubes[i].points[0].y > BOUNDS_Y) {
-    float BOUNDS_Y_MULT = BOUNDS_Y * 2;
+  } else if (cubes[i].points[0].y > cubeBounds) {
+    float cubeBounds_MULT = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].y -= BOUNDS_Y_MULT;
+      cubes[i].points[p].y -= cubeBounds_MULT;
     }
   }
 }
@@ -163,7 +169,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
       float middleX = fabsf(cubes[i].points[0].x + (cubes[i].points[2].x - cubes[i].points[0].x) * 0.5f);
       // top edge of cube on cursor is 0, bottom edge is cubeSize
       float middleY = fabsf(cubes[i].points[0].y + (cubes[i].points[2].y - cubes[i].points[0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
-      if (middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME && !isInvincible) {
+      if (middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME && !debugMode) {
         // gameFrame() can be called when preparing game, so check for that first
         if (gameState != GAME_STATE_PLAYING) {
           if (shouldResetCube) {
@@ -211,17 +217,17 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
 
 Cube newCube(float s, Sint16 i) {
   Point c = {
-    randF(-BOUNDS_X, BOUNDS_X),
-    randF(-BOUNDS_Y, BOUNDS_Y),
+    randF(-cubeBounds, cubeBounds),
+    randF(-cubeBounds, cubeBounds),
     MAX_DEPTH / cubeAmount * i
   };
 
   // Try not to spawn any blocks too close to the player
-  if (c.z <= 3) {
+  if (c.z <= 5) {
     for (int i = 0; i < 5; i++) {
       if (fabsf(c.x) < 2 || fabsf(c.y) < 2) {
-        c.x = randF(-BOUNDS_X, BOUNDS_X);
-        c.y = randF(-BOUNDS_Y, BOUNDS_Y);
+        c.x = randF(-cubeBounds, cubeBounds);
+        c.y = randF(-cubeBounds, cubeBounds);
       } else {
         break;
       }

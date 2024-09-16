@@ -593,7 +593,11 @@ inline void drawQuitText(SDL_Renderer *renderer) {
 }
 
 inline void drawGameText(SDL_Renderer *renderer) {
-  snprintf(message_game_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
+  if (!debugMode) {
+    snprintf(message_game_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
+  } else {
+    snprintf(message_game_score.text, TEXT_LINE_SIZE, "Bounds %.1f Cubes %d", cubeBounds, cubeAmount);
+  }
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
   setMessagePosRelativeToScreenX(&message_game_score, 0.5f);
   renderMessage(renderer, &message_game_score);

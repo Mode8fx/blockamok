@@ -47,18 +47,12 @@ extern float cubeSizeHalf;
 extern float cubeSizeLimit;
 extern Sint8 numLives;
 
-extern bool isInvincible;
+extern bool debugMode;
 
 // Weaker systems need to handle fewer cubes, and smaller bounds balance this out
-#if defined(PC)
-#define BOUNDS_X 12.0f
-#define BOUNDS_Y 12.0f
-#define CUBE_LIMIT_MULT 1.0f
-#else
-#define BOUNDS_X 9.0f
-#define BOUNDS_Y 9.0f
-#define CUBE_LIMIT_MULT 0.5625f // 9^2 / 12^2
-#endif
+#define DEFAULT_CUBE_BOUNDS 12.0f
+extern float cubeBounds;
+#define CUBE_LIMIT_MULT (cubeBounds / DEFAULT_CUBE_BOUNDS)
 #define CUBE_LIMIT_MAX (Sint16)(800 * CUBE_LIMIT_MULT)
 
 #define CUBE_REMOVAL_DEPTH 1.5f

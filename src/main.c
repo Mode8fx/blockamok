@@ -140,11 +140,11 @@ static void handleInvincibility() {
   if (keyPressed(invincibilitySequence[invincibilityResetIndex])) {
     invincibilityResetIndex++;
     if (invincibilityResetIndex >= INVINCIBILITY_SEQUENCE_LENGTH) {
-      if (!isInvincible) {
-        isInvincible = true;
+      if (!debugMode) {
+        debugMode = true;
         playSFX(SFX_DING_A);
       } else {
-        isInvincible = false;
+        debugMode = false;
         playSFX(SFX_DING_B);
       }
       invincibilityResetIndex = 0;
@@ -318,6 +318,17 @@ int main(int arg, char *argv[]) {
         break;
 
       case GAME_STATE_PAUSED:
+        if (debugMode) {
+          if (dirPressedLeft() && cubeBounds > 3.0f) {
+            cubeBounds -= 0.1f;
+            optionCallback_CubeFrequency();
+            prepareGame();
+          } else if (dirPressedRight() && cubeBounds < 15.0f) {
+            cubeBounds += 0.1f;
+            optionCallback_CubeFrequency();
+            prepareGame();
+          }
+        }
         handleInvincibility();
         if (keyPressed(INPUT_START)) {
           gameState = GAME_STATE_PLAYING;

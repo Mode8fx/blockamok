@@ -233,7 +233,7 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
-static void optionCallback_CubeFrequency() {
+void optionCallback_CubeFrequency() {
 	switch (OPTION_CUBE_FREQUENCY) {
 	case 0:
 		cubeAmount = (Sint16)(400 * CUBE_LIMIT_MULT);
