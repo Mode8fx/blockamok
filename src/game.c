@@ -20,8 +20,6 @@ float cubeSizeHalf = 0.25f;
 float cubeSizeLimit = 0.5f;
 Sint8 numLives = 3;
 
-const Sint16 cubeMemSize = CUBE_POINTS_N * sizeof(Point);
-
 const Sint16 SPEED_INCREASE = 350;
 
 float playerSpeed;
@@ -43,11 +41,23 @@ void resetCube(Cube cubes[], int i) {
   float relX = randF(-BOUNDS_X, BOUNDS_X) - cubes[i].points[0].x;
   float relY = randF(-BOUNDS_Y, BOUNDS_Y) - cubes[i].points[0].y;
   float relZ = MAX_DEPTH - cubes[i].points[0].z;
-  for (int p = 0; p < 20; p++) {
+  for (int p = 0; p < 8; p++) {
     cubes[i].points[p].x += relX;
     cubes[i].points[p].y += relY;
     cubes[i].points[p].z += relZ;
   }
+  cubes[i].points[8] = cubes[i].points[4];
+  cubes[i].points[9] = cubes[i].points[0];
+  cubes[i].points[10] = cubes[i].points[3];
+  cubes[i].points[11] = cubes[i].points[7];
+  cubes[i].points[12] = cubes[i].points[5];
+  cubes[i].points[13] = cubes[i].points[1];
+  cubes[i].points[14] = cubes[i].points[2];
+  cubes[i].points[15] = cubes[i].points[6];
+  cubes[i].points[16] = cubes[i].points[3];
+  cubes[i].points[17] = cubes[i].points[2];
+  cubes[i].points[18] = cubes[i].points[6];
+  cubes[i].points[19] = cubes[i].points[7];
 }
 
 static void flipCubeIfOutOfBounds(Cube cubes[], int i) {

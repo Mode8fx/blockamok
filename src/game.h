@@ -6,7 +6,6 @@
 #define CUBE_FACE_POINTS_N 4
 #define CUBE_FACE_N 5
 #define CUBE_POINTS_N 20  // 5 * 4
-#define FRONT_I 16        // 4 * 4
 
 #define GAME_STATE_TITLE_SCREEN 0
 #define GAME_STATE_INSTRUCTIONS 1
