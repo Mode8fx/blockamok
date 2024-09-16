@@ -86,4 +86,4 @@ void gameInit(Cube cubes[]);
 void resetCube(Cube cubes[], int i);
 extern void prepareGame();
 
-Cube newCube(float s);
+Cube newCube(float s, Sint16 i);

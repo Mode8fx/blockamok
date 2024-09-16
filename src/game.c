@@ -33,18 +33,17 @@ bool isInvincible = false;
 void gameInit(Cube cubes[]) {
   playerSpeed = PLAYER_INITIAL_SPEED;
   for (Sint16 i = 0; i < cubeAmount; i++) {
-    cubes[i] = newCube(cubeSize);
+    cubes[i] = newCube(cubeSize, i);
   }
 }
 
 void resetCube(Cube cubes[], int i) {
   float relX = randF(-BOUNDS_X, BOUNDS_X) - cubes[i].points[0].x;
   float relY = randF(-BOUNDS_Y, BOUNDS_Y) - cubes[i].points[0].y;
-  float relZ = MAX_DEPTH - cubes[i].points[0].z;
   for (int p = 0; p < 8; p++) {
     cubes[i].points[p].x += relX;
     cubes[i].points[p].y += relY;
-    cubes[i].points[p].z += relZ;
+    cubes[i].points[p].z += MAX_DEPTH;
   }
   cubes[i].points[8] = cubes[i].points[4];
   cubes[i].points[9] = cubes[i].points[0];
@@ -210,11 +209,11 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
   return GAME_STATE_PLAYING;
 }
 
-Cube newCube(float s) {
+Cube newCube(float s, Sint16 i) {
   Point c = {
     randF(-BOUNDS_X, BOUNDS_X),
     randF(-BOUNDS_Y, BOUNDS_Y),
-    randF(0, MAX_DEPTH)
+    MAX_DEPTH / cubeAmount * i
   };
 
   float half = s * 0.5f;
@@ -222,14 +221,14 @@ Cube newCube(float s) {
   Cube cube;
 
   // Up
-  cube.points[0] = (Point){ .x = -half + c.x, .y = -half + c.y, .z = +half * 2 + c.z };
-  cube.points[1] = (Point){ .x = +half + c.x, .y = -half + c.y, .z = +half * 2 + c.z };
+  cube.points[0] = (Point){ .x = -half + c.x, .y = -half + c.y, .z = +s + c.z };
+  cube.points[1] = (Point){ .x = +half + c.x, .y = -half + c.y, .z = +s + c.z };
   cube.points[2] = (Point){ .x = +half + c.x, .y = -half + c.y, .z = -half + c.z };
   cube.points[3] = (Point){ .x = -half + c.x, .y = -half + c.y, .z = -half + c.z };
 
   // Down
-  cube.points[4] = (Point){ .x = -half + c.x, .y = +half + c.y, .z = +half * 2 + c.z };
-  cube.points[5] = (Point){ .x = +half + c.x, .y = +half + c.y, .z = +half * 2 + c.z };
+  cube.points[4] = (Point){ .x = -half + c.x, .y = +half + c.y, .z = +s + c.z };
+  cube.points[5] = (Point){ .x = +half + c.x, .y = +half + c.y, .z = +s + c.z };
   cube.points[6] = (Point){ .x = +half + c.x, .y = +half + c.y, .z = -half + c.z };
   cube.points[7] = (Point){ .x = -half + c.x, .y = +half + c.y, .z = -half + c.z };
 

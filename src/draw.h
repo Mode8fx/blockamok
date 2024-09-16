@@ -23,7 +23,7 @@ extern SDL_Color cubeColorSide;
 extern SDL_Color overlayColor;
 extern bool drawOverlayOnThisFrame;
 
-#define MAX_DEPTH 150
+#define MAX_DEPTH 150.0f
 extern float HALF_FOV_ANGLE_RADIANS;
 
 void setScalingVals();

@@ -47,7 +47,7 @@ float WIDTH_HALF;
 float WIDTH_NEG;
 
 #define MIN_FADE 150
-#define MAX_FADE 190
+#define FADE_DIFF (190 - MIN_FADE)
 
 void setScalingVals() {
   int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
@@ -192,7 +192,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     }
 
     float z = (cube.points[faceIndexMult].z) + fabsf(cube.points[faceIndexMult].x) * 7 + fabsf(cube.points[faceIndexMult].y) * 7;
-    float fadeAmount = z < MIN_FADE ? 0 : fminf((z - MIN_FADE) / (MAX_FADE - MIN_FADE), 1.0f);
+    float fadeAmount = z < MIN_FADE ? 0 : fminf((z - MIN_FADE) / FADE_DIFF, 1.0f);
 
     color.a = (Uint8)fadeTowards(255, 0, fadeAmount);
 
