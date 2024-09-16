@@ -259,8 +259,8 @@ static void initStaticMessages_Game() {
   SDL_SetTextureAlphaMod(message_game_cursor.text_texture, 64);
 
   snprintf(message_game_life.text, TEXT_LINE_SIZE, ".");
-  prepareMessage(renderer, Sans_63, outlineSize_63, &message_game_life, 1, color_red, color_blue);
-  setMessagePosRelativeToScreenY(&message_game_life, 0.01f);
+  prepareMessage(renderer, Sans_126, outlineSize_126, &message_game_life, 1, color_red, color_blue);
+  setMessagePosRelativeToScreenY(&message_game_life, -0.01f);
 
   snprintf(message_game_speed.text, TEXT_LINE_SIZE, "12345 MPH");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed, 1, color_white, color_black);
@@ -601,7 +601,7 @@ inline void drawGameText(SDL_Renderer *renderer) {
   Uint32 invinceTimer = now - invinceStart;
   if (invinceTimer > INVINCE_TIME || invinceTimer / INVINCE_BLINK_TIME % 2 == 1 || gameStart == invinceStart) {
     for (int i = 0; i < numLives; i++) {
-      setMessagePosRelativeToScreenX_LeftAlign(&message_game_life, 0.85f + 0.03f * i);
+      setMessagePosRelativeToScreenX_LeftAlign(&message_game_life, 0.8f + 0.06f * i);
       renderMessage(renderer, &message_game_life);
     }
   }
