@@ -29,7 +29,6 @@ Uint32 invinceStart = 0;
 Uint32 deltaTime = 0;
 Uint32 credits_startTime = 0;
 
-int cubesLength = 0;
 Cube cubes[1000];
 
 float scoreVal;
@@ -85,14 +84,12 @@ static void handleWindowResize(SDL_Event *event) {
 }
 
 void prepareGame() {
-  for (int i = 0; i < cubesLength; i++) {
-    removeCube(cubes, i);
+  for (int i = 0; i < CUBE_LIMIT_MAX; i++) {
+    resetCube(cubes, i);
   }
-  rearrangeCubesToTakeOutRemoved(cubes, &cubesLength, cubesLength);
-  cubesLength = 0;
-  gameInit(cubes, &cubesLength);
+  gameInit(cubes);
   // Call once for initial render
-  gameFrame(deltaTime, cubes, &cubesLength);
+  gameFrame(deltaTime, cubes);
 }
 
 static void init() {
@@ -118,7 +115,7 @@ static void init() {
 
 static inline void gameLoop() {
   if (gameState != GAME_STATE_GAME_OVER) {
-    gameState = gameFrame(deltaTime, cubes, &cubesLength);
+    gameState = gameFrame(deltaTime, cubes);
   }
 }
 
@@ -211,7 +208,7 @@ int main(int arg, char *argv[]) {
 
     switch (gameState) {
       case GAME_STATE_STARTED:
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         drawTitleScreenText(renderer, false);
         fadeInFromBlack(renderer);
         if (now - startingTick > INIT_FADE_LENGTH) {
@@ -232,7 +229,7 @@ int main(int arg, char *argv[]) {
           openPage(renderer, &optionPage_Main, true);
           gameState = GAME_STATE_OPTIONS_MAIN;
         }
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         drawTitleScreenText(renderer, true);
         break;
 
@@ -254,40 +251,40 @@ int main(int arg, char *argv[]) {
               break;
           }
         }
-				drawEssentials(renderer, cubes, cubesLength);
+				drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Main, true);
 				break;
 
       case GAME_STATE_OPTIONS_GAME:
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Game, true);
         break;
 
       case GAME_STATE_OPTIONS_VISUAL:
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Visual, true);
         break;
 
       case GAME_STATE_OPTIONS_AUDIO:
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Audio, true);
         break;
 
       case GAME_STATE_INSTRUCTIONS:
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawInstructionsText(renderer);
         break;
 
 			case GAME_STATE_CREDITS:
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawCreditsText(renderer, now);
         break;
 
       case GAME_STATE_RESET_HIGH_SCORE:
         handleResetHighScore();
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawResetHighScoreText(renderer);
         break;
@@ -297,7 +294,7 @@ int main(int arg, char *argv[]) {
           quit = true;
           writeSaveData();
         }
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawQuitText(renderer);
         break;
@@ -315,7 +312,7 @@ int main(int arg, char *argv[]) {
             playSFX(SFX_DING_B);
           }
         }
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         drawGameText(renderer);
         drawCursor(renderer);
         break;
@@ -328,7 +325,7 @@ int main(int arg, char *argv[]) {
           prepareGame();
           gameState = GAME_STATE_TITLE_SCREEN;
         }
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         drawGameText(renderer);
         drawPausedText(renderer);
         break;
@@ -339,7 +336,7 @@ int main(int arg, char *argv[]) {
           prepareGame();
           gameState = GAME_STATE_TITLE_SCREEN;
         }
-        drawEssentials(renderer, cubes, cubesLength);
+        drawEssentials(renderer, cubes, cubeAmount);
         drawGameText(renderer);
         drawGameOverText(renderer);
         break;

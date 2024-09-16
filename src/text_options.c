@@ -248,7 +248,7 @@ static void optionCallback_CubeFrequency() {
 		cubeAmount = (Sint16)(700 * CUBE_LIMIT_MULT);
 		break;
 	default:
-		cubeAmount = (Sint16)(800 * CUBE_LIMIT_MULT);
+		cubeAmount = CUBE_LIMIT_MAX;
 		break;
 	}
 	prepareGame();

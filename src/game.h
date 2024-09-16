@@ -60,6 +60,7 @@ extern bool isInvincible;
 #define BOUNDS_Y 8.3f
 #define CUBE_LIMIT_MULT 0.4784f // 8.3^2 / 12^2
 #endif
+#define CUBE_LIMIT_MAX (Sint16)(800 * CUBE_LIMIT_MULT)
 
 #define CUBE_REMOVAL_DEPTH 1.5f
 
@@ -76,17 +77,14 @@ typedef struct Point {
   float z;
 } Point;
 
-//typedef struct {
-//} Block;
+typedef struct {
+  Point points[CUBE_POINTS_N];
+} Cube;
 
-typedef Point *Cube;
+int gameFrame(Uint32 deltaTime, Cube cubes[]);
 
-extern inline void addNewCube(Cube cubes[], int *cubesLength);
-int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength);
-
-void gameInit(Cube cubes[], int *cubesLength);
-void removeCube(Cube cubes[], int i);
-void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN);
+void gameInit(Cube cubes[]);
+void resetCube(Cube cubes[], int i);
 extern void prepareGame();
 
-Cube newCube(Point c, float s);
+Cube newCube(float s);

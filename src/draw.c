@@ -150,7 +150,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     Sint8 orgCubeI = f * 4;    // The way our cube is defined, a face has four corners
     Sint8 transCubeI = f * 5;  // The way our transformed cube is defined, a face has 5 corners (last one connects back to the first one)
     for (Sint8 p = 0; p < 4; p++) {
-      Point point = cube[orgCubeI + p];
+      Point point = cube.points[orgCubeI + p];
       // Changing sPoint.x and sPoint.y can change the "angle" at which you fall, if it looks like you're shifting too much in one direction
       SDL_Point sPoint = {
         (int)screenX(transform3Dto2D(point.x, point.z)),
@@ -191,7 +191,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
       color = cubeColorSide;
     }
 
-    float z = (cube[faceIndexMult].z) + fabsf(cube[faceIndexMult].x) * 7 + fabsf(cube[faceIndexMult].y) * 7;
+    float z = (cube.points[faceIndexMult].z) + fabsf(cube.points[faceIndexMult].x) * 7 + fabsf(cube.points[faceIndexMult].y) * 7;
     float fadeAmount = z < MIN_FADE ? 0 : fminf((z - MIN_FADE) / (MAX_FADE - MIN_FADE), 1.0f);
 
     color.a = (Uint8)fadeTowards(255, 0, fadeAmount);

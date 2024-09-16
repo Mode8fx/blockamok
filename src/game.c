@@ -32,71 +32,46 @@ Sint16 movementMagnitudeY;
 
 bool isInvincible = false;
 
-inline void addNewCube(Cube cubes[], int *cubesLength) {
-  Point point = {
-    randF(-BOUNDS_X, BOUNDS_X),
-    randF(-BOUNDS_Y, BOUNDS_Y),
-    MAX_DEPTH
-  };
-  cubes[(*cubesLength)++] = newCube(point, cubeSize);
-}
-
-static void addInitialCube(Cube cubes[], int *cubesLength) {
-  Point point = {
-    randF(-BOUNDS_X, BOUNDS_X),
-    randF(-BOUNDS_Y, BOUNDS_Y),
-    randF(0, MAX_DEPTH)
-	};
-  cubes[(*cubesLength)++] = newCube(point, cubeSize);
-}
-
-void gameInit(Cube cubes[], int *cubesLength) {
+void gameInit(Cube cubes[]) {
   playerSpeed = PLAYER_INITIAL_SPEED;
-  while ((*cubesLength) < cubeAmount) {
-    addInitialCube(cubes, cubesLength);
+  for (Sint16 i = 0; i < cubeAmount; i++) {
+    cubes[i] = newCube(cubeSize);
   }
 }
 
-void removeCube(Cube cubes[], int i) {
-  free(cubes[i]);
-  cubes[i] = NULL;
-}
-
-void rearrangeCubesToTakeOutRemoved(Cube cubes[], int *cubesLength, int removedN) {
-  if (removedN == 0) {
-    return;
-  }
-
-  int fullI = 0;
-  for (int i = 0; i < (*cubesLength); i++) {
-    if (cubes[i] != NULL) {
-      cubes[fullI++] = cubes[i];
-    }
+void resetCube(Cube cubes[], int i) {
+  float relX = randF(-BOUNDS_X, BOUNDS_X) - cubes[i].points[0].x;
+  float relY = randF(-BOUNDS_Y, BOUNDS_Y) - cubes[i].points[0].y;
+  float relZ = MAX_DEPTH - cubes[i].points[0].z;
+  for (int p = 0; p < 20; p++) {
+    cubes[i].points[p].x += relX;
+    cubes[i].points[p].y += relY;
+    cubes[i].points[p].z += relZ;
   }
 }
 
 static void flipCubeIfOutOfBounds(Cube cubes[], int i) {
   int p;
-  if (cubes[i][0].x < -BOUNDS_X) {
+  if (cubes[i].points[0].x < -BOUNDS_X) {
     float BOUNDS_X_MULT = BOUNDS_X * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].x += BOUNDS_X_MULT;
+      cubes[i].points[p].x += BOUNDS_X_MULT;
     }
-  } else if (cubes[i][0].x > BOUNDS_X) {
+  } else if (cubes[i].points[0].x > BOUNDS_X) {
     float BOUNDS_X_MULT = BOUNDS_X * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].x -= BOUNDS_X_MULT;
+      cubes[i].points[p].x -= BOUNDS_X_MULT;
     }
   }
-  if (cubes[i][0].y < -BOUNDS_Y) {
+  if (cubes[i].points[0].y < -BOUNDS_Y) {
     float BOUNDS_Y_MULT = BOUNDS_Y * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].y += BOUNDS_Y_MULT;
+      cubes[i].points[p].y += BOUNDS_Y_MULT;
     }
-  } else if (cubes[i][0].y > BOUNDS_Y) {
+  } else if (cubes[i].points[0].y > BOUNDS_Y) {
     float BOUNDS_Y_MULT = BOUNDS_Y * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i][p].y -= BOUNDS_Y_MULT;
+      cubes[i].points[p].y -= BOUNDS_Y_MULT;
     }
   }
 }
@@ -104,17 +79,13 @@ static void flipCubeIfOutOfBounds(Cube cubes[], int i) {
 static int compareSize(const void *a, const void *b) {
   Cube cube1 = *((Cube *)a);
   Cube cube2 = *((Cube *)b);
-  if (cube1[0].z == cube2[0].z) {
-    return (cube1[0].x < cube2[0].x) - (cube1[0].x > cube2[0].x);
+  if (cube1.points[0].z == cube2.points[0].z) {
+    return (cube1.points[0].x < cube2.points[0].x) - (cube1.points[0].x > cube2.points[0].x);
   }
-  return (cube1[0].z < cube2[0].z) - (cube1[0].z > cube2[0].z);
+  return (cube1.points[0].z < cube2.points[0].z) - (cube1.points[0].z > cube2.points[0].z);
 }
 
-int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
-  while (*cubesLength < cubeAmount) {
-    addNewCube(cubes, cubesLength);
-  }
-
+int gameFrame(Uint32 deltaTime, Cube cubes[]) {
   speedingUp = (keyHeld(INPUT_A) || keyHeld(INPUT_B));
 
   float deltaTimeDiv = (float)deltaTime / 12000;
@@ -125,8 +96,6 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
   }
 
   float speed = playerSpeed * deltaTimeDiv;
-
-  int cubesRemoved = 0;
 
   float xDiff = 0;
   float yDiff = 0;
@@ -157,32 +126,29 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
     zSpeed *= SPEED_UP_MULT;
   }
 
-  for (int i = 0; i < (*cubesLength); i++) {
-    bool shouldRemove = (cubes[i][0].z - zSpeed) < CUBE_REMOVAL_DEPTH;
+  for (int i = 0; i < cubeAmount; i++) {
+    bool shouldResetCube = (cubes[i].points[0].z - zSpeed) < CUBE_REMOVAL_DEPTH;
 
     flipCubeIfOutOfBounds(cubes, i);
     for (int p = 0; p < 20; p++) {
-      cubes[i][p].x += xDiff;
-      cubes[i][p].y += yDiff;
+      cubes[i].points[p].x += xDiff;
+      cubes[i].points[p].y += yDiff;
 
-      cubes[i][p].z -= zSpeed;
+      cubes[i].points[p].z -= zSpeed;
     }
 
     // left edge of cube on cursor is cubeSize/2, right edge is -cubeSize/2
-    float middleX = fabsf(cubes[i][0].x + (cubes[i][2].x - cubes[i][0].x) * 0.5f);
+    float middleX = fabsf(cubes[i].points[0].x + (cubes[i].points[2].x - cubes[i].points[0].x) * 0.5f);
     // top edge of cube on cursor is 0, bottom edge is cubeSize
-    float middleY = fabsf(cubes[i][0].y + (cubes[i][2].y - cubes[i][0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
-    bool closeToCube = cubes[i][0].z < 2;
+    float middleY = fabsf(cubes[i].points[0].y + (cubes[i].points[2].y - cubes[i].points[0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
+    bool closeToCube = cubes[i].points[0].z < 2;
     if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME && !isInvincible) {
       // gameFrame() can be called when preparing game, so check for that first
       if (gameState != GAME_STATE_PLAYING) {
-        if (shouldRemove) {
-          removeCube(cubes, i);
-          cubesRemoved += 1;
+        if (shouldResetCube) {
+          resetCube(cubes, i);
         }
-        rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
-        *cubesLength -= cubesRemoved;
-        qsort(cubes, *cubesLength, sizeof(Cube*), compareSize);
+        qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
         return gameState;
       }
       playSFX(SFX_THUNK);
@@ -193,10 +159,10 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
         }
         invinceStart = SDL_GetTicks();
       } else {
-        if (shouldRemove) {
-          float depthDiff = CUBE_REMOVAL_DEPTH - cubes[i][0].z;
+        if (shouldResetCube) {
+          float depthDiff = CUBE_REMOVAL_DEPTH - cubes[i].points[0].z;
           for (int p = 0; p < 20; p++) {
-            cubes[i][p].z += depthDiff;
+            cubes[i].points[p].z += depthDiff;
           }
         }
         scoreVal += zSpeed;
@@ -206,72 +172,61 @@ int gameFrame(Uint32 deltaTime, Cube cubes[], int *cubesLength) {
           refreshHighScoreText(renderer);
           writeSaveData();
         }
-        rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
-        *cubesLength -= cubesRemoved;
-        qsort(cubes, *cubesLength, sizeof(Cube*), compareSize);
+        qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
         return GAME_STATE_GAME_OVER;
       }
     }
-    if (shouldRemove) {
-      removeCube(cubes, i);
-      cubesRemoved += 1;
+    if (shouldResetCube) {
+      resetCube(cubes, i);
     }
   }
 
 	scoreVal += zSpeed;
-  rearrangeCubesToTakeOutRemoved(cubes, cubesLength, cubesRemoved);
-  *cubesLength -= cubesRemoved;
-  qsort(cubes, *cubesLength, sizeof(Cube *), compareSize);
+  qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
 
   return GAME_STATE_PLAYING;
 }
 
-Cube newCube(Point c, float s) {
+Cube newCube(float s) {
+  Point c = {
+    randF(-BOUNDS_X, BOUNDS_X),
+    randF(-BOUNDS_Y, BOUNDS_Y),
+    randF(0, MAX_DEPTH)
+  };
+
   float half = s * 0.5f;
 
-  Cube cubeAddr = malloc(cubeMemSize);
+  Cube cube;
 
   // Up
-  Point u1 = {.x = -half + c.x, .y = -half + c.y, .z = +half * 2 + c.z};
-  Point u2 = {.x = +half + c.x, .y = -half + c.y, .z = +half * 2 + c.z};
-  Point u3 = {.x = +half + c.x, .y = -half + c.y, .z = -half + c.z};
-  Point u4 = {.x = -half + c.x, .y = -half + c.y, .z = -half + c.z};
+  cube.points[0] = (Point){ .x = -half + c.x, .y = -half + c.y, .z = +half * 2 + c.z };
+  cube.points[1] = (Point){ .x = +half + c.x, .y = -half + c.y, .z = +half * 2 + c.z };
+  cube.points[2] = (Point){ .x = +half + c.x, .y = -half + c.y, .z = -half + c.z };
+  cube.points[3] = (Point){ .x = -half + c.x, .y = -half + c.y, .z = -half + c.z };
 
   // Down
-  Point d1 = {.x = -half + c.x, .y = +half + c.y, .z = +half * 2 + c.z};
-  Point d2 = {.x = +half + c.x, .y = +half + c.y, .z = +half * 2 + c.z};
-  Point d3 = {.x = +half + c.x, .y = +half + c.y, .z = -half + c.z};
-  Point d4 = {.x = -half + c.x, .y = +half + c.y, .z = -half + c.z};
-
-  // Up
-  cubeAddr[0] = u1;
-  cubeAddr[1] = u2;
-  cubeAddr[2] = u3;
-  cubeAddr[3] = u4;
-
-  // Down
-  cubeAddr[4] = d1;
-  cubeAddr[5] = d2;
-  cubeAddr[6] = d3;
-  cubeAddr[7] = d4;
+  cube.points[4] = (Point){ .x = -half + c.x, .y = +half + c.y, .z = +half * 2 + c.z };
+  cube.points[5] = (Point){ .x = +half + c.x, .y = +half + c.y, .z = +half * 2 + c.z };
+  cube.points[6] = (Point){ .x = +half + c.x, .y = +half + c.y, .z = -half + c.z };
+  cube.points[7] = (Point){ .x = -half + c.x, .y = +half + c.y, .z = -half + c.z };
 
   // Left
-  cubeAddr[8] = d1;
-  cubeAddr[9] = u1;
-  cubeAddr[10] = u4;
-  cubeAddr[11] = d4;
+  cube.points[8] = cube.points[4];
+  cube.points[9] = cube.points[0];
+  cube.points[10] = cube.points[3];
+  cube.points[11] = cube.points[7];
 
   // Right
-  cubeAddr[12] = d2;
-  cubeAddr[13] = u2;
-  cubeAddr[14] = u3;
-  cubeAddr[15] = d3;
+  cube.points[12] = cube.points[5];
+  cube.points[13] = cube.points[1];
+  cube.points[14] = cube.points[2];
+  cube.points[15] = cube.points[6];
 
   // Front
-  cubeAddr[16] = u4;
-  cubeAddr[17] = u3;
-  cubeAddr[18] = d3;
-  cubeAddr[19] = d4;
+  cube.points[16] = cube.points[3];
+  cube.points[17] = cube.points[2];
+  cube.points[18] = cube.points[6];
+  cube.points[19] = cube.points[7];
 
-  return cubeAddr;
+  return cube;
 }
