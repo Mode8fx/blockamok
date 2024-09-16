@@ -55,9 +55,9 @@ extern bool isInvincible;
 #define BOUNDS_Y 12.0f
 #define CUBE_LIMIT_MULT 1.0f
 #else
-#define BOUNDS_X 8.3f
-#define BOUNDS_Y 8.3f
-#define CUBE_LIMIT_MULT 0.4784f // 8.3^2 / 12^2
+#define BOUNDS_X 9.0f
+#define BOUNDS_Y 9.0f
+#define CUBE_LIMIT_MULT 0.5625f // 9^2 / 12^2
 #endif
 #define CUBE_LIMIT_MAX (Sint16)(800 * CUBE_LIMIT_MULT)
 

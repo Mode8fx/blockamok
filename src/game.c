@@ -216,6 +216,18 @@ Cube newCube(float s, Sint16 i) {
     MAX_DEPTH / cubeAmount * i
   };
 
+  // Try not to spawn any blocks too close to the player
+  if (c.z <= 3) {
+    for (int i = 0; i < 5; i++) {
+      if (fabsf(c.x) < 2 || fabsf(c.y) < 2) {
+        c.x = randF(-BOUNDS_X, BOUNDS_X);
+        c.y = randF(-BOUNDS_Y, BOUNDS_Y);
+      } else {
+        break;
+      }
+    }
+  }
+
   float half = s * 0.5f;
 
   Cube cube;
