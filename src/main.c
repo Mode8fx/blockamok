@@ -342,6 +342,8 @@ int main(int arg, char *argv[]) {
         break;
     }
 
+    updateLastKeys();
+
     SDL_RenderSetViewport(renderer, NULL);
     //if (drawOverlayOnThisFrame) {
       SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);

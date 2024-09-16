@@ -63,13 +63,13 @@ extern const char *btn_Select;
 
 #define STICK_DEADZONE 3277
 #define STICK_FULLZONE 31129
-#define STICK_THRESHOLD 0
+#define STICK_THRESHOLD STICK_DEADZONE
 #define TRIGGER_DEADZONE 26215
 
-extern bool stickIsUp(Stick stick);
-extern bool stickIsDown(Stick stick);
-extern bool stickIsLeft(Stick stick);
-extern bool stickIsRight(Stick stick);
+extern inline bool stickIsUp(Stick stick);
+extern inline bool stickIsDown(Stick stick);
+extern inline bool stickIsLeft(Stick stick);
+extern inline bool stickIsRight(Stick stick);
 extern bool keyPressed(Uint32);
 extern bool keyHeld(Uint32);
 extern bool keyReleased(Uint32);
@@ -81,5 +81,6 @@ extern bool dirHeld_Up();
 extern bool dirHeld_Down();
 extern bool dirHeld_Left();
 extern bool dirHeld_Right();
+extern inline void updateLastKeys();
 extern void controllerInit();
 extern void handlePlayerInput();

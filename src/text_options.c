@@ -441,23 +441,23 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 
 	// Handle Up/Down input
 	if (page->numLines > 1) {
-		if (keyPressed(INPUT_UP)) {
+		if (dirPressedUp()) {
 			page->index = (page->index - 1) % page->numLines;
 			if (page->index < 0) {
 				page->index = page->numLines - 1;
 			}
-		} else if (keyPressed(INPUT_DOWN)) {
+		} else if (dirPressedDown()) {
 			page->index = (page->index + 1) % page->numLines;
 		}
 	}
 
 	// Handle Left/Right input
 	bool optionChanged = false;
-	if (keyPressed(INPUT_LEFT)) {
+	if (dirPressedLeft()) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index - 1 + currentLine->numChoices) % currentLine->numChoices;
 		optionCallback(window, page);
-	} else if (keyPressed(INPUT_RIGHT)) {
+	} else if (dirPressedRight()) {
 		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index + 1) % currentLine->numChoices;
 		optionCallback(window, page);

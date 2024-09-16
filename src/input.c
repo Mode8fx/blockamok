@@ -172,7 +172,7 @@ static inline void updateChangedKeys() {
 
 static inline void handleHoldTimer_prepare() {
 	// If any direction is held, continue timer; otherwise, reset it
-	if (heldKeys & 0x0F) {
+	if (heldKeys & 0x0F || leftStick.y) { // don't bother checking leftStick.x, it's not repeated anyway
 		timer_buttonHold += deltaTime;
 	}
 	else {
@@ -204,7 +204,7 @@ static inline void handleHoldTimer_execute() {
 	}
 }
 
-static inline void updateLastKeys() {
+inline void updateLastKeys() {
 	heldKeys_last = heldKeys;
 	updateStick(&leftStick);
 	updateStick(&rightStick);
@@ -563,5 +563,4 @@ inline void handlePlayerInput() {
 	updateChangedKeys();
 	handleHoldTimer_prepare();
 	handleHoldTimer_execute();
-	updateLastKeys();
 }

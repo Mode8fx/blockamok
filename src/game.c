@@ -126,9 +126,9 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
     }
   }
   else {
-    float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTimeDiv;
-    xDiff = turnSpeed * -movementMagnitudeX / 32767;
-    yDiff = turnSpeed * -movementMagnitudeY / 32767;
+    float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTimeDiv / 32767;
+    xDiff = turnSpeed * -movementMagnitudeX;
+    yDiff = turnSpeed * -movementMagnitudeY;
   }
 
   float zSpeed = speed;
@@ -140,50 +140,63 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
     bool shouldResetCube = (cubes[i].points[0].z - zSpeed) < CUBE_REMOVAL_DEPTH;
 
     flipCubeIfOutOfBounds(cubes, i);
-    for (int p = 0; p < 20; p++) {
+    for (int p = 0; p < 8; p++) {
       cubes[i].points[p].x += xDiff;
       cubes[i].points[p].y += yDiff;
 
       cubes[i].points[p].z -= zSpeed;
     }
+    cubes[i].points[8] = cubes[i].points[4];
+    cubes[i].points[9] = cubes[i].points[0];
+    cubes[i].points[10] = cubes[i].points[3];
+    cubes[i].points[11] = cubes[i].points[7];
+    cubes[i].points[12] = cubes[i].points[5];
+    cubes[i].points[13] = cubes[i].points[1];
+    cubes[i].points[14] = cubes[i].points[2];
+    cubes[i].points[15] = cubes[i].points[6];
+    cubes[i].points[16] = cubes[i].points[3];
+    cubes[i].points[17] = cubes[i].points[2];
+    cubes[i].points[18] = cubes[i].points[6];
+    cubes[i].points[19] = cubes[i].points[7];
 
-    // left edge of cube on cursor is cubeSize/2, right edge is -cubeSize/2
-    float middleX = fabsf(cubes[i].points[0].x + (cubes[i].points[2].x - cubes[i].points[0].x) * 0.5f);
-    // top edge of cube on cursor is 0, bottom edge is cubeSize
-    float middleY = fabsf(cubes[i].points[0].y + (cubes[i].points[2].y - cubes[i].points[0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
-    bool closeToCube = cubes[i].points[0].z < 2;
-    if (closeToCube && middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME && !isInvincible) {
-      // gameFrame() can be called when preparing game, so check for that first
-      if (gameState != GAME_STATE_PLAYING) {
-        if (shouldResetCube) {
-          resetCube(cubes, i);
-        }
-        qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
-        return gameState;
-      }
-      playSFX(SFX_THUNK);
-      if (--numLives > 0) {
-        playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
-        if (playerSpeed < PLAYER_INITIAL_SPEED) {
-          playerSpeed = PLAYER_INITIAL_SPEED;
-        }
-        invinceStart = SDL_GetTicks();
-      } else {
-        if (shouldResetCube) {
-          float depthDiff = CUBE_REMOVAL_DEPTH - cubes[i].points[0].z;
-          for (int p = 0; p < 20; p++) {
-            cubes[i].points[p].z += depthDiff;
+    if (cubes[i].points[0].z < 2) {
+      // left edge of cube on cursor is cubeSize/2, right edge is -cubeSize/2
+      float middleX = fabsf(cubes[i].points[0].x + (cubes[i].points[2].x - cubes[i].points[0].x) * 0.5f);
+      // top edge of cube on cursor is 0, bottom edge is cubeSize
+      float middleY = fabsf(cubes[i].points[0].y + (cubes[i].points[2].y - cubes[i].points[0].y) * 0.5f + cubeSizeHalf); // the +cubeSizeHalf shifts the collision point downwards
+      if (middleX < cubeSizeLimit && middleY < cubeSizeLimit && (SDL_GetTicks() - invinceStart) > INVINCE_TIME && !isInvincible) {
+        // gameFrame() can be called when preparing game, so check for that first
+        if (gameState != GAME_STATE_PLAYING) {
+          if (shouldResetCube) {
+            resetCube(cubes, i);
           }
+          qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
+          return gameState;
         }
-        scoreVal += zSpeed;
-        if (scoreVal > highScoreVal) {
-          highScoreVal = (int)scoreVal;
-          newHighScore = true;
-          refreshHighScoreText(renderer);
-          writeSaveData();
+        playSFX(SFX_THUNK);
+        if (--numLives > 0) {
+          playerSpeed = (float)fmin(playerSpeed, MAX_SPEED) - (MAX_SPEED * 0.3f);
+          if (playerSpeed < PLAYER_INITIAL_SPEED) {
+            playerSpeed = PLAYER_INITIAL_SPEED;
+          }
+          invinceStart = SDL_GetTicks();
+        } else {
+          if (shouldResetCube) {
+            float depthDiff = CUBE_REMOVAL_DEPTH - cubes[i].points[0].z;
+            for (int p = 0; p < 20; p++) {
+              cubes[i].points[p].z += depthDiff;
+            }
+          }
+          scoreVal += zSpeed;
+          if (scoreVal > highScoreVal) {
+            highScoreVal = (int)scoreVal;
+            newHighScore = true;
+            refreshHighScoreText(renderer);
+            writeSaveData();
+          }
+          qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
+          return GAME_STATE_GAME_OVER;
         }
-        qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
-        return GAME_STATE_GAME_OVER;
       }
     }
     if (shouldResetCube) {
