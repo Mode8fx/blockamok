@@ -1,7 +1,7 @@
 @echo off
 
 :: Manual sleep amounts (because `start /wait` doesn't work...)
-set SLEEP_COMPILE=18
+set SLEEP_COMPILE=14
 set SLEEP_COMPILE_SHORT=5
 set SLEEP_CLEAN=2
 
@@ -82,7 +82,7 @@ call :compile_gc
 call :compile_wii
 call :compile_wii_u
 call :compile_switch
-rem call :compile_vita
+call :compile_vita
 rem call :compile_rg35xx
 rem call :compile_psp
 

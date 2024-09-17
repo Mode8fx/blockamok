@@ -30,7 +30,8 @@ Message message_titlescreen_highscore;
 Message message_game_score;
 Message message_game_life;
 Message message_game_cursor;
-Message message_game_speed;
+Message message_game_speed_1;
+Message message_game_speed_2;
 Message message_gameover;
 Message message_gameover_highscore;
 Message message_paused;
@@ -262,9 +263,13 @@ static void initStaticMessages_Game() {
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_game_life, 1, color_red, color_blue);
   setMessagePosRelativeToScreenY(&message_game_life, -0.01f);
 
-  snprintf(message_game_speed.text, TEXT_LINE_SIZE, "12345 MPH");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed, 1, color_white, color_black);
-  setMessagePosRelativeToScreenY(&message_game_speed, 0.95f);
+  snprintf(message_game_speed_1.text, TEXT_LINE_SIZE, "12345");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed_1, 1, color_white, color_black);
+  setMessagePosRelativeToScreenY(&message_game_speed_1, 0.95f);
+
+  snprintf(message_game_speed_2.text, TEXT_LINE_SIZE, " MPH");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed_2, 1, color_white, color_black);
+  setMessagePosRelativeToScreen_RightAlign(&message_game_speed_2, 0.95f, 0.95f);
 
   snprintf(message_gameover.text, TEXT_LINE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
@@ -596,7 +601,7 @@ inline void drawGameText(SDL_Renderer *renderer) {
   if (!debugMode) {
     snprintf(message_game_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
   } else {
-    snprintf(message_game_score.text, TEXT_LINE_SIZE, "Bounds %.1f Cubes %d", cubeBounds, cubeAmount);
+    snprintf(message_game_score.text, TEXT_LINE_SIZE, "%.1f %d", cubeBounds, cubeAmount);
   }
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
   setMessagePosRelativeToScreenX(&message_game_score, 0.5f);
@@ -610,15 +615,19 @@ inline void drawGameText(SDL_Renderer *renderer) {
     }
   }
 
-  SDL_Color speedColor = color_white;
-  float printedSpeed = playerSpeed * (speedingUp ? SPEED_UP_MULT : 1);
-  if (printedSpeed >= (speedingUp ? TRUE_MAX_SPEED_INT : MAX_SPEED_INT)) {
-    speedColor = color_orange;
+  if (OPTION_SPEEDOMETER) {
+    SDL_Color speedColor = color_white;
+    float printedSpeed = playerSpeed * (speedingUp ? SPEED_UP_MULT : 1);
+    if (printedSpeed >= (speedingUp ? TRUE_MAX_SPEED_INT : MAX_SPEED_INT)) {
+      speedColor = color_orange;
+    }
+    snprintf(message_game_speed_1.text, TEXT_LINE_SIZE, "%d", (int)printedSpeed);
+    prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed_1, 1, speedColor, color_black);
+    setMessagePosRelativeToScreenX_RightAlign(&message_game_speed_1, message_game_speed_2.outline_rect.x);
+    setMessagePosX(&message_game_speed_1, message_game_speed_2.text_rect.x - message_game_speed_1.text_rect.w);
+    renderMessage(renderer, &message_game_speed_1);
+    renderMessage(renderer, &message_game_speed_2);
   }
-  snprintf(message_game_speed.text, TEXT_LINE_SIZE, "%d MPH", (int)printedSpeed);
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed, 1, speedColor, color_black);
-  setMessagePosRelativeToScreenX_RightAlign(&message_game_speed, 0.95f);
-  renderMessage(renderer, &message_game_speed);
 }
 
 inline void drawCursor(SDL_Renderer *renderer) {
@@ -654,7 +663,8 @@ void cleanUpText() {
   destroyMessage(&message_game_score);
   destroyMessage(&message_game_life);
   destroyMessage(&message_game_cursor);
-  destroyMessage(&message_game_speed);
+  destroyMessage(&message_game_speed_1);
+  destroyMessage(&message_game_speed_2);
   destroyMessage(&message_gameover);
   destroyMessage(&message_gameover_highscore);
   destroyMessage(&message_paused);

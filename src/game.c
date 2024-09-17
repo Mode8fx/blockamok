@@ -33,7 +33,7 @@ bool debugMode = false;
 #if defined(PC)
 float cubeBounds = DEFAULT_CUBE_BOUNDS;
 #else
-float cubeBounds = 9.0f;
+float cubeBounds = 8.3f;
 #endif
 
 void gameInit(Cube cubes[]) {
