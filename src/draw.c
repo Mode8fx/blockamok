@@ -53,11 +53,11 @@ float WIDTH_NEG;
 void setScalingVals() {
   int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
   gameViewport = (SDL_Rect){ .x = gameOffsetX, .y = 0, .w = GAME_WIDTH, .h = GAME_HEIGHT };
-  leftBar = (SDL_Rect){ .x = 0, .y = 0, .w = gameOffsetX, .h = WINDOW_HEIGHT };
-  rightBar = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = gameOffsetX + 10, .h = WINDOW_HEIGHT };
-  leftBorder = (SDL_Rect){ .x = 0, .y = 0, .w = WINDOW_HEIGHT / 100, .h = WINDOW_HEIGHT };
+  leftBar = (SDL_Rect){ .x = 0, .y = 0, .w = gameOffsetX, .h = GAME_HEIGHT };
+  rightBar = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = gameOffsetX + 10, .h = GAME_HEIGHT };
+  leftBorder = (SDL_Rect){ .x = 0, .y = 0, .w = GAME_HEIGHT / 100, .h = GAME_HEIGHT };
   leftBorder.x = gameOffsetX - leftBorder.w;
-  rightBorder = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = WINDOW_HEIGHT / 100, .h = WINDOW_HEIGHT };
+  rightBorder = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = GAME_HEIGHT / 100, .h = GAME_HEIGHT };
 
   HEIGHT_DOUBLE = GAME_HEIGHT * 2.0f;
   HEIGHT_HALF = GAME_HEIGHT * 0.5f;

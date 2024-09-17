@@ -141,17 +141,28 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.numLines = OPTION_PAGE_GAME_NUM_LINES;
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 2, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Very Low", "Change the number of obstacles.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Low", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "Medium", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "High", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Very High", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
+#if defined(VITA)
+	setOptionChoice(renderer, &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "WARNING: High Frequency + High Size", "= Possible Crash on Vita!");
+#else
+	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
+#endif
+	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Medium", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
+#if defined(VITA)
+	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 3, 0, STAY, true);
+	setOptionChoice(renderer, &optionPage_Game, 1, 0, "Normal", "Change the size of obstacles.", "WARNING: High Frequency + High Size", "= Possible Crash on Vita!");
+#else
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
+#endif
 	setOptionChoice(renderer,   &optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 2, "Very Large", EMPTY, EMPTY, EMPTY);
+#if !defined(VITA)
 	setOptionChoice(renderer,   &optionPage_Game, 1, 3, "Giant", EMPTY, EMPTY, EMPTY);
+#endif
 	setOptionPageLine(renderer, &optionPage_Game, 2, "Lives", 3, 2, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "1", "Change how many hits you can take.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "2", EMPTY, EMPTY, EMPTY);
