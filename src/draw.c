@@ -20,6 +20,7 @@ const int DOWN = 1;
 const int LEFT = 2;
 const int RIGHT = 3;
 const int FRONT = 4;
+const int FRONT_I = 20; // FRONT * 5
 
 SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155 };
 SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120 };
@@ -146,19 +147,48 @@ static inline float fadeTowards(float current, float target, float amount) {
 }
 
 void drawCube(SDL_Renderer *renderer, Cube cube) {
+  //for (int f = 0; f < 5; f++) {
+  //  Sint8 orgCubeI = f * 4;    // The way our cube is defined, a face has four corners
+  //  Sint8 transCubeI = f * 5;  // The way our transformed cube is defined, a face has 5 corners (last one connects back to the first one)
+  //  for (Sint8 p = 0; p < 4; p++) {
+  //    Point point = cube.points[orgCubeI + p];
+  //    // Changing sPoint.x and sPoint.y can change the "angle" at which you fall, if it looks like you're shifting too much in one direction
+  //    SDL_Point sPoint = {
+  //      (int)screenX(transform3Dto2D(point.x, point.z)),
+  //      (int)screenY(transform3Dto2D(point.y, point.z))
+  //    };
+  //    transformedCube[transCubeI + p] = sPoint;
+  //  }
+  //  transformedCube[transCubeI + 4] = transformedCube[transCubeI];
+  //}
+
+	// Unroll the above loop
   for (int f = 0; f < 5; f++) {
-    Sint8 orgCubeI = f * 4;    // The way our cube is defined, a face has four corners
+    Sint8 orgCubeI = f << 2;    // The way our cube is defined, a face has four corners
     Sint8 transCubeI = f * 5;  // The way our transformed cube is defined, a face has 5 corners (last one connects back to the first one)
-    for (Sint8 p = 0; p < 4; p++) {
-      Point point = cube.points[orgCubeI + p];
-      // Changing sPoint.x and sPoint.y can change the "angle" at which you fall, if it looks like you're shifting too much in one direction
-      SDL_Point sPoint = {
-        (int)screenX(transform3Dto2D(point.x, point.z)),
-        (int)screenY(transform3Dto2D(point.y, point.z))
-      };
-      transformedCube[transCubeI + p] = sPoint;
-    }
-    transformedCube[transCubeI + 4] = transformedCube[transCubeI + 0];
+
+    Point point = cube.points[orgCubeI++];
+    // Changing sPoint.x and sPoint.y can change the "angle" at which you fall, if it looks like you're shifting too much in one direction
+    transformedCube[transCubeI++] = (SDL_Point) {
+      (int)screenX(transform3Dto2D(point.x, point.z)),
+      (int)screenY(transform3Dto2D(point.y, point.z))
+    };
+    point = cube.points[orgCubeI++];
+    transformedCube[transCubeI++] = (SDL_Point) {
+      (int)screenX(transform3Dto2D(point.x, point.z)),
+      (int)screenY(transform3Dto2D(point.y, point.z))
+    };
+    point = cube.points[orgCubeI++];
+    transformedCube[transCubeI++] = (SDL_Point) {
+      (int)screenX(transform3Dto2D(point.x, point.z)),
+      (int)screenY(transform3Dto2D(point.y, point.z))
+    };
+    point = cube.points[orgCubeI];
+    transformedCube[transCubeI++] = (SDL_Point) {
+      (int)screenX(transform3Dto2D(point.x, point.z)),
+      (int)screenY(transform3Dto2D(point.y, point.z))
+    };
+    transformedCube[transCubeI] = transformedCube[transCubeI - 4];
   }
 
   // If a have has at least two points outside of front, it gets to be drawn last
@@ -168,20 +198,42 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 
   faceOrder[lastI--] = FRONT;  // Front always gets to be last
 
-  for (int f = 0; f < 4; f++) {
-    int cubeI = f * 5;
-    bool sideOutsideFront = isPointOutsideFront(cubeI, FRONT * 5) && isPointOutsideFront(cubeI + 1, FRONT * 5);
-    // If we are outside, we should draw this as last as possible
-    if (sideOutsideFront) {
-      faceOrder[lastI--] = f;
-    } else {
-      faceOrder[firstI++] = f;
-    }
+  //for (int f = 0; f < 4; f++) {
+  //  int cubeI = f * 5;
+  //  bool sideOutsideFront = isPointOutsideFront(cubeI, FRONT * 5) && isPointOutsideFront(cubeI + 1, FRONT * 5);
+  //  // If we are outside, we should draw this as last as possible
+  //  if (sideOutsideFront) {
+  //    faceOrder[lastI--] = f;
+  //  } else {
+  //    faceOrder[firstI++] = f;
+  //  }
+  //}
+
+  // Unroll the above loop
+  if (isPointOutsideFront(0, FRONT_I) && isPointOutsideFront(1, FRONT_I)) {
+    faceOrder[lastI--] = 0;
+  } else {
+    faceOrder[firstI++] = 0;
+  }
+  if (isPointOutsideFront(5, FRONT_I) && isPointOutsideFront(6, FRONT_I)) {
+    faceOrder[lastI--] = 1;
+  } else {
+    faceOrder[firstI++] = 1;
+  }
+  if (isPointOutsideFront(10, FRONT_I) && isPointOutsideFront(11, FRONT_I)) {
+    faceOrder[lastI--] = 2;
+  } else {
+    faceOrder[firstI++] = 2;
+  }
+  if (isPointOutsideFront(15, FRONT_I) && isPointOutsideFront(16, FRONT_I)) {
+    faceOrder[lastI--] = 3;
+  } else {
+    faceOrder[firstI++] = 3;
   }
 
   // No need to draw the first 2 faces. They are hidden behind the front
   for (int f = 2; f < 5; f++) {
-    Sint8 faceIndexMult = faceOrder[f] * 4;
+    Sint8 faceIndexMult = faceOrder[f] << 2;
     Sint8 cubeI = faceOrder[f] * 5;
 
     SDL_Color color;
