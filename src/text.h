@@ -93,11 +93,12 @@ extern void drawCursor(SDL_Renderer *renderer);
 extern void drawGameOverText(SDL_Renderer *renderer);
 extern void drawPausedText(SDL_Renderer *renderer);
 extern void refreshHighScoreText(SDL_Renderer *renderer);
+extern void refreshDebugText(SDL_Renderer *renderer);
 extern void cleanUpText();
 
 extern void initStaticMessages_Options(SDL_Renderer *renderer);
 extern void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex);
-extern void optionCallback_CubeFrequency();
+extern void optionCallback_CubeFrequency(SDL_Renderer *renderer);
 extern void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page);
 extern void optionCallback_All();
 extern void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor);

@@ -22,16 +22,24 @@ SDL_Color color_orange = {255, 160, 0};
 SDL_Color color_red = {255, 92, 92};
 SDL_Color color_blue = {128, 128, 255};
 
+Message message_numbers_white[10];
+Message message_numbers_orange[10];
+#define LEFT_ALIGN 0
+#define CENTER_ALIGN 1
+#define RIGHT_ALIGN 2
+#define COLOR_WHITE 0
+#define COLOR_ORANGE 1
+
 Message message_titlescreen_logo_1;
 Message message_titlescreen_logo_2;
 Message message_titlescreen_play;
 Message message_titlescreen_options;
 Message message_titlescreen_highscore;
-Message message_game_score;
+Message message_game_debug;
 Message message_game_life;
 Message message_game_cursor;
-Message message_game_speed_1;
-Message message_game_speed_2;
+Message message_game_mph_white;
+Message message_game_mph_orange;
 Message message_gameover;
 Message message_gameover_highscore;
 Message message_paused;
@@ -228,6 +236,16 @@ static inline void setMessagePosRelativeToScreen_RightAlign(Message *message, fl
 // GAME-SPECIFIC //
 ///////////////////
 
+static void initStaticMessages_Numbers() {
+  for (int i = 0; i < 10; i++) {
+    snprintf(message_numbers_white[i].text, 2, "%d", i);
+    prepareMessage(renderer, Sans_42, outlineSize_42, &message_numbers_white[i], 1, color_white, color_black);
+    snprintf(message_numbers_orange[i].text, 2, "%d", i);
+    prepareMessage(renderer, Sans_42, outlineSize_42, &message_numbers_orange[i], 1, color_orange, color_black);
+  }
+}
+
+
 static void initStaticMessages_TitleScreen() {
   snprintf(message_titlescreen_logo_1.text, TEXT_LINE_SIZE, "Blockamok");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen_logo_1, 1, color_white, color_black);
@@ -249,9 +267,9 @@ static void initStaticMessages_TitleScreen() {
 }
 
 static void initStaticMessages_Game() {
-  snprintf(message_game_score.text, TEXT_LINE_SIZE, "12345");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
-  setMessagePosRelativeToScreenY(&message_game_score, 0.03f);
+  snprintf(message_game_debug.text, TEXT_LINE_SIZE, "1");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_debug, 1, color_white, color_black);
+  setMessagePosRelativeToScreenY(&message_game_debug, 0.95f);
 
   snprintf(message_game_cursor.text, TEXT_LINE_SIZE, "+");
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_cursor, 1, color_white, color_black);
@@ -263,13 +281,13 @@ static void initStaticMessages_Game() {
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_game_life, 1, color_red, color_blue);
   setMessagePosRelativeToScreenY(&message_game_life, -0.01f);
 
-  snprintf(message_game_speed_1.text, TEXT_LINE_SIZE, "12345");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed_1, 1, color_white, color_black);
-  setMessagePosRelativeToScreenY(&message_game_speed_1, 0.95f);
+  snprintf(message_game_mph_white.text, TEXT_LINE_SIZE, " MPH");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_mph_white, 1, color_white, color_black);
+  setMessagePosRelativeToScreen_RightAlign(&message_game_mph_white, 0.95f, 0.95f);
 
-  snprintf(message_game_speed_2.text, TEXT_LINE_SIZE, " MPH");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed_2, 1, color_white, color_black);
-  setMessagePosRelativeToScreen_RightAlign(&message_game_speed_2, 0.95f, 0.95f);
+  snprintf(message_game_mph_orange.text, TEXT_LINE_SIZE, " MPH");
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_mph_orange, 1, color_orange, color_black);
+  setMessagePosRelativeToScreen_RightAlign(&message_game_mph_orange, 0.95f, 0.95f);
 
   snprintf(message_gameover.text, TEXT_LINE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
@@ -286,6 +304,8 @@ static void initStaticMessages_Game() {
   snprintf(message_paused_quit.text, TEXT_LINE_SIZE, "Press %s to quit", btn_Select);
   prepareMessage(renderer, Sans_42, outlineSize_42, &message_paused_quit, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused_quit, 0.5f, 0.65f);
+
+  refreshDebugText(renderer);
 }
 
 static void initStaticMessages_Instructions(bool compactView) {
@@ -516,6 +536,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   }
   Sans_38 = TTF_OpenFontRW(rw, 1, textSize_38);
 
+  initStaticMessages_Numbers();
   initStaticMessages_TitleScreen();
   initStaticMessages_Game();
   initStaticMessages_Options(renderer);
@@ -597,15 +618,44 @@ inline void drawQuitText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_array_quit[1]);
 }
 
-inline void drawGameText(SDL_Renderer *renderer) {
-  if (!debugMode) {
-    snprintf(message_game_score.text, TEXT_LINE_SIZE, "%d", (int)scoreVal);
+inline void drawTextFromNumbers(SDL_Renderer *renderer, int val, float relX, int offsetX, float relY, Uint8 alignType, Uint8 color) {
+  char valStr[10];
+  snprintf(valStr, 10, "%d", val);
+  Uint8 numDigits = (Uint8)strlen(valStr);
+
+  Message *message_numbers;
+  if (color == COLOR_WHITE) {
+    message_numbers = message_numbers_white;
   } else {
-    snprintf(message_game_score.text, TEXT_LINE_SIZE, "%.1f %d", cubeBounds, cubeAmount);
+    message_numbers = message_numbers_orange;
   }
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_score, 1, color_white, color_black);
-  setMessagePosRelativeToScreenX(&message_game_score, 0.5f);
-  renderMessage(renderer, &message_game_score);
+
+  int currX;
+  switch (alignType) {
+  case LEFT_ALIGN:
+    currX = (int)(relX * GAME_WIDTH) + offsetX;
+    break;
+  case CENTER_ALIGN:
+    currX = (int)(relX * GAME_WIDTH - (numDigits * message_numbers[0].text_rect.w) / 2) + offsetX;
+    break;
+  default: // right align
+    currX = (int)(relX * GAME_WIDTH - numDigits * message_numbers[0].text_rect.w) + offsetX;
+    break;
+  }
+  for (int i = 0; i < numDigits; i++) {
+    int digit = valStr[i] - '0';
+    message_numbers[digit].text_rect.x = currX + i * message_numbers[digit].text_rect.w;
+    message_numbers[digit].outline_rect.x = message_numbers[digit].text_rect.x - (message_numbers[digit].outline_rect.w - message_numbers[digit].text_rect.w) / 2;
+    setMessagePosRelativeToScreenY(&message_numbers[digit], relY);
+    renderMessage(renderer, &message_numbers[digit]);
+  }
+}
+
+inline void drawGameText(SDL_Renderer *renderer) {
+  drawTextFromNumbers(renderer, (int)scoreVal, 0.5f, 0, 0.03f, CENTER_ALIGN, COLOR_WHITE);
+  if (debugMode) {
+    renderMessage(renderer, &message_game_debug);
+  }
 
   Uint32 invinceTimer = now - invinceStart;
   if (invinceTimer > INVINCE_TIME || invinceTimer / INVINCE_BLINK_TIME % 2 == 1 || gameStart == invinceStart) {
@@ -616,17 +666,14 @@ inline void drawGameText(SDL_Renderer *renderer) {
   }
 
   if (OPTION_SPEEDOMETER) {
-    SDL_Color speedColor = color_white;
     float printedSpeed = playerSpeed * (speedingUp ? SPEED_UP_MULT : 1);
-    if (printedSpeed >= (speedingUp ? TRUE_MAX_SPEED_INT : MAX_SPEED_INT)) {
-      speedColor = color_orange;
+    if (printedSpeed < (speedingUp ? TRUE_MAX_SPEED_INT : MAX_SPEED_INT)) {
+      drawTextFromNumbers(renderer, (int)printedSpeed, 0.95f, -message_game_mph_white.text_rect.w, 0.95f, RIGHT_ALIGN, COLOR_WHITE);
+      renderMessage(renderer, &message_game_mph_white);
+    } else {
+      drawTextFromNumbers(renderer, (int)printedSpeed, 0.95f, -message_game_mph_orange.text_rect.w, 0.95f, RIGHT_ALIGN, COLOR_ORANGE);
+      renderMessage(renderer, &message_game_mph_orange);
     }
-    snprintf(message_game_speed_1.text, TEXT_LINE_SIZE, "%d", (int)printedSpeed);
-    prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_speed_1, 1, speedColor, color_black);
-    setMessagePosRelativeToScreenX_RightAlign(&message_game_speed_1, message_game_speed_2.outline_rect.x);
-    setMessagePosX(&message_game_speed_1, message_game_speed_2.text_rect.x - message_game_speed_1.text_rect.w);
-    renderMessage(renderer, &message_game_speed_1);
-    renderMessage(renderer, &message_game_speed_2);
   }
 }
 
@@ -654,17 +701,27 @@ inline void refreshHighScoreText(SDL_Renderer *renderer) {
   setMessagePosRelativeToScreen(&message_titlescreen_highscore, 0.5f, 0.9f);
 }
 
+inline void refreshDebugText(SDL_Renderer *renderer) {
+  snprintf(message_game_debug.text, TEXT_LINE_SIZE, "%.1f %d", cubeBounds, cubeAmount);
+  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_debug, 1, color_white, color_black);
+  setMessagePosRelativeToScreenX(&message_game_debug, 0.5f);
+}
+
 void cleanUpText() {
+  for (int i = 0; i < 10; i++) {
+    destroyMessage(&message_numbers_white[i]);
+    destroyMessage(&message_numbers_orange[i]);
+  }
   destroyMessage(&message_titlescreen_logo_1);
   destroyMessage(&message_titlescreen_logo_2);
   destroyMessage(&message_titlescreen_play);
   destroyMessage(&message_titlescreen_options);
   destroyMessage(&message_titlescreen_highscore);
-  destroyMessage(&message_game_score);
+  destroyMessage(&message_game_debug);
   destroyMessage(&message_game_life);
   destroyMessage(&message_game_cursor);
-  destroyMessage(&message_game_speed_1);
-  destroyMessage(&message_game_speed_2);
+  destroyMessage(&message_game_mph_white);
+  destroyMessage(&message_game_mph_orange);
   destroyMessage(&message_gameover);
   destroyMessage(&message_gameover_highscore);
   destroyMessage(&message_paused);

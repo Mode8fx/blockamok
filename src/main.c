@@ -321,11 +321,11 @@ int main(int arg, char *argv[]) {
         if (debugMode) {
           if (dirPressedLeft() && cubeBounds > 3.0f) {
             cubeBounds -= 0.1f;
-            optionCallback_CubeFrequency();
+            optionCallback_CubeFrequency(renderer);
             prepareGame();
           } else if (dirPressedRight() && cubeBounds < 15.0f) {
             cubeBounds += 0.1f;
-            optionCallback_CubeFrequency();
+            optionCallback_CubeFrequency(renderer);
             prepareGame();
           }
         }

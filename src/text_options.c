@@ -245,7 +245,7 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
-void optionCallback_CubeFrequency() {
+void optionCallback_CubeFrequency(SDL_Renderer *renderer) {
 	switch (OPTION_CUBE_FREQUENCY) {
 	case 0:
 		cubeAmount = (Sint16)(400 * CUBE_LIMIT_MULT);
@@ -263,6 +263,7 @@ void optionCallback_CubeFrequency() {
 		cubeAmount = CUBE_LIMIT_MAX;
 		break;
 	}
+	refreshDebugText(renderer);
 	prepareGame();
 }
 
@@ -384,7 +385,7 @@ static void optionCallback_SFXVolume() {
 
 void optionCallback_All() {
 	// Fullscreen and Music callbacks are omitted
-	optionCallback_CubeFrequency();
+	optionCallback_CubeFrequency(renderer);
 	optionCallback_CubeSize();
 	optionCallback_BackgroundColor();
 	optionCallback_CubeColor();
@@ -399,7 +400,7 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 	case 2:
 		switch (page->index) {
 		case 0:
-			optionCallback_CubeFrequency();
+			optionCallback_CubeFrequency(renderer);
 			break;
 		case 1:
 			optionCallback_CubeSize();
