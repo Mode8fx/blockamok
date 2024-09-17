@@ -382,7 +382,7 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_RIGHT, WPAD_BUTTON_DOWN);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_A, WPAD_BUTTON_2);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_B, WPAD_BUTTON_1);
-	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_L, WPAD_BUTTON_B);
+	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_X, WPAD_BUTTON_B);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_R, WPAD_BUTTON_A);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_START, WPAD_BUTTON_PLUS);
 	mapInputToVar_GeneralConsole(heldButtonsWii, INPUT_SELECT, WPAD_BUTTON_MINUS);
@@ -488,18 +488,18 @@ static void handleAllCurrentInputs() {
 	const char *btn_Down = "Down";
 	const char *btn_Left = "Left";
 	const char *btn_Right = "Right";
-	const char *btn_A = "2";
-	const char *btn_B = "1";
-	const char *btn_X = "?";
-	const char *btn_Y = "?";
-	const char *btn_L = "B";
-	const char *btn_R = "A";
+	const char *btn_A = "2/A";
+	const char *btn_B = "1/B";
+	const char *btn_X = "B (Wiimote)";
+	const char *btn_Y = "X/Y";
+	const char *btn_L = "A (Wiimote)";
+	const char *btn_R = "L/R";
 	const char *btn_ZL = "?";
 	const char *btn_ZR = "?";
 	const char *btn_LS = "?";
 	const char *btn_RS = "?";
-	const char *btn_Start = "+";
-	const char *btn_Select = "-";
+	const char *btn_Start = "+/Start";
+	const char *btn_Select = "-/Z";
 #elif defined(PSP) | defined(VITA)
 	const char *btn_Up = "Up";
 	const char *btn_Down = "Down";

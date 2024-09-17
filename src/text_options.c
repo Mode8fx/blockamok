@@ -191,16 +191,17 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 6, 5, STAY, true);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 7, 6, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Electric Green", "Change the overlay color", "on non-square displays.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Void Black", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Lava Red", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Pitch Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 5, "Lava Red", EMPTY, EMPTY, EMPTY);
 	if (compactView) {
-		setOptionChoice(renderer, &optionPage_Visual, 2, 5, "Match BG", EMPTY, EMPTY, EMPTY);
+		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match BG", EMPTY, EMPTY, EMPTY);
 	} else {
-		setOptionChoice(renderer, &optionPage_Visual, 2, 5, "Match Background", EMPTY, EMPTY, EMPTY);
+		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
 	setOptionPageLine(renderer, &optionPage_Visual, 3, "Speedometer", 2, 1, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
@@ -307,6 +308,9 @@ static void optionCallback_OverlayColor() {
 		overlayColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
 		break;
 	case 4:
+		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0 };
+		break;
+	case 5:
 		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
 		break;
 	default:
