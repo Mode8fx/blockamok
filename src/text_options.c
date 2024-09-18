@@ -49,10 +49,6 @@ OptionLine optionPage_Empty_Lines[1];
 #define STAY -1
 
 bool forceIndexReset = false;
-char valStr[TEXT_LINE_SIZE];
-#define TYPE_LINE 0
-#define TYPE_CHOICE 1
-#define TYPE_DESC 2
 
 static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
 	OptionLine *currLine = &page->optionLines[lineIndex];
