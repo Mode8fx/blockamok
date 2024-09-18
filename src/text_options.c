@@ -49,10 +49,15 @@ OptionLine optionPage_Empty_Lines[1];
 #define STAY -1
 
 bool forceIndexReset = false;
+char valStr[TEXT_LINE_SIZE];
+#define TYPE_LINE 0
+#define TYPE_CHOICE 1
+#define TYPE_DESC 2
 
 static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
 	OptionLine *currLine = &page->optionLines[lineIndex];
-	snprintf(currLine->name.text, TEXT_LINE_SIZE, text);
+	currLine->y = LINE_Y;
+	snprintf(currLine->name, TEXT_LINE_SIZE, text);
 	currLine->numChoices = numChoices;
 	if (currLine->index == 0 || (forceIndexReset) && !(page->pageID == 4 && lineIndex == 0)) { // don't reset music index
 		currLine->index = choiceIndex;
@@ -65,43 +70,15 @@ static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int line
 	}
 	currLine->nextState = nextState;
 	currLine->oneDesc = oneDesc;
-	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &currLine->name, 1, color_white, color_black);
-	setMessagePosRelativeToScreen_LeftAlign(&currLine->name, LINE_X, LINE_Y);
 }
 
 static void setOptionChoice(SDL_Renderer *renderer, OptionPage *page, int lineIndex, int choiceIndex, char name[], char descLine1[], char descLine2[], char descLine3[]) {
 	OptionChoice *currChoice = &page->optionLines[lineIndex].optionChoices[choiceIndex];
-	snprintf(currChoice->name.text, TEXT_LINE_SIZE, "%s", name);
-	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &currChoice->name, 1, color_gray, color_black);
-	setMessagePosRelativeToScreen_LeftAlign(&currChoice->name, CHOICE_X, CHOICE_Y);
-	snprintf(currChoice->descLine1.text, TEXT_LINE_SIZE, "%s", descLine1);
-	snprintf(currChoice->descLine2.text, TEXT_LINE_SIZE, "%s", descLine2);
-	snprintf(currChoice->descLine3.text, TEXT_LINE_SIZE, "%s", descLine3);
-	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &currChoice->descLine1, 1, color_gray, color_black);
-	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &currChoice->descLine2, 1, color_gray, color_black);
-	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &currChoice->descLine3, 1, color_gray, color_black);
-
-	Sint8 numDescLines = 0;
-	if (strcmp(descLine1, EMPTY) != 0) numDescLines++;
-	if (strcmp(descLine2, EMPTY) != 0) numDescLines++;
-	if (strcmp(descLine3, EMPTY) != 0) numDescLines++;
-	switch (numDescLines) {
-		case 2:
-			setMessagePosRelativeToScreen(&currChoice->descLine1, 0.5f, DESC_LINE_Y_POS_2);
-			setMessagePosRelativeToScreen(&currChoice->descLine2, 0.5f, DESC_LINE_Y_POS_4);
-			setMessagePosRelativeToScreen(&currChoice->descLine3, 0.5f, 0);
-			break;
-		case 3:
-			setMessagePosRelativeToScreen(&currChoice->descLine1, 0.5f, DESC_LINE_Y_POS_1);
-			setMessagePosRelativeToScreen(&currChoice->descLine2, 0.5f, DESC_LINE_Y_POS_3);
-			setMessagePosRelativeToScreen(&currChoice->descLine3, 0.5f, DESC_LINE_Y_POS_5);
-			break;
-		default:
-			setMessagePosRelativeToScreen(&currChoice->descLine1, 0.5f, DESC_LINE_Y_POS_3);
-			setMessagePosRelativeToScreen(&currChoice->descLine2, 0.5f, 0);
-			setMessagePosRelativeToScreen(&currChoice->descLine3, 0.5f, 0);
-			break;
-		}
+	currChoice->y = CHOICE_Y;
+	snprintf(currChoice->name, TEXT_LINE_SIZE, "%s", name);
+	snprintf(currChoice->descLine1, TEXT_LINE_SIZE, "%s", descLine1);
+	snprintf(currChoice->descLine2, TEXT_LINE_SIZE, "%s", descLine2);
+	snprintf(currChoice->descLine3, TEXT_LINE_SIZE, "%s", descLine3);
 }
 
 void initStaticMessages_Options(SDL_Renderer *renderer) {
@@ -447,6 +424,64 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 	}
 }
 
+static inline void drawOptionTextFromChars(SDL_Renderer *renderer, Message message_characters[], char text[], Uint8 numChars, int startingX, float relY) {
+	// Render all outlines, then all text
+	for (int i = 0; i < numChars; i++) {
+		Uint8 chr = text[i] - FIRST_PRINTABLE_CHAR;
+		message_characters[chr].text_rect.x = startingX + i * message_characters[chr].text_rect.w;
+		message_characters[chr].outline_rect.x = message_characters[chr].text_rect.x - (message_characters[chr].outline_rect.w - message_characters[chr].text_rect.w) / 2;
+		setMessagePosRelativeToScreenY(&message_characters[chr], relY);
+		SDL_RenderCopy(renderer, message_characters[chr].outline_texture, NULL, &message_characters[chr].outline_rect);
+	}
+	for (int i = 0; i < numChars; i++) {
+		Uint8 chr = text[i] - FIRST_PRINTABLE_CHAR;
+		message_characters[chr].text_rect.x = startingX + i * message_characters[chr].text_rect.w;
+		SDL_RenderCopy(renderer, message_characters[chr].text_texture, NULL, &message_characters[chr].text_rect);
+	}
+}
+
+static inline void drawLineFromChars(SDL_Renderer *renderer, OptionLine *line, OptionChoice *choice) {
+	Uint8 numChars = (Uint8)strlen(line->name);
+	drawOptionTextFromChars(renderer, message_characters_white_38, line->name, numChars, (int)(LINE_X * GAME_WIDTH), line->y);
+	numChars = (Uint8)strlen(choice->name);
+	drawOptionTextFromChars(renderer, message_characters_gray_38, choice->name, numChars, (int)(CHOICE_X * GAME_WIDTH), choice->y);
+}
+
+static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choice) {
+	Uint8 numChars;
+	int startingX;
+	Sint8 numDescLines = 0;
+	if (strcmp(choice->descLine1, EMPTY) != 0) numDescLines++;
+	if (strcmp(choice->descLine2, EMPTY) != 0) numDescLines++;
+	if (strcmp(choice->descLine3, EMPTY) != 0) numDescLines++;
+	switch (numDescLines) {
+	case 1:
+		numChars = (Uint8)strlen(choice->descLine1);
+		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_3);
+		break;
+	case 2:
+		numChars = (Uint8)strlen(choice->descLine1);
+		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_2);
+		numChars = (Uint8)strlen(choice->descLine2);
+		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine2, numChars, startingX, DESC_LINE_Y_POS_4);
+		break;
+	default:
+		numChars = (Uint8)strlen(choice->descLine1);
+		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_1);
+		numChars = (Uint8)strlen(choice->descLine2);
+		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine2, numChars, startingX, DESC_LINE_Y_POS_3);
+		numChars = (Uint8)strlen(choice->descLine3);
+		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine3, numChars, startingX, DESC_LINE_Y_POS_5);
+		break;
+	}
+}
+
 void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor) {
 	if (page->pageID != 3) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
@@ -514,7 +549,6 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 				break;
 		}
 	}
-	// Not ideal, but easiest way to handle window resize
 	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 
 	if (renderCursor) {
@@ -522,43 +556,25 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 	}
 	for (Sint8 lineIndex = 0; lineIndex < page->numLines; lineIndex++) {
 		OptionLine *currLine = &page->optionLines[lineIndex];
-		renderMessage(renderer, &currLine->name);
-		renderMessage(renderer, &currLine->optionChoices[currLine->index].name);
+		OptionChoice *currChoice = &currLine->optionChoices[currLine->index];
+		drawLineFromChars(renderer, currLine, currChoice);
 	}
 	OptionChoice *currChoice = &page->optionLines[page->index]
 		.optionChoices[page->optionLines[page->index].oneDesc ? 0 : page->optionLines[page->index].index];
-	renderMessage(renderer, &currChoice->descLine1);
-	renderMessage(renderer, &currChoice->descLine2);
-	renderMessage(renderer, &currChoice->descLine3);
-}
-
-static inline void destroyMessage(Message *message) {
-	if (message->outline_texture != NULL) {
-		SDL_DestroyTexture(message->outline_texture);
-		message->outline_texture = NULL;
-	}
-	if (message->text_texture != NULL) {
-		SDL_DestroyTexture(message->text_texture);
-		message->text_texture = NULL;
-	}
+	drawDescFromChars(renderer, currChoice);
 }
 
 static void freePage(OptionPage *page) {
 	if (page == NULL) return;
 	for (int i = 0; i < page->numLines; i++) {
-		destroyMessage(&page->optionLines[i].name);
-		for (int j = 0; j < page->optionLines[i].numChoices; j++) {
-			destroyMessage(&page->optionLines[i].optionChoices[j].name);
-			destroyMessage(&page->optionLines[i].optionChoices[j].descLine1);
-			destroyMessage(&page->optionLines[i].optionChoices[j].descLine2);
-			destroyMessage(&page->optionLines[i].optionChoices[j].descLine3);
-		}
 		free(page->optionLines[i].optionChoices);
 	}
 }
 
 void cleanUpMenu() {
+	freePage(&optionPage_Empty);
 	freePage(&optionPage_Main);
 	freePage(&optionPage_Game);
 	freePage(&optionPage_Visual);
+	freePage(&optionPage_Audio);
 }

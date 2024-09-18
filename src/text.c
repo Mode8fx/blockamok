@@ -22,8 +22,6 @@ SDL_Color color_orange = {255, 160, 0};
 SDL_Color color_red = {255, 92, 92};
 SDL_Color color_blue = {128, 128, 255};
 
-#define NUM_PRINTABLE_CHARS 95 // From ASCII 32 to 126
-#define FIRST_PRINTABLE_CHAR 32
 char valStr[TEXT_LINE_SIZE];
 Message message_characters_white_42[NUM_PRINTABLE_CHARS];
 Message message_characters_orange_42[NUM_PRINTABLE_CHARS];
@@ -132,7 +130,7 @@ static inline void setMessagePosRelativeToScreenX(Message *message, float x) {
 	setMessagePosX(message, (int)(GAME_WIDTH * x - message->text_rect.w * 0.5f));
 }
 
-static inline void setMessagePosRelativeToScreenY(Message *message, float y) {
+inline void setMessagePosRelativeToScreenY(Message *message, float y) {
 	setMessagePosY(message, (int)(GAME_HEIGHT * y - message->text_rect.h * 0.5f));
 }
 
@@ -159,7 +157,7 @@ static inline void setMessagePosRelativeToScreen_RightAlign(Message *message, fl
   setMessagePosRelativeToScreenY(message, y);
 }
 
-inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float relY) {
+static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float relY) {
   Message *message_characters;
 
   // Initialize string if empty

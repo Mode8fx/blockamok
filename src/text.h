@@ -15,14 +15,18 @@ typedef struct {
 } Message;
 
 typedef struct {
-	Message name;
-	Message descLine1;
-	Message descLine2;
-	Message descLine3;
+	char name[TEXT_LINE_SIZE];
+	//float x; same for all choices
+	float y;
+	char descLine1[TEXT_LINE_SIZE];
+	char descLine2[TEXT_LINE_SIZE];
+	char descLine3[TEXT_LINE_SIZE];
 } OptionChoice;
 
 typedef struct {
-	Message name;
+	char name[TEXT_LINE_SIZE];
+	//float x; same for all lines
+	float y;
 	Sint8 numChoices;
 	Sint8 index;
 	OptionChoice *optionChoices; // if there are no options, use a single empty Option
@@ -50,6 +54,11 @@ extern SDL_Color color_gray;
 extern SDL_Color color_orange;
 extern SDL_Color color_red;
 extern SDL_Color color_blue;
+
+#define NUM_PRINTABLE_CHARS 95 // From ASCII 32 to 126
+#define FIRST_PRINTABLE_CHAR 32
+extern Message message_characters_white_38[NUM_PRINTABLE_CHARS];
+extern Message message_characters_gray_38[NUM_PRINTABLE_CHARS];
 
 extern bool credits_paused;
 extern Uint32 credits_startTime;
@@ -79,6 +88,7 @@ extern bool forceIndexReset;
 
 extern void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
 extern void renderMessage(SDL_Renderer *renderer, Message *message);
+extern void setMessagePosRelativeToScreenY(Message *message, float y);
 extern void setMessagePosRelativeToScreen(Message *message, float x, float y);
 extern void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y);
 
