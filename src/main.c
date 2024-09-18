@@ -124,7 +124,6 @@ static void handleResetHighScore() {
     highScoreResetIndex++;
     if (highScoreResetIndex >= HIGH_SCORE_RESET_SEQUENCE_LENGTH) {
       highScoreVal = DEFAULT_HIGH_SCORE;
-      refreshHighScoreText(renderer);
       writeSaveData();
 			playSFX(SFX_THUNK);
       highScoreResetIndex = 0;

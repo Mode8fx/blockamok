@@ -221,7 +221,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Audio, 0, 1, "#2", "Cobburn and Monty", "\"Falling Up\"", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Audio, 0, 2, "#3", "Diomatic", "\"Falling People\"", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Audio, 0, 3, "#4", "mano and ske", "\"Darkness in da Night\"", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 4, "#5", "Diáblo", "\"Dance 2 Insanity\"", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Audio, 0, 4, "#5", "Diablo", "\"Dance 2 Insanity\"", EMPTY);
 	setOptionPageLine(renderer, &optionPage_Audio, 1, "Music Volume", 6, 5, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Audio, 1, 0, "0", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Audio, 1, 1, "1", EMPTY, EMPTY, EMPTY);
@@ -263,7 +263,6 @@ void optionCallback_CubeFrequency(SDL_Renderer *renderer) {
 		cubeAmount = CUBE_LIMIT_MAX;
 		break;
 	}
-	refreshDebugText(renderer);
 	prepareGame();
 }
 

@@ -196,7 +196,6 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
           if (scoreVal > highScoreVal) {
             highScoreVal = (int)scoreVal;
             newHighScore = true;
-            refreshHighScoreText(renderer);
             writeSaveData();
           }
           qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
