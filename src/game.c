@@ -32,6 +32,10 @@ bool debugMode = false;
 
 #if defined(PC)
 float cubeBounds = DEFAULT_CUBE_BOUNDS;
+#elif defined(WII)
+float cubeBounds = 9.0f; // could probably go higher, but this is safe
+#elif defined(SWITCH)
+float cubeBounds = 8.5f; // could probably go higher, but this is safe
 #else
 float cubeBounds = 8.3f;
 #endif

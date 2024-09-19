@@ -3,12 +3,11 @@
   <name>Blockamok Remix</name>
   <coder>Mode8fx</coder>
   <version>1.0</version>
-  <release_date>20240918220000</release_date>
+  <release_date>20240919220000</release_date>
   <short_description>Dodge the incoming blocks!</short_description>
   <long_description>Fly through the void and survive for as long as you can! Customize your game with plenty of options!
-  
-  https://github.com/Mode8fx/Blockamok
-  
-  This is an upgraded version of Blockamok, originally made by Carl Riis. Credits are listed in-game.
-  </long_description>
+
+https://github.com/Mode8fx/Blockamok
+
+This is an upgraded version of Blockamok, originally made by Carl Riis. Credits are listed in-game.</long_description>
 </app>
