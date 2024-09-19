@@ -52,7 +52,7 @@ extern bool debugMode;
 // Weaker systems need to handle fewer cubes, and smaller bounds balance this out
 #define DEFAULT_CUBE_BOUNDS 12.0f
 extern float cubeBounds;
-#define CUBE_LIMIT_MULT (cubeBounds / DEFAULT_CUBE_BOUNDS)
+#define CUBE_LIMIT_MULT ((cubeBounds * cubeBounds) / (DEFAULT_CUBE_BOUNDS * DEFAULT_CUBE_BOUNDS))
 #define CUBE_LIMIT_MAX (Sint16)(800 * CUBE_LIMIT_MULT)
 
 #define CUBE_REMOVAL_DEPTH 1.5f

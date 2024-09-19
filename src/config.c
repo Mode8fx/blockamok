@@ -89,6 +89,9 @@ void readSaveData() {
 }
 
 static void writeDefaultConfig(int screenHeight) {
+#if defined(LINUX) || defined(VITA)
+  mkdir(rootDir, 0777);
+#endif
   FILE *file = fopen(configFile, "w");
   fprintf(file, "# Size must be between 240 and your screen's height\n");
   fprintf(file, "WINDOW_SIZE=%d\n", (int)DEFAULT_SCREEN_SIZE);

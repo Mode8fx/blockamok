@@ -68,25 +68,25 @@ void resetCube(Cube cubes[], int i) {
 static void flipCubeIfOutOfBounds(Cube cubes[], int i) {
   int p;
   if (cubes[i].points[0].x < -cubeBounds) {
-    float cubeBounds_MULT = cubeBounds * 2;
+    float cubeBoundsMult = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].x += cubeBounds_MULT;
+      cubes[i].points[p].x += cubeBoundsMult;
     }
   } else if (cubes[i].points[0].x > cubeBounds) {
-    float cubeBounds_MULT = cubeBounds * 2;
+    float cubeBoundsMult = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].x -= cubeBounds_MULT;
+      cubes[i].points[p].x -= cubeBoundsMult;
     }
   }
   if (cubes[i].points[0].y < -cubeBounds) {
-    float cubeBounds_MULT = cubeBounds * 2;
+    float cubeBoundsMult = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].y += cubeBounds_MULT;
+      cubes[i].points[p].y += cubeBoundsMult;
     }
   } else if (cubes[i].points[0].y > cubeBounds) {
-    float cubeBounds_MULT = cubeBounds * 2;
+    float cubeBoundsMult = cubeBounds * 2;
     for (p = 0; p < 20; p++) {
-      cubes[i].points[p].y -= cubeBounds_MULT;
+      cubes[i].points[p].y -= cubeBoundsMult;
     }
   }
 }

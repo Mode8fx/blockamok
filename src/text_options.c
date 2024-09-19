@@ -80,7 +80,7 @@ static void setOptionChoice(SDL_Renderer *renderer, OptionPage *page, int lineIn
 void initStaticMessages_Options(SDL_Renderer *renderer) {
 	bool compactView = GAME_HEIGHT <= 289;
 
-	snprintf(message_menu_cursor.text, TEXT_LINE_SIZE, ">");
+	snprintf(message_menu_cursor.text, MAX_MESSAGE_SIZE, ">");
 	prepareMessage(renderer, OPTION_FONT, OPTION_OUTLINE_SIZE, &message_menu_cursor, 1, color_white, color_black);
 
 	optionPage_Main.pageID = 0;
