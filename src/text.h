@@ -4,10 +4,11 @@
 #include <SDL_ttf.h>
 #include <stdbool.h>
 
+#define MAX_MESSAGE_SIZE 20 // most text lines use per-character Messages, not per-line Messages
 #define TEXT_LINE_SIZE 50
 
 typedef struct {
-	char text[TEXT_LINE_SIZE];
+	char text[MAX_MESSAGE_SIZE];
 	SDL_Rect text_rect;
 	SDL_Rect outline_rect;
 	SDL_Texture *text_texture;

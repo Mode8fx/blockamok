@@ -235,31 +235,31 @@ static void initStaticMessages_Characters() {
 }
 
 static void initStaticMessages_TitleScreen() {
-  snprintf(message_titlescreen_logo_1.text, TEXT_LINE_SIZE, "Blockamok");
+  snprintf(message_titlescreen_logo_1.text, MAX_MESSAGE_SIZE, "Blockamok");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen_logo_1, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_titlescreen_logo_1, 0.5f, 0.4f);
 
-  snprintf(message_titlescreen_logo_2.text, TEXT_LINE_SIZE, "Remix");
+  snprintf(message_titlescreen_logo_2.text, MAX_MESSAGE_SIZE, "Remix");
   prepareMessage(renderer, Sans_63, outlineSize_63, &message_titlescreen_logo_2, 1, color_black, color_white);
   setMessagePosRelativeToScreen(&message_titlescreen_logo_2, 0.5f, 0.525f);
 }
 
 static void initStaticMessages_Game() {
-  snprintf(message_game_cursor.text, TEXT_LINE_SIZE, "+");
-  prepareMessage(renderer, Sans_42, outlineSize_42, &message_game_cursor, 1, color_white, color_black);
+  snprintf(message_game_cursor.text, MAX_MESSAGE_SIZE, "+");
+  prepareMessage(renderer, Sans_63, outlineSize_63, &message_game_cursor, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_game_cursor, 0.5f, 0.5f);
   SDL_SetTextureAlphaMod(message_game_cursor.outline_texture, 64);
   SDL_SetTextureAlphaMod(message_game_cursor.text_texture, 64);
 
-  snprintf(message_game_life.text, TEXT_LINE_SIZE, ".");
+  snprintf(message_game_life.text, MAX_MESSAGE_SIZE, ".");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_game_life, 1, color_red, color_blue);
   setMessagePosRelativeToScreenY(&message_game_life, -0.01f);
 
-  snprintf(message_gameover.text, TEXT_LINE_SIZE, "GAME OVER");
+  snprintf(message_gameover.text, MAX_MESSAGE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
 
-  snprintf(message_paused.text, TEXT_LINE_SIZE, "PAUSED");
+  snprintf(message_paused.text, MAX_MESSAGE_SIZE, "PAUSED");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_paused, 1, color_white, color_black);
   setMessagePosRelativeToScreen(&message_paused, 0.5f, 0.5f);
 }
