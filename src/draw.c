@@ -79,6 +79,11 @@ static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint tri
   triangle[0].position = trianglePoints[0];
   triangle[1].position = trianglePoints[1];
   triangle[2].position = trianglePoints[2];
+#if defined(PSP)
+  triangle[0].position.x += 104;
+  triangle[1].position.x += 104;
+  triangle[2].position.x += 104;
+#endif
   SDL_RenderGeometry(renderer, NULL, triangle, 3, NULL, 0);
 }
 
@@ -101,7 +106,11 @@ inline void draw(SDL_Renderer *renderer) {
 }
 
 static inline float screenX(float x) {
+#if defined(PSP)
+  return x * GAME_WIDTH + WIDTH_HALF + 104;
+#else
   return x * GAME_WIDTH + WIDTH_HALF;
+#endif
 }
 
 static inline float screenY(float y) {

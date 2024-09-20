@@ -114,7 +114,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.numLines = OPTION_PAGE_GAME_NUM_LINES;
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
+#if defined(PSP)
+	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 3, 1, STAY, true);
+#else
 	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
+#endif
 #if defined(VITA)
 	setOptionChoice(renderer, &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "WARNING: High Frequency + High Size", "= Possible Crash on Vita!");
 #else
@@ -122,8 +126,10 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 #endif
 	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Medium", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
+#if !defined(PSP)
 	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
+#endif
 #if defined(VITA)
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 3, 0, STAY, true);
 	setOptionChoice(renderer, &optionPage_Game, 1, 0, "Normal", "Change the size of obstacles.", "WARNING: High Frequency + High Size", "= Possible Crash on Vita!");
@@ -421,6 +427,9 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 }
 
 static inline void drawOptionTextFromChars(SDL_Renderer *renderer, Message message_characters[], char text[], Uint8 numChars, int startingX, float relY) {
+#if defined(PSP)
+	startingX += 104;
+#endif
 	// Render all outlines, then all text
 	for (int i = 0; i < numChars; i++) {
 		Uint8 chr = text[i] - FIRST_PRINTABLE_CHAR;
@@ -481,7 +490,11 @@ static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choic
 void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor) {
 	if (page->pageID != 3) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
+#if defined(PSP)
+		SDL_Rect rect = { 0, 0, GAME_WIDTH + 104, GAME_HEIGHT };
+#else
 		SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
+#endif
 		SDL_RenderFillRect(renderer, &rect);
 	}
 

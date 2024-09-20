@@ -36,6 +36,8 @@ float cubeBounds = DEFAULT_CUBE_BOUNDS;
 float cubeBounds = 9.0f; // could probably go higher, but this is safe
 #elif defined(SWITCH)
 float cubeBounds = 8.5f; // could probably go higher, but this is safe
+#elif defined(PSP)
+float cubeBounds = 2.5f; // this version is basically a proof-of-concept
 #else
 float cubeBounds = 8.3f;
 #endif

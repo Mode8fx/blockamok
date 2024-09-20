@@ -101,18 +101,15 @@ inline void renderMessage(SDL_Renderer *renderer, Message *message) {
   SDL_RenderCopy(renderer, message->text_texture, NULL, &message->text_rect);
 }
 
-static inline void renderAndDestroyMessage(SDL_Renderer *renderer, Message *message) {
-  renderMessage(renderer, message);
-	SDL_DestroyTexture(message->text_texture);
-	SDL_DestroyTexture(message->outline_texture);
-}
-
 ///////////////////
 // TEXT POSITION //
 ///////////////////
 
 static inline void setMessagePosX(Message *message, int x) {
   message->text_rect.x = x;
+#if defined(PSP)
+  message->text_rect.x += 104;
+#endif
   message->outline_rect.x = message->text_rect.x - (message->outline_rect.w - message->text_rect.w) / 2;
 }
 
@@ -194,6 +191,9 @@ static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float r
     currX = (int)(relX * GAME_WIDTH - numChars * message_characters[0].text_rect.w);
     break;
   }
+#if defined(PSP)
+  currX += 104;
+#endif
 
   // The fourth character is a delimiter (it does nothing), while the actual string starts at the fifth character
   // Render all outlines, then all text
@@ -462,7 +462,11 @@ inline void drawInstructionsText(SDL_Renderer *renderer) {
   drawTextFromChars(renderer, 0.5f, 0.15f);
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Hold %s or %s to speed up.", btn_A, btn_B);
   drawTextFromChars(renderer, 0.5f, 0.225f);
+#if defined(PSP)
+  snprintf(valStr, TEXT_LINE_SIZE, "MGC %s or %s to toggle cursor.", btn_X, btn_Y);
+#else
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Press %s or %s to toggle cursor.", btn_X, btn_Y);
+#endif
   drawTextFromChars(renderer, 0.5f, 0.3f);
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Press %s to pause.", btn_Start);
   drawTextFromChars(renderer, 0.5f, 0.375f);
