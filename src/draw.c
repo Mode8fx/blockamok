@@ -84,20 +84,20 @@ static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint tri
 
 inline void draw(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
-  SDL_FPoint triangle1Points[3][2] = {
+  SDL_FPoint triangle1Points[] = {
 		{WIDTH_NEG, HEIGHT_HALF},
 		{WIDTH_HALF, HEIGHT_NEG},
 		{WIDTH_DOUBLE, HEIGHT_HALF}
   };
-  SDL_FPoint triangle2Points[3][2] = {
+  SDL_FPoint triangle2Points[] = {
     {WIDTH_NEG, HEIGHT_HALF},
     {WIDTH_HALF, HEIGHT_DOUBLE},
     {WIDTH_DOUBLE, HEIGHT_HALF}
   };
 
   SDL_RenderClear(renderer);
-  drawBackgroundTriangle(renderer, *triangle1Points);
-  drawBackgroundTriangle(renderer, *triangle2Points);
+  drawBackgroundTriangle(renderer, triangle1Points);
+  drawBackgroundTriangle(renderer, triangle2Points);
 }
 
 static inline float screenX(float x) {
