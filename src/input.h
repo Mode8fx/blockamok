@@ -5,7 +5,7 @@
 
 extern Uint32 deltaTime;
 
-extern SDL_GameController *controller;
+extern SDL_GameController* controllers[4];
 
 /* General Input */
 typedef struct {

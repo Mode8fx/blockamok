@@ -189,16 +189,24 @@ int main(int arg, char *argv[]) {
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
-        quit = true;
-      }
+      switch (event.type) {
+      case SDL_QUIT:
+				quit = true;
+        break;
+      case SDL_CONTROLLERDEVICEADDED:
+      case SDL_CONTROLLERDEVICEREMOVED:
+        controllerInit();
+        break;
 #if defined(PC)
-      else if (event.type == SDL_WINDOWEVENT) {
+      case SDL_WINDOWEVENT:
         if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
           handleWindowResize(&event);
         }
-      }
+        break;
 #endif
+      default:
+        break;
+      }
     }
 
     handlePlayerInput();

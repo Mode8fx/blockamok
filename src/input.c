@@ -9,7 +9,7 @@
 #include "./input.h"
 #include "./game.h"
 
-SDL_GameController *controller = NULL;
+SDL_GameController *controllers[4];
 
 Stick leftStick = {
 	0, 0, 0, 0, STICK_DEADZONE, STICK_FULLZONE, STICK_THRESHOLD
@@ -207,17 +207,16 @@ static inline void handleHoldTimer_execute() {
 inline void updateLastKeys() {
 	heldKeys_last = heldKeys;
 	updateStick(&leftStick);
-	updateStick(&rightStick);
+	//updateStick(&rightStick);
 }
 
 void controllerInit() {
-	Sint8 numJoysticks = SDL_NumJoysticks();
-	for (Sint8 controllerNum = 0; controllerNum < numJoysticks; controllerNum++) {
-		if (SDL_IsGameController(controllerNum)) {
-			controller = SDL_GameControllerOpen(controllerNum);
-			break;
+	for (Sint8 i = 0; i < 4; i++) {
+		if (SDL_IsGameController(i)) {
+			controllers[i] = SDL_GameControllerOpen(i);
+		} else {
+			controllers[i] = NULL;
 		}
-	}
 }
 
 ///////////////////
@@ -255,8 +254,10 @@ static inline void gameSpecificInputBehavior() {
 
 #if !(defined(PSP) || defined(GAMECUBE) || defined(WII))
 static inline void mapInputToVar_SDL2(Uint16 varBtn, Sint32 inputBtn) {
-	if (SDL_GameControllerGetButton(controller, inputBtn)) {
-		heldKeys |= varBtn;
+	for (int i = 0; i < 4; i++) {
+		if (SDL_GameControllerGetButton(controllers[i], inputBtn)) {
+			heldKeys |= varBtn;
+		}
 	}
 }
 #endif
@@ -300,23 +301,63 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_SDL2(INPUT_L, SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
 	mapInputToVar_SDL2(INPUT_R, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
 	mapInputToVar_SDL2(INPUT_LS, SDL_CONTROLLER_BUTTON_LEFTSTICK);
-	mapInputToVar_SDL2(INPUT_RS, SDL_CONTROLLER_BUTTON_RIGHTSTICK);
+	//mapInputToVar_SDL2(INPUT_RS, SDL_CONTROLLER_BUTTON_RIGHTSTICK);
 
-	int leftTrigger = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-	int rightTrigger = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-	if (leftTrigger > TRIGGER_DEADZONE) {
-		heldKeys |= INPUT_ZL;
-	}
-	if (rightTrigger > TRIGGER_DEADZONE) {
-		heldKeys |= INPUT_ZR;
+	for (int i = 0; i < 4; i++) {
+		if (controllers[i]) {
+			int leftTrigger = SDL_GameControllerGetAxis(controllers[i], SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+			int rightTrigger = SDL_GameControllerGetAxis(controllers[i], SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+			if (leftTrigger > TRIGGER_DEADZONE) {
+				heldKeys |= INPUT_ZL;
+			}
+			if (rightTrigger > TRIGGER_DEADZONE) {
+				heldKeys |= INPUT_ZR;
+			}
+		}
 	}
 
-	leftStick.x = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
-	leftStick.y = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
-	rightStick.x = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
-	rightStick.y = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
+	leftStick.x = 0;
+	leftStick.y = 0;
+	bool leftXSet = false, leftYSet = false;
+	//rightStick.x = 0;
+	//rightStick.y = 0;
+	//bool rightXSet = false, rightYSet = false;
+
+	for (int i = 0; i < 4; i++) {
+		if (controllers[i]) {
+			Stick tempLeft = leftStick;
+			tempLeft.x = SDL_GameControllerGetAxis(controllers[i], SDL_CONTROLLER_AXIS_LEFTX);
+			tempLeft.y = SDL_GameControllerGetAxis(controllers[i], SDL_CONTROLLER_AXIS_LEFTY);
+			applyStickZones(&tempLeft);
+			//Stick tempRight = rightStick;
+			//tempRight.x = SDL_GameControllerGetAxis(controllers[i], SDL_CONTROLLER_AXIS_RIGHTX);
+			//tempRight.y = SDL_GameControllerGetAxis(controllers[i], SDL_CONTROLLER_AXIS_RIGHTY);
+			//applyStickZones(&tempRight);
+
+			if (!leftXSet && tempLeft.x != 0) {
+				leftStick.x = tempLeft.x;
+				leftXSet = true;
+			}
+			if (!leftYSet && tempLeft.y != 0) {
+				leftStick.y = tempLeft.y;
+				leftYSet = true;
+			}
+			//if (!rightXSet && tempRight.x != 0) {
+			//	rightStick.x = tempRight.x;
+			//	rightXSet = true;
+			//}
+			//if (!rightYSet && tempRight.y != 0) {
+			//	rightStick.y = tempRight.y;
+			//	rightYSet = true;
+			//}
+			// Stop early if all axes are set
+			if (leftXSet && leftYSet) {
+				break;
+			}
+		}
+	}
 	applyStickZones(&leftStick);
-	applyStickZones(&rightStick);
+	//applyStickZones(&rightStick);
 #endif
 
 #if defined(PC) || defined(ANDROID)
@@ -367,10 +408,10 @@ static void handleAllCurrentInputs() {
 
 	leftStick.x = PAD_StickX(0) * 256;
 	leftStick.y = PAD_StickY(0) * -256;
-	rightStick.x = PAD_SubStickX(0) * 256;
-	rightStick.y = PAD_SubStickY(0) * -256;
+	//rightStick.x = PAD_SubStickX(0) * 256;
+	//rightStick.y = PAD_SubStickY(0) * -256;
 	applyStickZones(&leftStick);
-	applyStickZones(&rightStick);
+	//applyStickZones(&rightStick);
 #endif
 
 #if defined(WII)
@@ -410,15 +451,15 @@ static void handleAllCurrentInputs() {
 		if (leftStick.y == 0) {
 			leftStick.y = ((Sint16)wii_exp.classic.ljs.pos.y - 32) * -1023;
 		}
-		if (leftStick.x == 0) {
-			rightStick.x = ((Sint16)wii_exp.classic.rjs.pos.x - 32) * 1023;
-		}
-		if (leftStick.y == 0) {
-			rightStick.y = ((Sint16)wii_exp.classic.rjs.pos.y - 32) * -1023;
-		}
+		//if (rightStick.x == 0) {
+		//	rightStick.x = ((Sint16)wii_exp.classic.rjs.pos.x - 32) * 1023;
+		//}
+		//if (rightStick.y == 0) {
+		//	rightStick.y = ((Sint16)wii_exp.classic.rjs.pos.y - 32) * -1023;
+		//}
 	}
 	applyStickZones(&leftStick);
-	applyStickZones(&rightStick);
+	//applyStickZones(&rightStick);
 #endif
 
 #if defined(PSP)

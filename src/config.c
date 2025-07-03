@@ -102,7 +102,7 @@ void loadConfig(int screenWidth, int screenHeight) {
 #if defined(ANDROID)
 	WINDOW_WIDTH = (int)fmax(screenWidth, screenHeight);
 	WINDOW_HEIGHT = (int)fmin(screenWidth, screenHeight);
-#elif !defined(PC)
+#elif defined(LINUX) || !defined(PC)
 	WINDOW_WIDTH = screenWidth;
 	WINDOW_HEIGHT = screenHeight;
 #else
