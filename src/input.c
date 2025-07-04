@@ -217,6 +217,7 @@ void controllerInit() {
 		} else {
 			controllers[i] = NULL;
 		}
+	}
 }
 
 ///////////////////

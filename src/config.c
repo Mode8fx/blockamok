@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(_WIN32)
+#include <windows.h>
+#elif defined(LINUX)
+#include <sys/stat.h>
+#endif
 
 #include "./config.h"
 #include "./draw.h"
@@ -17,16 +22,151 @@ char rootDir[256];
 char saveFile[256];
 char configFile[256];
 
+#if !defined(PATH_MAX) && defined(LINUX)
+#define PATH_MAX 4096
+#elif !defined(PATH_MAX)
+#define PATH_MAX 260
+#endif
+
+// Returns a malloc'd string with the directory path. Caller must free() it.
+char* getExeDirectory(void) {
+  char buffer[PATH_MAX];
+#if defined(_WIN32)
+  DWORD len = GetModuleFileNameA(NULL, buffer, sizeof(buffer));
+  if (len == 0 || len >= sizeof(buffer)) {
+    return NULL;
+  }
+  buffer[len] = '\0'; // Ensure null-termination
+#elif defined(LINUX)
+  ssize_t count = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
+  if (count == -1 || count >= sizeof(buffer)) {
+    return NULL;
+  }
+  buffer[count] = '\0';
+#else
+  return NULL;
+#endif
+
+  // Find the last directory separator
+  char *lastSlash = strrchr(buffer, '/');
+#if defined(_WIN32)
+  char *lastBackslash = strrchr(buffer, '\\');
+  if (!lastSlash || (lastBackslash && lastBackslash > lastSlash)) {
+    lastSlash = lastBackslash;
+  }
+#endif
+
+  if (lastSlash) {
+    size_t dirLen = (size_t)(lastSlash - buffer + 1);
+    char *dir = (char*)malloc(dirLen + 1);
+    if (!dir) return NULL;
+    memcpy(dir, buffer, dirLen);
+    dir[dirLen] = '\0';
+    return dir;
+  } else {
+    // No directory separator found, return empty string
+    char *dir = (char*)malloc(1);
+    if (dir) dir[0] = '\0';
+    return dir;
+  }
+}
+
+#if defined(GAMECUBE)
+static bool directoryExists(const char *path) {
+  struct stat info;
+  if (stat(path, &info) != 0) {
+    // Path does not exist or cannot be accessed
+    return false;
+  }
+  return (info.st_mode & S_IFDIR) != 0; // Check if it's a directory
+}
+
+#define DEV_GCSDA 1
+#define DEV_GCSDB 2
+#define DEV_GCSDC 3
+
+static bool gc_initFAT(int device) {
+	switch (device) {
+	case DEV_GCSDA:
+		__io_gcsda.startup();
+		if (!__io_gcsda.isInserted()) {
+			return false;
+		}
+		if (!fatMountSimple("sda", &__io_gcsda)) {
+			return false;
+		}
+		break;
+	case DEV_GCSDB:
+		__io_gcsdb.startup();
+		if (!__io_gcsdb.isInserted()) {
+			return false;
+		}
+		if (!fatMountSimple("sdb", &__io_gcsdb)) {
+			return false;
+		}
+		break;
+	case DEV_GCSDC:
+		__io_gcsd2.startup();
+		if (!__io_gcsd2.isInserted()) {
+			return false;
+		}
+		if (!fatMountSimple("sdc", &__io_gcsd2)) {
+			return false;
+		}
+		break;
+	default:
+		return false;
+		break;
+	}
+
+	return true;
+}
+#endif
+
 void initFilePaths() {
 #if defined(VITA)
   snprintf(rootDir, sizeof(rootDir), "ux0:data/BlockamokRemix/");
 #elif defined(WII)
   snprintf(rootDir, sizeof(rootDir), "sd:/apps/BlockamokRemix/");
 #elif defined(GAMECUBE)
-  snprintf(rootDir, sizeof(rootDir), "/BlockamokRemix/");
+  const char *devices[] = { "sda", "sdb", "sdc" };
+  for (int i = 0; i < 3; i++) {
+    snprintf(rootDir, sizeof(rootDir), "%s:/BlockamokRemix/", devices[i]);
+    if (directoryExists(rootDir)) {
+      break;
+    }
+  }
+#elif defined(_WIN32)
+  char *exeDir = getExeDirectory();
+  if (exeDir) {
+    snprintf(rootDir, sizeof(rootDir), "%s", exeDir);
+    free(exeDir);
+  } else {
+    snprintf(rootDir, sizeof(rootDir), "./");
+  }
 #elif defined(LINUX)
-  snprintf(rootDir, sizeof(rootDir), "%s/.BlockamokRemix/", getenv("HOME"));
-// else, rootDir remains empty
+  char *exeDir = getExeDirectory();
+  if (exeDir) {
+    snprintf(rootDir, sizeof(rootDir), "%s", exeDir);
+    free(exeDir);
+  } else {
+    snprintf(rootDir, sizeof(rootDir), "./");
+  }
+  //const char *home = getenv("HOME");
+  //if (home) {
+  //  char localPath[PATH_MAX];
+  //  snprintf(localPath, sizeof(localPath), "%s/.local", home);
+  //  mkdir(localPath, 0755);
+  //  snprintf(localPath, sizeof(localPath), "%s/.local/share", home);
+  //  mkdir(localPath, 0755);
+  //  snprintf(localPath, sizeof(localPath), "%s/.local/share/.BlockamokRemix", home);
+  //  mkdir(localPath, 0755);
+  //  snprintf(rootDir, sizeof(rootDir), "%s/.local/share/.BlockamokRemix/", home);
+  //} else {
+  //  // Fallback if HOME is not set
+  //  snprintf(rootDir, sizeof(rootDir), "./.BlockamokRemix/");
+  //  mkdir(rootDir, 0755);
+  //}
 #endif
   snprintf(saveFile, sizeof(saveFile), "%s%s", rootDir, "save.bin");
   snprintf(configFile, sizeof(configFile), "%s%s", rootDir, "config.ini");
