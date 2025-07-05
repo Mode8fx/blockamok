@@ -1,18 +1,53 @@
+# This makefile is untested and may not work as intended.
+
 .DEFAULT_GOAL := all_default
 
+# Directories
+SRC_DIR := src
+OBJ_DIR := build_mac
+
+# Recursively find all C source files
+SRCS := $(shell find $(SRC_DIR) -name '*.c')
+
+# Convert source paths to object paths
+OBJS := $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+# Compiler and flags
+CC := gcc
+CFLAGS := -O2 -Wall -Wextra \
+          $(shell pkg-config --cflags SDL2_ttf SDL2_mixer)
+LDFLAGS := $(shell pkg-config --libs SDL2_ttf SDL2_mixer)
+
+# Dependencies installation
 install_dependencies_mac:
 	brew install sdl2
+	bre install sdl2_mixer
 	brew install sdl2_ttf
 	brew install pkg-config
 
+# Copy includes for VSCode
 satisfy_vscode_mac:
-	mkdir include && cp /opt/homebrew/include/SDL2/* ./include/
+	mkdir -p include
+	cp /opt/homebrew/include/SDL2/* ./include/
+	cp /opt/homebrew/opt/sdl_mixer/include/SDL/* ./include/
 	cp /opt/homebrew/opt/sdl_ttf/include/SDL/* ./include/
 
+# Default build and run
 all_default: compile run
 
-compile:
-	gcc src/*.c `pkg-config --cflags --libs SDL2_ttf` -o blockamokremix
+# Linking
+compile: $(OBJS)
+	$(CC) $(OBJS) $(LDFLAGS) -o blockamokremix
 
+# Compile each .c to .o
+$(OBJ_DIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) -c $< $(CFLAGS) -o $@
+
+# Run the built binary
 run:
 	./blockamokremix
+
+# Clean build artifacts
+clean:
+	rm -rf $(OBJ_DIR) blockamokremix

@@ -1,30 +1,48 @@
-OBJ_DIR = ./build_windows_x86
-EXE=BlockamokRemix.exe
+# Usage: In MSYS2 MinGW 32-bit shell, `make`
 
-SRC_DIR		=	src
-SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
-OBJS		=	$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
+# ─── Directories & Target ────────────────────────────────────────────────────
+OBJ_DIR    := build_win32
+EXE        := Blockamok-Remix.exe
 
-CC ?= i686-w64-mingw32-gcc
-CFLAGS += $(shell pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -DPC
-LDFLAGS += $(shell pkg-config --libs sdl2 SDL2_ttf SDL2_mixer)
+SRC_DIR    := src
+SRCS       := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
+OBJS       := $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
+RES_RC     := release-resources/resource.rc
+RES_OBJ    := $(OBJ_DIR)/resource.o
+
+# ─── Toolchain & Flags ───────────────────────────────────────────────────────
+CC         := i686-w64-mingw32-gcc
+PKG        := pkgconf
+
+# Optimize-for-size, warnings, platform defines,
+# per-function/data sections + LTO,
+# plus SDL2 include flags (static).
+CFLAGS     := -Os -Wall -Wextra \
+              -DPC -D_WIN32 \
+              -ffunction-sections -fdata-sections -flto=4 \
+              $(shell $(PKG) --static --cflags sdl2)
+
+# Static link against libgcc, SDL2 + extensions + gc-sections + strip + LTO
+LDFLAGS    := -static -static-libgcc \
+              $(shell $(PKG) --static --libs sdl2 SDL2_mixer SDL2_ttf) \
+              -Wl,--gc-sections -s -flto
+
+# ─── Build Rules ──────────────────────────────────────────────────────────────
 .PHONY: all clean
 
-all: $(RESOURCES) $(EXE)
+all: $(EXE)
 
-$(RESOURCES): release-resources/resource.rc
-	$(RC) -o $@ $<
-
-$(EXE): $(OBJS)
-	$(CC) $(CFLAGS) $^ $(RESOURCES) $(LDFLAGS) -o $@
+$(EXE): $(OBJS) $(RES_OBJ)
+	$(CC) $(OBJS) $(RES_OBJ) $(LDFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: %.c
-	mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	mkdir -p $(dir $@)
+	$(CC) -c $< $(CFLAGS) -o $@
 
-$(OBJ_DIR):
-	mkdir -p $@
+$(RES_OBJ): $(RES_RC)
+	mkdir -p $(dir $@)
+	windres $< -O coff -o $@
 
 clean:
-	$(RM) -rv *~ $(RESOURCES) $(OBJS) $(EXE)
+	rm -rf $(OBJ_DIR) $(EXE)
