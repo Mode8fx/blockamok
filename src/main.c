@@ -367,9 +367,11 @@ int main(int arg, char *argv[]) {
       SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
       SDL_RenderFillRect(renderer, &leftBar);
       SDL_RenderFillRect(renderer, &rightBar);
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-      SDL_RenderFillRect(renderer, &leftBorder);
-      SDL_RenderFillRect(renderer, &rightBorder);
+      if (OPTION_OVERLAY_COLOR != 5) {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(renderer, &leftBorder);
+        SDL_RenderFillRect(renderer, &rightBorder);
+      }
       //drawOverlayOnThisFrame = false;
     //}
     SDL_RenderPresent(renderer);

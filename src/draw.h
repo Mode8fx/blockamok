@@ -30,6 +30,7 @@ extern bool drawOverlayOnThisFrame;
 #define MAX_DEPTH 150.0f
 #endif
 extern float HALF_FOV_ANGLE_RADIANS;
+extern float HALF_FOV_ANGLE_RADIANS_TAN;
 
 void setScalingVals();
 

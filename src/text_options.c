@@ -162,21 +162,21 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Electric Green", "Change the background color.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Void Black", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Lava Red", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Lava Red", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Void Black", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 1, "Block Color", 5, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 0, "Lightning", "Change the color of obstacles.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 1, "Plant", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 7, 6, STAY, true);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 7, 5, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Electric Green", "Change the overlay color", "on non-square displays.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Void Black", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Pitch Black", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 5, "Lava Red", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Lava Red", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Void Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 5, "Pitch Black", EMPTY, EMPTY, EMPTY);
 	if (compactView) {
 		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match BG", EMPTY, EMPTY, EMPTY);
 	} else {
@@ -284,13 +284,13 @@ static void optionCallback_OverlayColor() {
 		overlayColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
 		break;
 	case 3:
-		overlayColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
+		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
 		break;
 	case 4:
-		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0 };
+		overlayColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
 		break;
 	case 5:
-		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
+		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0 };
 		break;
 	default:
 		overlayColor = backgroundColor;
@@ -311,10 +311,10 @@ static void optionCallback_BackgroundColor() {
 		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
 		break;
 	case 3:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
+		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
 		break;
 	default:
-		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
+		backgroundColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
 		break;
 	}
 	optionCallback_OverlayColor();

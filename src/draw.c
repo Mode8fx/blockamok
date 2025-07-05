@@ -14,6 +14,7 @@ SDL_Rect leftBorder;
 SDL_Rect rightBorder;
 
 float HALF_FOV_ANGLE_RADIANS;
+float HALF_FOV_ANGLE_RADIANS_TAN;
 
 const int UP = 0;
 const int DOWN = 1;
@@ -67,6 +68,7 @@ void setScalingVals() {
   WIDTH_NEG = -(float)GAME_WIDTH;
 
   HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) / 2;
+  HALF_FOV_ANGLE_RADIANS_TAN = tanf(HALF_FOV_ANGLE_RADIANS);
 
   triangle[0].color = darkBackgroundTriangle;
   triangle[1].color = emptyBackgroundTriangle;
@@ -151,8 +153,8 @@ inline void drawEssentialsWithAlpha(SDL_Renderer *renderer, Cube cubes[], int cu
 }
 
 static inline float fadeTowards(float current, float target, float amount) {
-  float diff = (target - current) * amount;
-  return current + diff;
+  //float diff = (target - current) * amount;
+  return current + (target - current) * amount;
 }
 
 void drawCube(SDL_Renderer *renderer, Cube cube) {

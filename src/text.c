@@ -266,7 +266,7 @@ static void initStaticMessages_Game() {
 
 static void initStaticMessages_Credits() {
   if (!compactView) {
-    message_array_credits_text[0] = "LoC BLOCKAMOK REMIX";
+    message_array_credits_text[0] = "LoC BLOCKAMOK REMIX v1.1";
     message_array_credits_text[1] = "";
     message_array_credits_text[2] = "MrC Carl Riis";
     message_array_credits_text[3] = "MrC Original game";
