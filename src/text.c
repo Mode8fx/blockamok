@@ -38,6 +38,7 @@ Message message_game_life;
 Message message_game_cursor;
 Message message_gameover;
 Message message_paused;
+Message message_fps;
 Sint8 CREDITS_LENGTH;
 #define CREDITS_LENGTH_DEFAULT 50
 #define CREDITS_LENGTH_COMPACT 56
@@ -582,4 +583,31 @@ void cleanUpText() {
 
   destroyFont(Sans_42);
   destroyFont(Sans_38);
+}
+
+Uint64 fps_lastTime = 0;
+double fps_freq;
+Uint8 fps_frameCount = 0;
+Uint8 fps_frameCountLastSecond = 0;
+
+void printFPS() {
+  fps_frameCount++;
+  Uint64 currentTime = SDL_GetPerformanceCounter();
+  if (fps_lastTime == 0) {
+    fps_lastTime = currentTime;
+    fps_freq = (double)SDL_GetPerformanceFrequency();
+  }
+
+  double elapsed = (double)(currentTime - fps_lastTime) / fps_freq;
+  if (elapsed >= 1.0) {
+    fps_frameCountLastSecond = fps_frameCount;
+    fps_frameCount = 0;
+    fps_lastTime = currentTime;
+  }
+
+  int hundreds = (int)(fps_frameCountLastSecond) / 100;
+  int tens = ((int)(fps_frameCountLastSecond) / 10) % 10;
+  int ones = (int)(fps_frameCountLastSecond) % 10;
+  snprintf(valStr, TEXT_LINE_SIZE, "MWC %d%d%d", hundreds, tens, ones);
+  drawTextFromChars(renderer, 0.5f, 0.95f);
 }

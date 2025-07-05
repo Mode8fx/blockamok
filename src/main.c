@@ -49,6 +49,11 @@ static const int invincibilitySequence[INVINCIBILITY_SEQUENCE_LENGTH] = {
   INPUT_UP, INPUT_UP, INPUT_UP, INPUT_DOWN, INPUT_DOWN, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT, INPUT_RIGHT, INPUT_LEFT
 };
 
+bool showFPS = false;
+#if defined(THREEDS)
+bool useNew3DSClockSpeed = true;
+#endif
+
 static void handleWindowResize(SDL_Event *event) {
 #if defined(PC)
   WINDOW_WIDTH = event->window.data1;
@@ -103,12 +108,18 @@ static void init() {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   screen = SDL_GetWindowSurface(window);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+#if defined(ANDROID)
+  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+#endif
   controllerInit();
   TTF_Init();
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   initAudio();
 #if !defined(PC)
   SDL_ShowCursor(SDL_DISABLE);
+#endif
+#if defined(THREEDS)
+  osSetSpeedupEnable(useNew3DSClockSpeed);
 #endif
   startingTick = SDL_GetTicks();
 }
@@ -287,6 +298,16 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawCreditsText(renderer, now);
+        if (keyHeld(INPUT_LEFT) && (keyPressed(INPUT_X)) || keyPressed(INPUT_Y)) {
+          showFPS = !showFPS;
+          playSFX(SFX_DING_A);
+        }
+#if defined(THREEDS)
+        if (keyHeld(INPUT_DOWN) && keyHeld(INPUT_RIGHT) && (keyPressed(INPUT_X) || keyPressed(INPUT_Y))) {
+          useNew3DSClockSpeed = !useNew3DSClockSpeed;
+          osSetSpeedupEnable(useNew3DSClockSpeed);
+        }
+#endif
         break;
 
       case GAME_STATE_RESET_HIGH_SCORE:
@@ -374,6 +395,9 @@ int main(int arg, char *argv[]) {
       }
       //drawOverlayOnThisFrame = false;
     //}
+    if (showFPS) {
+      printFPS();
+    }
     SDL_RenderPresent(renderer);
   }
 
