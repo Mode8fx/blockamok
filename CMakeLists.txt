@@ -45,6 +45,10 @@ add_executable(blockamokremix
 )
 find_package(PkgConfig REQUIRED)
 
+if (NO_QUIT)
+	add_definitions(-DNO_QUIT)
+endif()
+
 if (WIIU)
 	include("${DEVKITPRO}/wut/share/wut.cmake" REQUIRED)
 	add_definitions(-DWII_U)

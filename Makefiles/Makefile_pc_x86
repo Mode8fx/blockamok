@@ -2,7 +2,7 @@
 
 # ─── Directories & Target ────────────────────────────────────────────────────
 OBJ_DIR    := build_win32
-EXE        := Blockamok-Remix.exe
+EXE        := BlockamokRemix.exe
 
 SRC_DIR    := src
 SRCS       := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)

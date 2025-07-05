@@ -25,7 +25,11 @@
 Message message_menu_cursor;
 
 OptionPage optionPage_Main;
+#if !defined(NO_QUIT)
 #define OPTION_PAGE_MAIN_NUM_LINES 8
+#else
+#define OPTION_PAGE_MAIN_NUM_LINES 7
+#endif
 OptionLine optionPage_Main_Lines[OPTION_PAGE_MAIN_NUM_LINES];
 
 OptionPage optionPage_Game;
@@ -101,8 +105,10 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Main, 5, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Main, 6, "Reset Settings", 1, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Main, 6, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+#if !defined(NO_QUIT)
 	setOptionPageLine(renderer, &optionPage_Main, 7, "Quit", 1, 0, GAME_STATE_QUIT, true);
 	setOptionChoice(renderer,   &optionPage_Main, 7, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+#endif
 
 	optionPage_Empty.pageID = 1;
 	optionPage_Empty.optionLines = optionPage_Empty_Lines;
