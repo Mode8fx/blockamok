@@ -3,7 +3,7 @@
 #include <string.h>
 #if defined(_WIN32)
 #include <windows.h>
-#elif defined(LINUX)
+#elif defined(LINUX) || defined(GAMECUBE)
 #include <sys/stat.h>
 #endif
 
@@ -72,6 +72,11 @@ char* getExeDirectory(void) {
 }
 
 #if defined(GAMECUBE)
+#include <gccore.h>
+#include <dirent.h>
+#include <fat.h>
+#include <sdcard/gcsd.h>
+
 static bool directoryExists(const char *path) {
   struct stat info;
   if (stat(path, &info) != 0) {

@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #include "./game.h"
-#include "./math_custom.h"
 #include "./draw.h"
 #include "./input.h"
 #include "./audio.h"
@@ -47,6 +46,10 @@ void gameInit(Cube cubes[]) {
   for (Sint16 i = 0; i < cubeAmount; i++) {
     cubes[i] = newCube(cubeSize, i);
   }
+}
+
+static inline float randF(float min, float max) {
+  return min + (float)rand() / ((float)RAND_MAX / (max - min));
 }
 
 void resetCube(Cube cubes[], int i) {

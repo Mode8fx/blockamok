@@ -12,7 +12,7 @@ RES_RC     := release-resources/resource.rc
 RES_OBJ    := $(OBJ_DIR)/resource.o
 
 # ─── Toolchain & Flags ───────────────────────────────────────────────────────
-CC         := i686-w64-mingw32-gcc
+CC         := i686-w64-mingw32-g++
 PKG        := pkgconf
 
 # Optimize-for-size, warnings, platform defines,

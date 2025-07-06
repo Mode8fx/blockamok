@@ -112,3 +112,4 @@ extern void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page);
 extern void optionCallback_All();
 extern void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor);
 extern void cleanUpMenu();
+extern void printFPS();

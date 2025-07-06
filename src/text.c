@@ -141,7 +141,7 @@ static inline void setMessagePosRelativeToScreenX_LeftAlign(Message* message, fl
   setMessagePosX(message, (int)(GAME_WIDTH * x));
 }
 
-inline void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y) {
+void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y) {
   setMessagePosRelativeToScreenX_LeftAlign(message, x);
   setMessagePosRelativeToScreenY(message, y);
 }
@@ -417,7 +417,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   destroyFont(Sans_63); // no longer needed
 }
 
-inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
+void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
   renderMessage(renderer, &message_titlescreen_logo_1);
   renderMessage(renderer, &message_titlescreen_logo_2);
   if (drawSecondaryText) {
@@ -430,7 +430,7 @@ inline void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) 
   }
 }
 
-inline void drawGameText(SDL_Renderer *renderer) {
+void drawGameText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LWC %d", (int)scoreVal);
   drawTextFromChars(renderer, 0.5f, 0.03f);
   if (debugMode) {
@@ -458,7 +458,7 @@ inline void drawGameText(SDL_Renderer *renderer) {
   }
 }
 
-inline void drawInstructionsText(SDL_Renderer *renderer) {
+void drawInstructionsText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LoC Dodge the incoming blocks!");
   drawTextFromChars(renderer, 0.5f, 0.15f);
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Hold %s or %s to speed up.", btn_A, btn_B);
@@ -479,7 +479,7 @@ inline void drawInstructionsText(SDL_Renderer *renderer) {
   drawTextFromChars(renderer, 0.5f, 0.675f);
 }
 
-inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
+void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
   if (keyPressed(INPUT_A)) {
 		credits_paused = !credits_paused;
   }
@@ -512,7 +512,7 @@ inline void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
   }
 }
 
-inline void drawResetHighScoreText(SDL_Renderer *renderer) {
+void drawResetHighScoreText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Are you sure you want to");
   drawTextFromChars(renderer, 0.5f, 0.35f);
   snprintf(valStr, TEXT_LINE_SIZE, "LWC reset your high score?");
@@ -530,7 +530,7 @@ inline void drawResetHighScoreText(SDL_Renderer *renderer) {
   }
 }
 
-inline void drawQuitText(SDL_Renderer *renderer) {
+void drawQuitText(SDL_Renderer *renderer) {
 #if defined(SWITCH) || defined(WII_U)
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Quit to homebrew menu?");
   drawTextFromChars(renderer, 0.5f, 0.45f);
@@ -545,13 +545,13 @@ inline void drawQuitText(SDL_Renderer *renderer) {
   drawTextFromChars(renderer, 0.5f, 0.55f);
 }
 
-inline void drawCursor(SDL_Renderer *renderer) {
+void drawCursor(SDL_Renderer *renderer) {
   if (showCursor) {
     renderMessage(renderer, &message_game_cursor);
   }
 }
 
-inline void drawGameOverText(SDL_Renderer *renderer) {
+void drawGameOverText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_gameover);
   if (newHighScore) {
     snprintf(valStr, TEXT_LINE_SIZE, "LoC New High Score!");
@@ -559,7 +559,7 @@ inline void drawGameOverText(SDL_Renderer *renderer) {
   }
 }
 
-inline void drawPausedText(SDL_Renderer *renderer) {
+void drawPausedText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_paused);
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Press %s to quit", btn_Select);
   drawTextFromChars(renderer, 0.5f, 0.65f);

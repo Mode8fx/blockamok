@@ -3,7 +3,6 @@
 
 #include "./draw.h"
 #include "./game.h"
-#include "./math_custom.h"
 
 SDL_DisplayMode DM;
 
@@ -32,8 +31,8 @@ SDL_Color overlayColor = { .r = 15, .g = 255, .b = 155 };
 
 SDL_Point transformedCube[CUBE_FACE_N * 5];
 
-const SDL_Color darkBackgroundTriangle = {.r = 0, .b = 0, .g = 0, .a = 250 / 3};
-const SDL_Color emptyBackgroundTriangle = {.r = 255, .b = 255, .g = 255, .a = 0};
+const SDL_Color darkBackgroundTriangle = {.r = 0, .g = 0, .b = 0, .a = 250 / 3};
+const SDL_Color emptyBackgroundTriangle = {.r = 255, .g = 255, .b = 255, .a = 0};
 
 SDL_Vertex triangle[3];
 
@@ -50,6 +49,7 @@ float WIDTH_NEG;
 
 #define MIN_FADE 150
 #define FADE_DIFF (190 - MIN_FADE)
+#define FOV_ANGLE 45
 
 void setScalingVals() {
   int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
@@ -139,22 +139,18 @@ void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
   }
 }
 
-inline void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
+void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
   draw(renderer);
   drawCubes(renderer, cubes, cubesLength);
-}
-
-inline void drawEssentialsWithAlpha(SDL_Renderer *renderer, Cube cubes[], int cubesLength, Uint8 alpha) {
-  draw(renderer);
-  drawCubes(renderer, cubes, cubesLength);
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
-  SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
-  SDL_RenderFillRect(renderer, &rect);
 }
 
 static inline float fadeTowards(float current, float target, float amount) {
   //float diff = (target - current) * amount;
   return current + (target - current) * amount;
+}
+
+static inline float transform3Dto2D(float xy, float z) {
+  return xy / ((z)*HALF_FOV_ANGLE_RADIANS_TAN);
 }
 
 void drawCube(SDL_Renderer *renderer, Cube cube) {

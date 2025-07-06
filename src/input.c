@@ -34,17 +34,17 @@ bool quit = false;
 // GENERAL //
 /////////////
 
-inline bool keyPressed(Uint32 key) {
+bool keyPressed(Uint32 key) {
 	return (pressedKeys & key);
 }
 
-inline bool keyHeld(Uint32 key) {
+bool keyHeld(Uint32 key) {
 	return (heldKeys & key);
 }
 
-inline bool keyReleased(Uint32 key) {
-	return (releasedKeys & key);
-}
+//inline bool keyReleased(Uint32 key) {
+//	return (releasedKeys & key);
+//}
 
 ///////////
 // STICK //
@@ -129,35 +129,35 @@ static void mapStickToHeldKeys(Stick stick) {
 // DIRECTION LOGIC //
 /////////////////////
 
-inline bool dirPressedUp() {
+bool dirPressedUp() {
 	return keyPressed(INPUT_UP) || stickPressedUp();
 }
 
-inline bool dirPressedDown() {
+bool dirPressedDown() {
 	return keyPressed(INPUT_DOWN) || stickPressedDown();
 }
 
-inline bool dirPressedLeft() {
+bool dirPressedLeft() {
 	return keyPressed(INPUT_LEFT) || stickPressedLeft();
 }
 
-inline bool dirPressedRight() {
+bool dirPressedRight() {
 	return keyPressed(INPUT_RIGHT) || stickPressedRight();
 }
 
-inline bool dirHeld_Up() {
+bool dirHeld_Up() {
 	return keyHeld(INPUT_UP) || stickIsUp(leftStick);
 }
 
-inline bool dirHeld_Down() {
+bool dirHeld_Down() {
 	return keyHeld(INPUT_DOWN) || stickIsDown(leftStick);
 }
 
-inline bool dirHeld_Left() {
+bool dirHeld_Left() {
 	return keyHeld(INPUT_LEFT) || stickIsLeft(leftStick);
 }
 
-inline bool dirHeld_Right() {
+bool dirHeld_Right() {
 	return keyHeld(INPUT_RIGHT) || stickIsRight(leftStick);
 }
 
@@ -204,7 +204,7 @@ static inline void handleHoldTimer_execute() {
 	}
 }
 
-inline void updateLastKeys() {
+void updateLastKeys() {
 	heldKeys_last = heldKeys;
 	updateStick(&leftStick);
 	//updateStick(&rightStick);
@@ -230,8 +230,7 @@ static inline void gameSpecificInputBehavior() {
 	if (keyHeld(INPUT_LEFT) != keyHeld(INPUT_RIGHT)) {
 		if (keyHeld(INPUT_LEFT)) {
 			movementMagnitudeX = -32767;
-		}
-		else {
+		} else {
 			movementMagnitudeX = 32767;
 		}
 	} else {
@@ -240,8 +239,7 @@ static inline void gameSpecificInputBehavior() {
 	if (keyHeld(INPUT_UP) != keyHeld(INPUT_DOWN)) {
 		if (keyHeld(INPUT_UP)) {
 			movementMagnitudeY = -32767;
-		}
-		else {
+		} else {
 			movementMagnitudeY = 32767;
 		}
 	} else {
@@ -254,7 +252,7 @@ static inline void gameSpecificInputBehavior() {
 ///////////////////
 
 #if !(defined(PSP) || defined(GAMECUBE) || defined(WII))
-static inline void mapInputToVar_SDL2(Uint16 varBtn, Sint32 inputBtn) {
+static inline void mapInputToVar_SDL2(Uint16 varBtn, SDL_GameControllerButton inputBtn) {
 	for (int i = 0; i < 4; i++) {
 		if (SDL_GameControllerGetButton(controllers[i], inputBtn)) {
 			heldKeys |= varBtn;
@@ -599,7 +597,7 @@ static void handleAllCurrentInputs() {
 // MAIN FUNCTION //
 ///////////////////
 
-inline void handlePlayerInput() {
+void handlePlayerInput() {
 	heldKeys = 0;
 	handleAllCurrentInputs();
 	updateChangedKeys();

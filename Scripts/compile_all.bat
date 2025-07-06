@@ -3,8 +3,8 @@
 set "CURR_DIR=%CD%"
 
 :: Manual sleep amounts (because `start /wait` doesn't work...)
-set SLEEP_COMPILE=40
-set SLEEP_COMPILE_LONG=55
+set SLEEP_COMPILE=30
+set SLEEP_COMPILE_LONG=45
 set SLEEP_COMPILE_SHORT=5
 set SLEEP_CLEAN=2
 
@@ -33,17 +33,17 @@ set MAKEFILES_WSL=/mnt%MAKEFILES_DKP%
 :: Path: 3DS CIA Utilities
 set BANNERTOOL="D:/Utilities/3DS CIA Creation/bannertool"
 set MAKEROM="D:/Utilities/3DS CIA Creation/makerom-v0.18.3-win_x86_64/makerom.exe"
-set VERSION_3DS=320
+set VERSION_3DS=272
 
 
 
 :: Makefile: Windows x64
 set MAKEFILE_MSYS_WINDOWS=%MAKEFILES_MSYS%/Makefile_pc
-set OUTPUT_WINDOWS=%OUTPUT_DIR%-x64/BlockamokRemix.exe
+set OUTPUT_WINDOWS=%OUTPUT_DIR%-windows-x64/BlockamokRemix.exe
 
 :: Makefile: Windows x86
 set MAKEFILE_MSYS_WINDOWS_X86=%MAKEFILES_MSYS%/Makefile_pc_x86
-set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-x86/BlockamokRemix.exe
+set OUTPUT_WINDOWS_x86=%OUTPUT_DIR%-windows-x86/BlockamokRemix.exe
 
 :: Makefile: Linux
 set MAKEFILE_WSL_LINUX=%MAKEFILES_WSL%/Makefile_linux
@@ -102,7 +102,7 @@ call :compile_wii
 call :compile_wii_u
 call :compile_switch
 call :compile_vita
-call :compile_funkey
+rem call :compile_funkey
 rem call :compile_psp
 call :compile_3ds
 call :compile_android
@@ -117,9 +117,9 @@ echo Windows x64: Compiling with MSYS2 MINGW64...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make -f %MAKEFILE_MSYS_WINDOWS%"
 sleep %SLEEP_COMPILE%
 echo Windows x64: Compressing with UPX...
-upx --best --lzma %REPO%/blockamokremix.exe
+upx --best --lzma %REPO%/BlockamokRemix.exe
 echo Windows x64: Moving compiled exe to %OUTPUT_WINDOWS%...
-mv %REPO%/blockamokremix.exe %OUTPUT_WINDOWS%
+mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS%
 echo Windows x64: Cleaning up...
 start /wait "" %MSYS% /usr/bin/bash -lc "cd %REPO_MSYS%; make clean -f %MAKEFILE_MSYS_WINDOWS%"
 sleep %SLEEP_CLEAN%
@@ -132,9 +132,9 @@ echo Windows x86: Compiling with MSYS2 MINGW32...
 start /wait "" %MSYS_x86% /usr/bin/bash -lc "cd %REPO_MSYS%; make -f %MAKEFILE_MSYS_WINDOWS_X86%"
 sleep %SLEEP_COMPILE%
 echo Windows x86: Compressing with UPX...
-upx --best --lzma %REPO%/blockamokremix.exe
+upx --best --lzma %REPO%/BlockamokRemix.exe
 echo Windows x86: Moving compiled exe to %OUTPUT_WINDOWS_X86%...
-mv %REPO%/blockamokremix.exe %OUTPUT_WINDOWS_X86%
+mv %REPO%/BlockamokRemix.exe %OUTPUT_WINDOWS_X86%
 echo Windows x86: Cleaning up...
 start /wait "" %MSYS_x86% /usr/bin/bash -lc "cd %REPO_MSYS%; make clean -f %MAKEFILE_MSYS_WINDOWS_X86%"
 sleep %SLEEP_CLEAN%

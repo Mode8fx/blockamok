@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE := main
 
-LOCAL_SRC_FILES := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
+LOCAL_SRC_FILES := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/audio/*.c) $(wildcard $(SRC_DIR)/fonts/*.c)
 
 $(info LOCAL_PATH is $(LOCAL_PATH))
 $(info LOCAL_SRC_FILES is $(LOCAL_SRC_FILES))

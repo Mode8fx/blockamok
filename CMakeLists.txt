@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.5)
 project(blockamokremix C)
 
 add_executable(blockamokremix
@@ -17,8 +17,6 @@ add_executable(blockamokremix
 	"src/general.h"
 	"src/input.c"
 	"src/input.h"
-	"src/math_custom.c"
-	"src/math_custom.h"
 	"src/text.c"
 	"src/text_options.c"
 	"src/text.h"

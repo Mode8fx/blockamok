@@ -5,13 +5,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#if defined(THREEDS)
+#include <3ds.h>
+#endif
 
 #include "./config.h"
 #include "./draw.h"
 #include "./text.h"
 #include "./audio.h"
 #include "./game.h"
-#include "./math_custom.h"
 #include "./input.h"
 #include "./general.h"
 #include "./game_init.h"
