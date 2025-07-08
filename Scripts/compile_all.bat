@@ -3,8 +3,8 @@
 set "CURR_DIR=%CD%"
 
 :: Manual sleep amounts (because `start /wait` doesn't work...)
-set SLEEP_COMPILE=30
-set SLEEP_COMPILE_LONG=45
+set SLEEP_COMPILE=25
+set SLEEP_COMPILE_LONG=35
 set SLEEP_COMPILE_SHORT=5
 set SLEEP_CLEAN=2
 
@@ -187,7 +187,7 @@ sleep 10
 echo Wii U: Moving compiled rpx to %OUTPUT_WII_U%...
 mv %REPO%/build_wii_u/blockamokremix.rpx %OUTPUT_WII_U%
 echo Wii U WHUB: Creating WUHB in %OUTPUT_WII_U_WUHB%...
-start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %REPO%/build_wii_u_whub/blockamokremix.rpx %OUTPUT_WII_U_WUHB% --name=\"Blockamok Remix\" --short-name=\"Blockamok Remix\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/sce_sys/icon0.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
+start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %REPO%/build_wii_u_whub/blockamokremix.rpx %OUTPUT_WII_U_WUHB% --name=\"Blockamok Remix\" --short-name=\"Blockamok Remix\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_128.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
 sleep %SLEEP_COMPILE_SHORT%
 echo Wii U: Cleaning up...
 rm -r %REPO%/build_wii_u
@@ -219,7 +219,7 @@ sleep %SLEEP_COMPILE%
 echo 3DS: Moving compiled 3dsx to %OUTPUT_3DS%...
 mv %REPO%/blockamok.3dsx %OUTPUT_3DS%
 echo 3DS: Creating CIA in %OUTPUT_3DS_CIA%...
-%MAKEROM% -f cia -o %OUTPUT_3DS_CIA% -elf %REPO%/blockamok.elf -icon %RELEASE_RESOURCES%/3ds/icon_3ds.smdh -banner %RELEASE_RESOURCES%/3ds/banner_3ds.bnr -ver %VERSION_3DS% -rsf %RELEASE_RESOURCES%/3ds/app_3ds.rsf
+%MAKEROM% -f cia -o %OUTPUT_3DS_CIA% -elf %REPO%/blockamok.elf -icon %RELEASE_RESOURCES%/release-resources/icon_3ds.smdh -banner %RELEASE_RESOURCES%/release-resources/banner_3ds.bnr -ver %VERSION_3DS% -rsf %RELEASE_RESOURCES%/release-resources/app_3ds.rsf
 echo 3DS: Cleaning up...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make clean"
 sleep %SLEEP_CLEAN%

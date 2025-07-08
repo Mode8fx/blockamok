@@ -26,6 +26,8 @@ extern bool drawOverlayOnThisFrame;
 #if defined(PSP)
 #define MAX_DEPTH 100.0f
 #define SDL_RenderSetViewport(renderer, rect);
+#elif defined(THREEDS)
+#define MAX_DEPTH 100.0f
 #else
 #define MAX_DEPTH 150.0f
 #endif

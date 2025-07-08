@@ -102,12 +102,17 @@ void prepareGame() {
 static void init() {
 #if defined(PSP)
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 #elif defined(PC)
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+#elif defined(THREEDS)
+  window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 #else
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-#endif
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+#endif
   screen = SDL_GetWindowSurface(window);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 #if defined(ANDROID)
@@ -300,7 +305,7 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawCreditsText(renderer, now);
-        if (keyHeld(INPUT_LEFT) && (keyPressed(INPUT_X)) || keyPressed(INPUT_Y)) {
+        if (keyHeld(INPUT_LEFT) && (keyPressed(INPUT_X) || keyPressed(INPUT_Y))) {
           showFPS = !showFPS;
           playSFX(SFX_DING_A);
         }

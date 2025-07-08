@@ -29,16 +29,20 @@ Sint16 movementMagnitudeY;
 
 bool debugMode = false;
 
-#if defined(PC)
-float cubeBounds = DEFAULT_CUBE_BOUNDS;
-#elif defined(WII)
-float cubeBounds = 9.0f; // could probably go higher, but this is safe
-#elif defined(SWITCH)
-float cubeBounds = 8.5f; // could probably go higher, but this is safe
-#elif defined(PSP)
-float cubeBounds = 2.5f; // this version is basically a proof-of-concept
-#else
+#if defined(GAMECUBE)
 float cubeBounds = 8.3f;
+#elif defined(WII)
+float cubeBounds = 10.5f;
+#elif defined(WII_U)
+float cubeBounds = 8.3f; // TODO: test this
+#elif defined(SWITCH)
+float cubeBounds = 8.5f; // TODO: test this
+#elif defined(PSP) || defined(THREEDS)
+float cubeBounds = 2.5f; // these versions are basically a proof-of-concept
+#elif defined(VITA)
+float cubeBounds = 8.1f;
+#else
+float cubeBounds = DEFAULT_CUBE_BOUNDS;
 #endif
 
 void gameInit(Cube cubes[]) {
