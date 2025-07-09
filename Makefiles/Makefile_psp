@@ -6,7 +6,7 @@ SRC_DIR		=	src
 SRCS		=	$(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 OBJS		=	$(patsubst %.c, %.o, $(SRCS))
 
-CFLAGS = $(shell psp-pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -G0 -O2 -DPSP
+CFLAGS = $(shell psp-pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer) -G0 -O2 -DPSP -DLOW_SPEC
 
 # LIBDIR = -I$(PSPSDK)/../lib/SDL2
 # LDFLAGS =-L$(LIBDIR)

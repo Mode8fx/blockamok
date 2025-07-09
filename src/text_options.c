@@ -329,24 +329,24 @@ static void optionCallback_BackgroundColor() {
 static void optionCallback_CubeColor() {
 	switch (OPTION_CUBE_COLOR) {
 	case 0:
-		cubeColorFront = (SDL_Color){ .r = 200, .g = 250, .b = 120 };
-		cubeColorSide = (SDL_Color){ .r = 100, .g = 100, .b = 200 };
+		cubeColorFront = (SDL_Color){ .r = 200, .g = 250, .b = 120, .a = 255 };
+		cubeColorSide = (SDL_Color){ .r = 100, .g = 100, .b = 200, .a = 255 };
 		break;
 	case 1:
-		cubeColorFront = (SDL_Color){ .r = 0, .g = 255, .b = 150 };
-		cubeColorSide = (SDL_Color){ .r = 50, .g = 50, .b = 50 };
+		cubeColorFront = (SDL_Color){ .r = 0, .g = 255, .b = 150, .a = 255 };
+		cubeColorSide = (SDL_Color){ .r = 50, .g = 50, .b = 50, .a = 255 };
 		break;
 	case 2:
-		cubeColorFront = (SDL_Color){ .r = 255, .g = 100, .b = 100 };
-		cubeColorSide = (SDL_Color){ .r = 70, .g = 90, .b = 80 };
+		cubeColorFront = (SDL_Color){ .r = 255, .g = 100, .b = 100, .a = 255 };
+		cubeColorSide = (SDL_Color){ .r = 70, .g = 90, .b = 80, .a = 255 };
 		break;
 	case 3:
-		cubeColorFront = (SDL_Color){ .r = 170, .g = 195, .b = 255 };
-		cubeColorSide = (SDL_Color){ .r = 120, .g = 135, .b = 180 };
+		cubeColorFront = (SDL_Color){ .r = 170, .g = 195, .b = 255, .a = 255 };
+		cubeColorSide = (SDL_Color){ .r = 120, .g = 135, .b = 180, .a = 255 };
 		break;
 	default:
-		cubeColorFront = (SDL_Color){ .r = 255, .g = 150, .b = 0 };
-		cubeColorSide = (SDL_Color){ .r = 180, .g = 105, .b = 0 };
+		cubeColorFront = (SDL_Color){ .r = 255, .g = 150, .b = 0, .a = 255 };
+		cubeColorSide = (SDL_Color){ .r = 180, .g = 105, .b = 0, .a = 255 };
 		break;
 	}
 }

@@ -34,11 +34,13 @@ float cubeBounds = 8.3f;
 #elif defined(WII)
 float cubeBounds = 10.5f;
 #elif defined(WII_U)
-float cubeBounds = 8.3f; // TODO: test this
+float cubeBounds = 8.3f;
 #elif defined(SWITCH)
-float cubeBounds = 8.5f; // TODO: test this
-#elif defined(PSP) || defined(THREEDS)
-float cubeBounds = 2.5f; // these versions are basically a proof-of-concept
+float cubeBounds = 8.5f;
+#elif defined(THREEDS)
+float cubeBounds = 4.5f;
+#elif defined(PSP)
+float cubeBounds = 2.5f;
 #elif defined(VITA)
 float cubeBounds = 8.1f;
 #else

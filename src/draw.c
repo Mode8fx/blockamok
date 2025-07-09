@@ -23,8 +23,8 @@ const int FRONT = 4;
 const int FRONT_I = 20; // FRONT * 5
 
 SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155 };
-SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120 };
-SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200 };
+SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120, .a = 255 };
+SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200, .a = 255 };
 SDL_Color overlayColor = { .r = 15, .g = 255, .b = 155 };
 
 //int TRANSFORMED_FRONT_I = FRONT * 5;
@@ -91,6 +91,7 @@ static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint tri
 
 inline void draw(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
+#if !defined(LOW_SPEC)
   SDL_FPoint triangle1Points[] = {
 		{WIDTH_NEG, HEIGHT_HALF},
 		{WIDTH_HALF, HEIGHT_NEG},
@@ -101,10 +102,12 @@ inline void draw(SDL_Renderer *renderer) {
     {WIDTH_HALF, HEIGHT_DOUBLE},
     {WIDTH_DOUBLE, HEIGHT_HALF}
   };
-
   SDL_RenderClear(renderer);
   drawBackgroundTriangle(renderer, triangle1Points);
   drawBackgroundTriangle(renderer, triangle2Points);
+#else
+  SDL_RenderClear(renderer);
+#endif
 }
 
 //static inline float screenX(float x) {
@@ -293,11 +296,13 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     SDL_Point *transformed = &transformedCube[cubeI];
 
     // Precompute z and fadeAmount
+#if !defined(LOW_SPEC)
     float z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
     float fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
     fadeAmount = fminf(fadeAmount, 1.0f);
 
     color.a = (Uint8)(255 - fadeAmount * 255);
+#endif
 
     triangle1[0].color = color;
     triangle1[1].color = color;
@@ -325,8 +330,12 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
 
     // Render lines with adjusted fadeAmount
+#if !defined(LOW_SPEC)
     fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
+#else
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+#endif
     SDL_RenderDrawLines(renderer, transformed, 5);
   }
 }

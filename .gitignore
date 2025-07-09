@@ -65,3 +65,6 @@ PARAM.SFO
 /src - Copy
 config.ini
 Android
+/build_3ds
+blockamok.3dsx
+Makefile
