@@ -86,6 +86,7 @@ static void handleWindowResize(SDL_Event *event) {
   }
   setScalingVals();
   initStaticMessages(renderer);
+  saveBackgroundAsTexture(renderer);
   drawOverlayOnThisFrame = true;
 #endif
 }
@@ -190,13 +191,13 @@ int main(int arg, char *argv[]) {
   initStaticMessages(renderer);
   readSaveData();
   optionCallback_All();
+  saveBackgroundAsTexture(renderer);
   playMusicAtIndex(OPTION_MUSIC);
   if (OPTION_FULLSCREEN) {
     optionCallback_Fullscreen(window, &optionPage_Visual);
   }
   srand((Uint32)time(NULL));
   prepareGame();
-  draw(renderer);
 
   while (!quit) {
     last = now;

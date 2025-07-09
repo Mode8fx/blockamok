@@ -126,7 +126,9 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
 #endif
 #if defined(VITA)
-	setOptionChoice(renderer, &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "WARNING: High Frequency + High Size", "= Possible Crash on Vita!");
+	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "WARNING: High Frequency + Large Size", "= Possible Crash on Vita!");
+#elif defined(THREEDS)
+	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse framerate", EMPTY);
 #else
 	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
 #endif
@@ -138,7 +140,10 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 #endif
 #if defined(VITA)
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 3, 0, STAY, true);
-	setOptionChoice(renderer, &optionPage_Game, 1, 0, "Normal", "Change the size of obstacles.", "WARNING: High Frequency + High Size", "= Possible Crash on Vita!");
+	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of obstacles.", "WARNING: High Frequency + Large Size", "= Possible Crash on Vita!");
+#elif defined(THREEDS)
+	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse framerate");
 #else
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
@@ -397,6 +402,7 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 		switch (page->index) {
 		case 0:
 			optionCallback_BackgroundColor();
+			saveBackgroundAsTexture(renderer);
 			break;
 		case 1:
 			optionCallback_CubeColor();

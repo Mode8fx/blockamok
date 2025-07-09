@@ -395,12 +395,12 @@ void initStaticMessages(SDL_Renderer *renderer) {
   Sans_63 = TTF_OpenFontRW(rw, 0, textSize_63);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 13);
+  int textSize_42 = (int)fmax(42 * GAME_HEIGHT / 1000, 12);
   outlineSize_42 = (int)fmax(textSize_42 / 10, 3);
   Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 11);
+  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 10);
   outlineSize_38 = (int)fmax(textSize_38 / 10, 3);
   if (compactView) {
     outlineSize_38 = 2;
@@ -608,6 +608,6 @@ void printFPS() {
   int hundreds = (int)(fps_frameCountLastSecond) / 100;
   int tens = ((int)(fps_frameCountLastSecond) / 10) % 10;
   int ones = (int)(fps_frameCountLastSecond) % 10;
-  snprintf(valStr, TEXT_LINE_SIZE, "MWC %d%d%d", hundreds, tens, ones);
+  snprintf(valStr, TEXT_LINE_SIZE, "LWC %d%d%d", hundreds, tens, ones);
   drawTextFromChars(renderer, 0.5f, 0.95f);
 }

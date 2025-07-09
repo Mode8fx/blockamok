@@ -17,6 +17,7 @@ extern SDL_Rect rightBar;
 extern SDL_Rect leftBorder;
 extern SDL_Rect rightBorder;
 
+extern SDL_Texture *backgroundTexture;
 extern SDL_Color backgroundColor;
 extern SDL_Color cubeColorFront;
 extern SDL_Color cubeColorSide;
@@ -37,3 +38,5 @@ extern inline void draw(SDL_Renderer *renderer);
 extern void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength);
 
 void drawCube(SDL_Renderer *renderer, Cube cube);
+
+extern void saveBackgroundAsTexture(SDL_Renderer *renderer);

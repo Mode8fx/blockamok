@@ -22,6 +22,7 @@ const int RIGHT = 3;
 const int FRONT = 4;
 const int FRONT_I = 20; // FRONT * 5
 
+SDL_Texture *backgroundTexture;
 SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155 };
 SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120, .a = 255 };
 SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200, .a = 255 };
@@ -31,8 +32,8 @@ SDL_Color overlayColor = { .r = 15, .g = 255, .b = 155 };
 
 SDL_Point transformedCube[CUBE_FACE_N * 5];
 
-const SDL_Color darkBackgroundTriangle = {.r = 0, .g = 0, .b = 0, .a = 250 / 3};
-const SDL_Color emptyBackgroundTriangle = {.r = 255, .g = 255, .b = 255, .a = 0};
+const SDL_Color bgVertexColor1 = {.r = 0, .g = 0, .b = 0, .a = 250 / 3};
+const SDL_Color bgVertexColor2 = {.r = 255, .g = 255, .b = 255, .a = 0};
 
 SDL_Vertex triangle[3];
 
@@ -70,9 +71,9 @@ void setScalingVals() {
   HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) / 2;
   HALF_FOV_ANGLE_RADIANS_TAN = tanf(HALF_FOV_ANGLE_RADIANS);
 
-  triangle[0].color = darkBackgroundTriangle;
-  triangle[1].color = emptyBackgroundTriangle;
-  triangle[2].color = darkBackgroundTriangle;
+  triangle[0].color = bgVertexColor1;
+  triangle[1].color = bgVertexColor2;
+  triangle[2].color = bgVertexColor1;
 
   drawOverlayOnThisFrame = true;
 }
@@ -89,9 +90,8 @@ static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint tri
   SDL_RenderGeometry(renderer, NULL, triangle, 3, NULL, 0);
 }
 
-inline void draw(SDL_Renderer *renderer) {
+inline static void drawBackground(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
-#if !defined(LOW_SPEC)
   SDL_FPoint triangle1Points[] = {
 		{WIDTH_NEG, HEIGHT_HALF},
 		{WIDTH_HALF, HEIGHT_NEG},
@@ -105,8 +105,36 @@ inline void draw(SDL_Renderer *renderer) {
   SDL_RenderClear(renderer);
   drawBackgroundTriangle(renderer, triangle1Points);
   drawBackgroundTriangle(renderer, triangle2Points);
+}
+
+inline void draw(SDL_Renderer *renderer) {
+#if !defined(LOW_SPEC_BG)
+  SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
 #else
+  SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
   SDL_RenderClear(renderer);
+#endif
+}
+
+void saveBackgroundAsTexture(SDL_Renderer *renderer) {
+#if !defined(LOW_SPEC_BG)
+  SDL_RenderSetViewport(renderer, NULL);
+  SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
+  SDL_RenderClear(renderer);
+  SDL_RenderSetViewport(renderer, &gameViewport);
+  drawBackground(renderer);
+#if defined(THREEDS)
+  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, GAME_WIDTH, GAME_HEIGHT, 16, SDL_PIXELFORMAT_RGB565);
+  SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB565, screenSurface->pixels, screenSurface->pitch);
+#else
+  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, GAME_WIDTH, GAME_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
+  SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
+#endif
+  if (backgroundTexture != NULL) {
+    SDL_DestroyTexture(backgroundTexture);
+  }
+  backgroundTexture = SDL_CreateTextureFromSurface(renderer, screenSurface);
+  SDL_FreeSurface(screenSurface);
 #endif
 }
 
@@ -287,16 +315,16 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
 
   // No need to draw the first 2 faces. They are hidden behind the front
   for (int f = 2; f < 5; f++) {
-    Sint8 faceIndexMult = faceOrder[f] << 2;
     Sint8 cubeI = faceOrder[f] * 5;
 
     SDL_Color color = (f == FRONT) ? cubeColorFront : cubeColorSide;
     // Cache cube points and transformed points
-    Point cubePoint = cube.points[faceIndexMult];
     SDL_Point *transformed = &transformedCube[cubeI];
 
     // Precompute z and fadeAmount
-#if !defined(LOW_SPEC)
+#if !defined(LOW_SPEC_CUBES)
+    Sint8 faceIndexMult = faceOrder[f] << 2;
+    Point cubePoint = cube.points[faceIndexMult];
     float z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
     float fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
     fadeAmount = fminf(fadeAmount, 1.0f);
@@ -330,7 +358,7 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
 
     // Render lines with adjusted fadeAmount
-#if !defined(LOW_SPEC)
+#if !defined(LOW_SPEC_CUBES)
     fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
 #else

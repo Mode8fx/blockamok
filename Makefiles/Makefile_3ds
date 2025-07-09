@@ -57,7 +57,7 @@ CFLAGS	:=	-g -Wall -O2 -mword-relocations \
 			-ffunction-sections \
 			$(ARCH)
 
-CFLAGS	+=	$(INCLUDE) `pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer freetype2` -D__3DS__ -DTHREEDS -DLOW_SPEC
+CFLAGS	+=	$(INCLUDE) `pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer freetype2` -D__3DS__ -DTHREEDS -DLOW_SPEC_CUBES
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fexceptions -std=gnu++11
 
