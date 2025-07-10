@@ -139,17 +139,13 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #endif
 }
 
-//static inline float screenX(float x) {
-//#if defined(PSP)
-//  return x * GAME_WIDTH + WIDTH_HALF + 104;
-//#else
-//  return x * GAME_WIDTH + WIDTH_HALF;
-//#endif
-//}
+#if defined(PSP)
+#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF + 104)
+#else
+#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF)
+#endif
 
-//static inline float screenY(float y) {
-//  return y * GAME_HEIGHT + HEIGHT_HALF;
-//}
+#define screenY(y) (y * GAME_HEIGHT + HEIGHT_HALF)
 
 static bool isPointOutsideFront(int f, int frontI) {
   //int x = transformedCube[f].x;
@@ -183,8 +179,8 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -201,8 +197,8 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[5 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -219,8 +215,8 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[10 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -237,8 +233,8 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[15 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -255,8 +251,8 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[20 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + WIDTH_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -354,8 +350,8 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -372,8 +368,8 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[5 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -390,8 +386,8 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[10 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -408,8 +404,8 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[15 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
@@ -426,8 +422,8 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 
     // Convert to screen coordinates
     transformedCube[20 + p] = (SDL_Point){
-        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
-        (int)(transformedY * GAME_HEIGHT + WIDTH_HALF)
+        (int)screenX(transformedX),
+        (int)screenY(transformedY)
     };
   }
 
