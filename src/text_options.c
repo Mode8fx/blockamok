@@ -38,9 +38,9 @@ OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
 OptionPage optionPage_Visual;
 #if defined(PC)
-#define OPTION_PAGE_VISUAL_NUM_LINES 5
+#define OPTION_PAGE_VISUAL_NUM_LINES 6
 #else
-#define OPTION_PAGE_VISUAL_NUM_LINES 4
+#define OPTION_PAGE_VISUAL_NUM_LINES 5
 #endif
 OptionLine optionPage_Visual_Lines[OPTION_PAGE_VISUAL_NUM_LINES];
 
@@ -193,13 +193,16 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	} else {
 		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
-	setOptionPageLine(renderer, &optionPage_Visual, 3, "Speedometer", 2, 1, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "On", EMPTY, EMPTY, EMPTY);
-#if defined(PC)
-	setOptionPageLine(renderer, &optionPage_Visual, 4, "Fullscreen", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", "Impacts performance on low-end devices.");
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 4, 1, "On", EMPTY, EMPTY, EMPTY);
+#if defined(PC)
+	setOptionPageLine(renderer, &optionPage_Visual, 5, "Fullscreen", 2, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 1, "On", EMPTY, EMPTY, EMPTY);
 #endif
 
 	optionPage_Audio.pageID = 4;

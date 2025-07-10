@@ -19,7 +19,6 @@
 #include "./game_init.h"
 
 SDL_Window *window = NULL;
-SDL_Surface *screen = NULL;
 SDL_Renderer *renderer;
 int gameState = GAME_STATE_STARTED;
 bool drawOverlayOnThisFrame = true;
@@ -114,7 +113,6 @@ static void init() {
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 #endif
-  screen = SDL_GetWindowSurface(window);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 #if defined(ANDROID)
   SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);

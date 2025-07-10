@@ -3,6 +3,7 @@
 
 #include "./draw.h"
 #include "./game.h"
+#include "./text.h"
 
 SDL_DisplayMode DM;
 
@@ -164,22 +165,11 @@ static bool isPointOutsideFront(int f, int frontI) {
     || transformedCube[f].y < transformedCube[frontI].y || transformedCube[f].y > transformedCube[frontI + 2].y;
 }
 
-void drawCubes(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
-  for (int i = 0; i < cubesLength; i++) {
-    drawCube(renderer, cubes[i]);
-  }
-}
-
-void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
-  draw(renderer);
-  drawCubes(renderer, cubes, cubesLength);
-}
-
 static inline float transform3Dto2D(float xy, float z) {
   return xy / ((z)*HALF_FOV_ANGLE_RADIANS_TAN);
 }
 
-void drawCube(SDL_Renderer *renderer, Cube cube) {
+static void drawCube(SDL_Renderer *renderer, Cube cube) {
   // Process face 0
   // Sint8 orgCubeI = 0;
   // Sint8 transCubeI = 0;
@@ -273,25 +263,13 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
   // Close the face by connecting the last point to the first
   transformedCube[24] = transformedCube[20];
 
-  // If a have has at least two points outside of front, it gets to be drawn last
+  // If a half has at least two points outside of front, it gets to be drawn last
 
   int lastI = 4;
   int firstI = 0;
 
   faceOrder[lastI--] = FRONT;  // Front always gets to be last
 
-  //for (int f = 0; f < 4; f++) {
-  //  int cubeI = f * 5;
-  //  bool sideOutsideFront = isPointOutsideFront(cubeI, FRONT * 5) && isPointOutsideFront(cubeI + 1, FRONT * 5);
-  //  // If we are outside, we should draw this as last as possible
-  //  if (sideOutsideFront) {
-  //    faceOrder[lastI--] = f;
-  //  } else {
-  //    faceOrder[firstI++] = f;
-  //  }
-  //}
-
-  // Unroll the above loop
   if (isPointOutsideFront(0, FRONT_I) && isPointOutsideFront(1, FRONT_I)) {
     faceOrder[lastI--] = 0;
   } else {
@@ -322,7 +300,6 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     SDL_Point *transformed = &transformedCube[cubeI];
 
     // Precompute z and fadeAmount
-#if !defined(LOW_SPEC_CUBES)
     Sint8 faceIndexMult = faceOrder[f] << 2;
     Point cubePoint = cube.points[faceIndexMult];
     float z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
@@ -330,7 +307,6 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     fadeAmount = fminf(fadeAmount, 1.0f);
 
     color.a = (Uint8)(255 - fadeAmount * 255);
-#endif
 
     triangle1[0].color = color;
     triangle1[1].color = color;
@@ -358,12 +334,183 @@ void drawCube(SDL_Renderer *renderer, Cube cube) {
     SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
 
     // Render lines with adjusted fadeAmount
-#if !defined(LOW_SPEC_CUBES)
     fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
-#else
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-#endif
     SDL_RenderDrawLines(renderer, transformed, 5);
+  }
+}
+
+static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
+  // Process face 0
+  // Sint8 orgCubeI = 0;
+  // Sint8 transCubeI = 0;
+
+  for (int p = 0; p < 4; p++) {
+    Point point = cube.points[p];
+
+    // Transform the 3D point to 2D
+    float transformedX = transform3Dto2D(point.x, point.z);
+    float transformedY = transform3Dto2D(point.y, point.z);
+
+    // Convert to screen coordinates
+    transformedCube[p] = (SDL_Point){
+        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
+        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+    };
+  }
+
+  // Close the face by connecting the last point to the first
+  transformedCube[4] = transformedCube[0];
+
+  // Process face 1
+  for (int p = 0; p < 4; p++) {
+    Point point = cube.points[4 + p];
+
+    // Transform the 3D point to 2D
+    float transformedX = transform3Dto2D(point.x, point.z);
+    float transformedY = transform3Dto2D(point.y, point.z);
+
+    // Convert to screen coordinates
+    transformedCube[5 + p] = (SDL_Point){
+        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
+        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+    };
+  }
+
+  // Close the face by connecting the last point to the first
+  transformedCube[9] = transformedCube[5];
+
+  // Process face 2
+  for (int p = 0; p < 4; p++) {
+    Point point = cube.points[8 + p];
+
+    // Transform the 3D point to 2D
+    float transformedX = transform3Dto2D(point.x, point.z);
+    float transformedY = transform3Dto2D(point.y, point.z);
+
+    // Convert to screen coordinates
+    transformedCube[10 + p] = (SDL_Point){
+        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
+        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+    };
+  }
+
+  // Close the face by connecting the last point to the first
+  transformedCube[14] = transformedCube[10];
+
+  // Process face 3
+  for (int p = 0; p < 4; p++) {
+    Point point = cube.points[12 + p];
+
+    // Transform the 3D point to 2D
+    float transformedX = transform3Dto2D(point.x, point.z);
+    float transformedY = transform3Dto2D(point.y, point.z);
+
+    // Convert to screen coordinates
+    transformedCube[15 + p] = (SDL_Point){
+        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
+        (int)(transformedY * GAME_HEIGHT + HEIGHT_HALF)
+    };
+  }
+
+  // Close the face by connecting the last point to the first
+  transformedCube[19] = transformedCube[15];
+
+  // Process face 4
+  for (int p = 0; p < 4; p++) {
+    Point point = cube.points[16 + p];
+
+    // Transform the 3D point to 2D
+    float transformedX = transform3Dto2D(point.x, point.z);
+    float transformedY = transform3Dto2D(point.y, point.z);
+
+    // Convert to screen coordinates
+    transformedCube[20 + p] = (SDL_Point){
+        (int)(transformedX * GAME_WIDTH + WIDTH_HALF),
+        (int)(transformedY * GAME_HEIGHT + WIDTH_HALF)
+    };
+  }
+
+  // Close the face by connecting the last point to the first
+  transformedCube[24] = transformedCube[20];
+
+  // If a half has at least two points outside of front, it gets to be drawn last
+
+  int lastI = 4;
+  int firstI = 0;
+
+  faceOrder[lastI--] = FRONT;  // Front always gets to be last
+
+  if (isPointOutsideFront(0, FRONT_I) && isPointOutsideFront(1, FRONT_I)) {
+    faceOrder[lastI--] = 0;
+  } else {
+    faceOrder[firstI++] = 0;
+  }
+  if (isPointOutsideFront(5, FRONT_I) && isPointOutsideFront(6, FRONT_I)) {
+    faceOrder[lastI--] = 1;
+  } else {
+    faceOrder[firstI++] = 1;
+  }
+  if (isPointOutsideFront(10, FRONT_I) && isPointOutsideFront(11, FRONT_I)) {
+    faceOrder[lastI--] = 2;
+  } else {
+    faceOrder[firstI++] = 2;
+  }
+  if (isPointOutsideFront(15, FRONT_I) && isPointOutsideFront(16, FRONT_I)) {
+    faceOrder[lastI--] = 3;
+  } else {
+    faceOrder[firstI++] = 3;
+  }
+
+  // No need to draw the first 2 faces. They are hidden behind the front
+  for (int f = 2; f < 5; f++) {
+    Sint8 cubeI = faceOrder[f] * 5;
+
+    SDL_Color color = (f == FRONT) ? cubeColorFront : cubeColorSide;
+    // Cache cube points and transformed points
+    SDL_Point *transformed = &transformedCube[cubeI];
+
+    triangle1[0].color = color;
+    triangle1[1].color = color;
+    triangle1[2].color = color;
+    triangle2[0].color = color;
+    triangle2[1].color = color;
+    triangle2[2].color = color;
+
+    triangle1[0].position.x = (float)transformed[0].x;
+    triangle1[0].position.y = (float)transformed[0].y;
+    triangle1[1].position.x = (float)transformed[1].x;
+    triangle1[1].position.y = (float)transformed[1].y;
+    triangle1[2].position.x = (float)transformed[2].x;
+    triangle1[2].position.y = (float)transformed[2].y;
+
+    triangle2[0].position.x = (float)transformed[2].x;
+    triangle2[0].position.y = (float)transformed[2].y;
+    triangle2[1].position.x = (float)transformed[3].x;
+    triangle2[1].position.y = (float)transformed[3].y;
+    triangle2[2].position.x = (float)transformed[4].x;
+    triangle2[2].position.y = (float)transformed[4].y;
+
+    // Render triangles
+    SDL_RenderGeometry(renderer, NULL, triangle1, 3, NULL, 0);
+    SDL_RenderGeometry(renderer, NULL, triangle2, 3, NULL, 0);
+
+    // Render lines
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLines(renderer, transformed, 5);
+  }
+}
+
+void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
+  draw(renderer);
+
+  if (OPTION_SIMPLE_CUBES) {
+    for (int i = 0; i < cubesLength; i++) {
+      drawCubeSimple(renderer, cubes[i]);
+    }
+  } else {
+    for (int i = 0; i < cubesLength; i++) {
+      drawCube(renderer, cubes[i]);
+    }
   }
 }
