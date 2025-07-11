@@ -186,6 +186,7 @@ int main(int arg, char *argv[]) {
   loadConfig(DM.w, DM.h);
   init();
   setScalingVals();
+  SDL_RenderSetViewport(renderer, &gameViewport);
   initStaticMessages(renderer);
   readSaveData();
   optionCallback_All();
@@ -201,8 +202,6 @@ int main(int arg, char *argv[]) {
     last = now;
     now = SDL_GetTicks();
     deltaTime = now - last;
-
-    SDL_RenderSetViewport(renderer, &gameViewport);
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -389,18 +388,18 @@ int main(int arg, char *argv[]) {
 
     updateLastKeys();
 
-    SDL_RenderSetViewport(renderer, NULL);
-    //if (drawOverlayOnThisFrame) {
+    if (drawOverlayOnThisFrame) {
+      SDL_RenderSetViewport(renderer, NULL);
       SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
       SDL_RenderFillRect(renderer, &leftBar);
       SDL_RenderFillRect(renderer, &rightBar);
-      if (OPTION_OVERLAY_COLOR != 5) {
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderFillRect(renderer, &leftBorder);
-        SDL_RenderFillRect(renderer, &rightBorder);
-      }
-      //drawOverlayOnThisFrame = false;
-    //}
+      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+      SDL_RenderFillRect(renderer, &leftBorder);
+      SDL_RenderFillRect(renderer, &rightBorder);
+      SDL_RenderSetViewport(renderer, &gameViewport);
+      drawOverlayOnThisFrame = false;
+    }
+
     if (showFPS) {
       printFPS();
     }

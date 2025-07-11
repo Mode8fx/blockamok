@@ -110,6 +110,7 @@ extern void initStaticMessages_Options(SDL_Renderer *renderer);
 extern void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex);
 extern void optionCallback_CubeFrequency(SDL_Renderer *renderer);
 extern void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page);
+extern void optionCallback_OverlayColor();
 extern void optionCallback_All();
 extern void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor);
 extern void cleanUpMenu();
