@@ -286,7 +286,7 @@ static void optionCallback_CubeSize() {
 	prepareGame();
 }
 
-static void optionCallback_OverlayColor() {
+void optionCallback_OverlayColor() {
 	switch (OPTION_OVERLAY_COLOR) {
 	case 0:
 		overlayColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
