@@ -120,7 +120,7 @@ inline void draw(SDL_Renderer *renderer) {
 }
 
 void saveBackgroundAsTexture(SDL_Renderer *renderer) {
-#if !defined(LOW_SPEC_BG)
+#if !(defined(LOW_SPEC_BG) || defined(FORCE_DRAW_BG))
   SDL_RenderSetViewport(renderer, NULL);
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
   SDL_RenderClear(renderer);
