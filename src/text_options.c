@@ -57,7 +57,7 @@ bool forceIndexReset = false;
 static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
 	OptionLine *currLine = &page->optionLines[lineIndex];
 	currLine->y = LINE_Y;
-	snprintf(currLine->name, TEXT_LINE_SIZE, text);
+	snprintf(currLine->name, TEXT_LINE_SIZE, "%s", text);
 	currLine->numChoices = numChoices;
 	if (currLine->index == 0 || (forceIndexReset) && !(page->pageID == 4 && lineIndex == 0)) { // don't reset music index
 		currLine->index = choiceIndex;
@@ -358,7 +358,9 @@ static void optionCallback_CubeColor() {
 }
 
 void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
+#if defined(PC)
 	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
+#endif
 }
 
 static void optionCallback_Music() {

@@ -109,14 +109,14 @@ static void init() {
 #elif defined(THREEDS)
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+#elif defined(ANDROID)
+  window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 #else
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 #endif
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-#if defined(ANDROID)
-  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-#endif
   controllerInit();
   TTF_Init();
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
@@ -352,7 +352,7 @@ int main(int arg, char *argv[]) {
 
       case GAME_STATE_PAUSED:
         if (debugMode) {
-          if (dirPressedLeft() && cubeBounds > 3.0f) {
+          if (dirPressedLeft() && cubeBounds > 2.5f) {
             cubeBounds -= 0.1f;
             optionCallback_CubeFrequency(renderer);
             prepareGame();

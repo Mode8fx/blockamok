@@ -385,7 +385,7 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_KP_ENTER);
 	mapInputToVar_Keyboard(state, INPUT_SELECT, SDL_SCANCODE_BACKSPACE);
 #if defined(ANDROID)
-	mapInputToVar_Button_Keyboard(state, INPUT_START, SDLK_AC_BACK);
+	mapInputToVar_Keyboard(state, INPUT_START, SDLK_AC_BACK);
 #endif
 #endif
 

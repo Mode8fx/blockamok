@@ -380,6 +380,12 @@ static void initStaticMessages_Credits() {
   }
 }
 
+#if defined(PSP)
+#define MIN_SIZE_38 12
+#else
+#define MIN_SIZE_38 10
+#endif
+
 void initStaticMessages(SDL_Renderer *renderer) {
   cleanUpText();
   compactView = GAME_HEIGHT <= 289;
@@ -400,7 +406,7 @@ void initStaticMessages(SDL_Renderer *renderer) {
   Sans_42 = TTF_OpenFontRW(rw, 0, textSize_42);
 
   SDL_RWseek(rw, 0, RW_SEEK_SET);
-  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, 10);
+  int textSize_38 = (int)fmax(38 * GAME_HEIGHT / 1000, MIN_SIZE_38);
   outlineSize_38 = (int)fmax(textSize_38 / 10, 3);
   if (compactView) {
     outlineSize_38 = 2;
@@ -507,7 +513,7 @@ void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
 		} else if (startPosY > 1.2f) {
 			break;
 		}
-    snprintf(valStr, TEXT_LINE_SIZE, message_array_credits_text[i]);
+    snprintf(valStr, TEXT_LINE_SIZE, "%s", message_array_credits_text[i]);
     drawTextFromChars(renderer, 0.5f, startPosY);
   }
 }
