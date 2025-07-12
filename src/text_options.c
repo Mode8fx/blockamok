@@ -194,7 +194,12 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
 	setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", "Impacts performance on low-end devices.");
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.",
+#if defined(THREEDS)
+		"Impacts performance.");
+#else
+		EMPTY);
+#endif
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);

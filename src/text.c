@@ -435,7 +435,7 @@ void drawGameText(SDL_Renderer *renderer) {
   drawTextFromChars(renderer, 0.5f, 0.03f);
   if (debugMode) {
     snprintf(valStr, TEXT_LINE_SIZE, "LWC %.1f %d", cubeBounds, cubeAmount);
-    drawTextFromChars(renderer, 0.5f, 0.95f);
+    drawTextFromChars(renderer, 0.5f, 0.90f);
   }
 
   Uint32 invinceTimer = now - invinceStart;

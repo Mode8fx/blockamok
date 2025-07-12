@@ -109,11 +109,13 @@ inline static void drawBackground(SDL_Renderer *renderer) {
 }
 
 inline void draw(SDL_Renderer *renderer) {
-#if !defined(LOW_SPEC_BG)
-  SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
-#else
+#if defined(LOW_SPEC_BG)
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
   SDL_RenderClear(renderer);
+#elif defined(FORCE_DRAW_BG)
+  drawBackground(renderer);
+#else
+  SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
 #endif
 }
 

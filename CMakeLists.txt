@@ -47,6 +47,18 @@ if (NO_QUIT)
 	add_definitions(-DNO_QUIT)
 endif()
 
+if (LOW_SPEC_BG)
+	add_definitions(-DLOW_SPEC_BG)
+endif()
+
+if (FORCE_DRAW_BG)
+	add_definitions(-DFORCE_DRAW_BG)
+endif()
+
+if (FORCE_DRAW_OVERLAY)
+	add_definitions(-DFORCE_DRAW_OVERLAY)
+endif()
+
 if (WIIU)
 	include("${DEVKITPRO}/wut/share/wut.cmake" REQUIRED)
 	add_definitions(-DWII_U)
