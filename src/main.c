@@ -182,6 +182,7 @@ static void handleFullscreenToggle() {
 int main(int arg, char *argv[]) {
   SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
   SDL_GetCurrentDisplayMode(0, &DM);
+  displayRefreshRate = (Uint16)DM.refresh_rate;
   initFilePaths();
   loadConfig(DM.w, DM.h);
   init();
@@ -197,6 +198,8 @@ int main(int arg, char *argv[]) {
   }
   srand((Uint32)time(NULL));
   prepareGame();
+
+  Uint32 frameTime;
 
   while (!quit) {
     last = now;
@@ -407,6 +410,14 @@ int main(int arg, char *argv[]) {
       printFPS();
     }
     SDL_RenderPresent(renderer);
+
+    /* Cap Framerate */
+    if (frameRate < displayRefreshRate) {
+      frameTime = SDL_GetTicks() - now;
+      if (frameTime < ticksPerFrame) {
+        SDL_Delay(ticksPerFrame - frameTime);
+      }
+    }
   }
 
   cleanUpText();

@@ -38,9 +38,9 @@ OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
 OptionPage optionPage_Visual;
 #if defined(PC)
-#define OPTION_PAGE_VISUAL_NUM_LINES 6
+#define OPTION_PAGE_VISUAL_NUM_LINES 7
 #else
-#define OPTION_PAGE_VISUAL_NUM_LINES 5
+#define OPTION_PAGE_VISUAL_NUM_LINES 6
 #endif
 OptionLine optionPage_Visual_Lines[OPTION_PAGE_VISUAL_NUM_LINES];
 
@@ -53,6 +53,9 @@ OptionLine optionPage_Empty_Lines[1];
 #define STAY -1
 
 bool forceIndexReset = false;
+Uint16 frameRate = 60;
+Uint16 displayRefreshRate;
+Uint32 ticksPerFrame;
 
 static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
 	OptionLine *currLine = &page->optionLines[lineIndex];
@@ -187,20 +190,26 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
 	setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.",
-#if defined(THREEDS)
-		"Impacts performance.");
-#else
-		EMPTY);
-#endif
+	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 4, 1, "On", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 5, "Frame Rate", 5, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 0, "Uncapped", "Set the max frame rate.",
+#if defined(WII) || defined(SWITCH) || defined(PC)
+		"(Though you can just keep it", "uncapped on this system)");
+#else
+		"Useful if you want to", "prioritize consistent visuals.");
+#endif
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 1, "30 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 2, "40 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 3, "50 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 5, 4, "60 FPS", EMPTY, EMPTY, EMPTY);
 #if defined(PC)
-	setOptionPageLine(renderer, &optionPage_Visual, 5, "Fullscreen", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 1, "On", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 6, "Fullscreen", 2, 0, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 6, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 6, 1, "On", EMPTY, EMPTY, EMPTY);
 #endif
 
 	optionPage_Audio.pageID = 4;
@@ -357,6 +366,27 @@ static void optionCallback_CubeColor() {
 	}
 }
 
+void optionCallback_FrameRate() {
+	switch (OPTION_FRAME_RATE) {
+	case 0:
+		frameRate = (displayRefreshRate < 255) ? displayRefreshRate : 255;
+		break;
+	case 1:
+		frameRate = 30;
+		break;
+	case 2:
+		frameRate = 40;
+		break;
+	case 3:
+		frameRate = 50;
+		break;
+	default:
+		frameRate = 60;
+		break;
+	}
+	ticksPerFrame = (Uint32)(1000 / frameRate);
+}
+
 void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
 #if defined(PC)
 	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
@@ -382,6 +412,7 @@ void optionCallback_All() {
 	optionCallback_BackgroundColor();
 	optionCallback_CubeColor();
 	optionCallback_OverlayColor();
+	optionCallback_FrameRate();
 	optionCallback_MusicVolume();
 	optionCallback_SFXVolume();
 }
@@ -413,7 +444,10 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 		case 2:
 			optionCallback_OverlayColor();
 			break;
-		case 4:
+		case 5:
+			optionCallback_FrameRate();
+			break;
+		case 6:
 			optionCallback_Fullscreen(window, page);
 			break;
 		default:

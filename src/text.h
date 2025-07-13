@@ -80,13 +80,17 @@ extern OptionPage optionPage_Empty;
 #define OPTION_OVERLAY_COLOR optionPage_Visual.optionLines[2].index
 #define OPTION_SIMPLE_CUBES optionPage_Visual.optionLines[3].index
 #define OPTION_SPEEDOMETER optionPage_Visual.optionLines[4].index
-#define OPTION_FULLSCREEN optionPage_Visual.optionLines[5].index
+#define OPTION_FRAME_RATE optionPage_Visual.optionLines[5].index
+#define OPTION_FULLSCREEN optionPage_Visual.optionLines[6].index
 
 #define OPTION_MUSIC optionPage_Audio.optionLines[0].index
 #define OPTION_MUSIC_VOLUME optionPage_Audio.optionLines[1].index
 #define OPTION_SFX_VOLUME optionPage_Audio.optionLines[2].index
 
 extern bool forceIndexReset;
+extern Uint16 frameRate;
+extern Uint16 displayRefreshRate;
+extern Uint32 ticksPerFrame;
 
 extern void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
 extern void renderMessage(SDL_Renderer *renderer, Message *message);

@@ -38,11 +38,13 @@ float cubeBounds = 8.3f;
 #elif defined(SWITCH)
 float cubeBounds = 8.5f;
 #elif defined(THREEDS)
-float cubeBounds = 4.5f;
+float cubeBounds = 4.8f; // 39-60 FPS on New 3DS, 12-20 FPS on Old 3DS
 #elif defined(PSP)
 float cubeBounds = 2.5f;
 #elif defined(VITA)
 float cubeBounds = 8.1f;
+#elif defined(ANDROID)
+float cubeBounds = 10.0f;
 #else
 float cubeBounds = DEFAULT_CUBE_BOUNDS;
 #endif
