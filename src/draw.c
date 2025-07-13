@@ -161,89 +161,51 @@ static inline float transform3Dto2D(float xy, float z) {
 }
 
 static void drawCube(SDL_Renderer *renderer, Cube cube) {
-  // Process face 0
-  // Sint8 orgCubeI = 0;
-  // Sint8 transCubeI = 0;
-
   for (int p = 0; p < 4; p++) {
     Point point = cube.points[p];
-
     // Transform the 3D point to 2D
     float transformedX = transform3Dto2D(point.x, point.z);
     float transformedY = transform3Dto2D(point.y, point.z);
-
     // Convert to screen coordinates
     transformedCube[p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[4] = transformedCube[0];
-
-  // Process face 1
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[4 + p];
-
+    point = cube.points[4 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[5 + p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[9] = transformedCube[5];
-
-  // Process face 2
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[8 + p];
-
+    point = cube.points[8 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[10 + p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[14] = transformedCube[10];
-
-  // Process face 3
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[12 + p];
-
+    point = cube.points[12 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[15 + p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[19] = transformedCube[15];
-
-  // Process face 4
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[16 + p];
-
+    point = cube.points[16 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[20 + p] = (SDL_Point){
         (int)screenX(transformedX),
@@ -251,7 +213,11 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
     };
   }
 
-  // Close the face by connecting the last point to the first
+  // Close the faces by connecting the last points to the first
+  transformedCube[4] = transformedCube[0];
+  transformedCube[9] = transformedCube[5];
+  transformedCube[14] = transformedCube[10];
+  transformedCube[19] = transformedCube[15];
   transformedCube[24] = transformedCube[20];
 
   // If a half has at least two points outside of front, it gets to be drawn last
@@ -332,89 +298,51 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 }
 
 static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
-  // Process face 0
-  // Sint8 orgCubeI = 0;
-  // Sint8 transCubeI = 0;
-
   for (int p = 0; p < 4; p++) {
     Point point = cube.points[p];
-
     // Transform the 3D point to 2D
     float transformedX = transform3Dto2D(point.x, point.z);
     float transformedY = transform3Dto2D(point.y, point.z);
-
     // Convert to screen coordinates
     transformedCube[p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[4] = transformedCube[0];
-
-  // Process face 1
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[4 + p];
-
+    point = cube.points[4 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[5 + p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[9] = transformedCube[5];
-
-  // Process face 2
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[8 + p];
-
+    point = cube.points[8 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[10 + p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[14] = transformedCube[10];
-
-  // Process face 3
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[12 + p];
-
+    point = cube.points[12 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[15 + p] = (SDL_Point){
         (int)screenX(transformedX),
         (int)screenY(transformedY)
     };
-  }
 
-  // Close the face by connecting the last point to the first
-  transformedCube[19] = transformedCube[15];
-
-  // Process face 4
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[16 + p];
-
+    point = cube.points[16 + p];
     // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-
+    transformedX = transform3Dto2D(point.x, point.z);
+    transformedY = transform3Dto2D(point.y, point.z);
     // Convert to screen coordinates
     transformedCube[20 + p] = (SDL_Point){
         (int)screenX(transformedX),
@@ -422,7 +350,11 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
     };
   }
 
-  // Close the face by connecting the last point to the first
+  // Close the faces by connecting the last points to the first
+  transformedCube[4] = transformedCube[0];
+  transformedCube[9] = transformedCube[5];
+  transformedCube[14] = transformedCube[10];
+  transformedCube[19] = transformedCube[15];
   transformedCube[24] = transformedCube[20];
 
   // If a half has at least two points outside of front, it gets to be drawn last

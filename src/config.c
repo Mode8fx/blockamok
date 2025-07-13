@@ -131,6 +131,7 @@ static bool gc_initFAT(int device) {
 void initFilePaths() {
 #if defined(VITA)
   snprintf(rootDir, sizeof(rootDir), "ux0:data/BlockamokRemix/");
+  mkdir(rootDir, 0777);
 #elif defined(WII)
   snprintf(rootDir, sizeof(rootDir), "sd:/apps/BlockamokRemix/");
 #elif defined(GAMECUBE)
@@ -238,9 +239,6 @@ void readSaveData() {
 }
 
 static void writeDefaultConfig(int screenHeight) {
-#if defined(LINUX) || defined(VITA)
-  mkdir(rootDir, 0777);
-#endif
   FILE *file = fopen(configFile, "w");
   fprintf(file, "# Size must be between 240 and your screen's height\n");
   fprintf(file, "WINDOW_SIZE=%d\n", (int)DEFAULT_SCREEN_SIZE);

@@ -195,7 +195,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionPageLine(renderer, &optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 4, 1, "On", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 5, "Frame Rate", 5, 0, STAY, true);
+	setOptionPageLine(renderer, &optionPage_Visual, 5, "Frame Rate Cap", 5, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Visual, 5, 0, "Uncapped", "Set the max frame rate.",
 #if defined(WII) || defined(SWITCH) || defined(PC)
 		"(Though you can just keep it", "uncapped on this system)");
