@@ -153,9 +153,9 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "1", "Change how many hits you can take.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "2", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 2, "3", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Game, 3, "Control Scheme", 2, 0, STAY, false);
-	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Type A", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
-	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "Type B", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
+	setOptionPageLine(renderer, &optionPage_Game, 3, "Stick Controls", 2, 1, STAY, false);
+	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Cardinal", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
+	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "True Analog", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
 
 	optionPage_Visual.pageID = 3;
 	optionPage_Visual.numLines = OPTION_PAGE_VISUAL_NUM_LINES;

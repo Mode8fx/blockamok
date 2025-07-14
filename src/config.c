@@ -173,6 +173,8 @@ void initFilePaths() {
   //  snprintf(rootDir, sizeof(rootDir), "./.BlockamokRemix/");
   //  mkdir(rootDir, 0755);
   //}
+#elif defined(ANDROID)
+	snprintf(rootDir, sizeof(rootDir), "%s", SDL_GetPrefPath("mode8fx", "blockamokremix"));
 #endif
   snprintf(saveFile, sizeof(saveFile), "%s%s", rootDir, "save.bin");
   snprintf(configFile, sizeof(configFile), "%s%s", rootDir, "config.ini");
