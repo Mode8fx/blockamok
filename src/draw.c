@@ -249,132 +249,52 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
   }
 
   // No need to draw the first 2 faces. They are hidden behind the front
+  for (int f = 2; f < 5; f++) {
+    Sint8 cubeI = faceOrder[f] * 5;
 
-  // Face 1
-  Sint8 cubeI = faceOrder[2] * 5;
+    SDL_Color color = (f == FRONT) ? cubeColorFront : cubeColorSide;
+    // Cache cube points and transformed points
+    SDL_Point *transformed = &transformedCube[cubeI];
 
-  SDL_Color color = cubeColorSide;
-  // Cache cube points and transformed points
-  SDL_Point *transformed = &transformedCube[cubeI];
+    // Precompute z and fadeAmount
+    Sint8 faceIndexMult = faceOrder[f] << 2;
+    Point cubePoint = cube.points[faceIndexMult];
+    float z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
+    float fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
+    fadeAmount = fminf(fadeAmount, 1.0f);
 
-  // Precompute z and fadeAmount
-  Sint8 faceIndexMult = faceOrder[2] << 2;
-  Point cubePoint = cube.points[faceIndexMult];
-  float z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
-  float fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
-  fadeAmount = fminf(fadeAmount, 1.0f);
+    color.a = (Uint8)(255 - fadeAmount * 255);
 
-  color.a = (Uint8)(255 - fadeAmount * 255);
+    SDL_Vertex vertices[6];
+    vertices[0].color = color;
+    vertices[1].color = color;
+    vertices[2].color = color;
+    vertices[3].color = color;
+    vertices[4].color = color;
+    vertices[5].color = color;
 
-  SDL_Vertex vertices[6];
-  vertices[0].color = color;
-  vertices[1].color = color;
-  vertices[2].color = color;
-  vertices[3].color = color;
-  vertices[4].color = color;
-  vertices[5].color = color;
-  vertices[0].position.x = (float)transformed[0].x;
-  vertices[0].position.y = (float)transformed[0].y;
-  vertices[1].position.x = (float)transformed[1].x;
-  vertices[1].position.y = (float)transformed[1].y;
-  vertices[2].position.x = (float)transformed[2].x;
-  vertices[2].position.y = (float)transformed[2].y;
-  vertices[3].position.x = (float)transformed[2].x;
-  vertices[3].position.y = (float)transformed[2].y;
-  vertices[4].position.x = (float)transformed[3].x;
-  vertices[4].position.y = (float)transformed[3].y;
-  vertices[5].position.x = (float)transformed[4].x;
-  vertices[5].position.y = (float)transformed[4].y;
+    vertices[0].position.x = (float)transformed[0].x;
+    vertices[0].position.y = (float)transformed[0].y;
+    vertices[1].position.x = (float)transformed[1].x;
+    vertices[1].position.y = (float)transformed[1].y;
+    vertices[2].position.x = (float)transformed[2].x;
+    vertices[2].position.y = (float)transformed[2].y;
 
-  // Render triangles
-  SDL_RenderGeometry(renderer, NULL, vertices, 6, NULL, 0);
-  // Render lines with adjusted fadeAmount
-  fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
-  SDL_RenderDrawLines(renderer, transformed, 5);
+    vertices[3].position.x = (float)transformed[2].x;
+    vertices[3].position.y = (float)transformed[2].y;
+    vertices[4].position.x = (float)transformed[3].x;
+    vertices[4].position.y = (float)transformed[3].y;
+    vertices[5].position.x = (float)transformed[4].x;
+    vertices[5].position.y = (float)transformed[4].y;
 
-  // Face 2
-  cubeI = faceOrder[3] * 5;
+    // Render triangles
+    SDL_RenderGeometry(renderer, NULL, vertices, 6, NULL, 0);
 
-  // Cache cube points and transformed points
-  transformed = &transformedCube[cubeI];
-
-  // Precompute z and fadeAmount
-  faceIndexMult = faceOrder[3] << 2;
-  cubePoint = cube.points[faceIndexMult];
-  z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
-  fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
-  fadeAmount = fminf(fadeAmount, 1.0f);
-
-  color.a = (Uint8)(255 - fadeAmount * 255);
-
-  vertices[0].color = color;
-  vertices[1].color = color;
-  vertices[2].color = color;
-  vertices[3].color = color;
-  vertices[4].color = color;
-  vertices[5].color = color;
-  vertices[0].position.x = (float)transformed[0].x;
-  vertices[0].position.y = (float)transformed[0].y;
-  vertices[1].position.x = (float)transformed[1].x;
-  vertices[1].position.y = (float)transformed[1].y;
-  vertices[2].position.x = (float)transformed[2].x;
-  vertices[2].position.y = (float)transformed[2].y;
-  vertices[3].position.x = (float)transformed[2].x;
-  vertices[3].position.y = (float)transformed[2].y;
-  vertices[4].position.x = (float)transformed[3].x;
-  vertices[4].position.y = (float)transformed[3].y;
-  vertices[5].position.x = (float)transformed[4].x;
-  vertices[5].position.y = (float)transformed[4].y;
-
-  // Render triangles
-  SDL_RenderGeometry(renderer, NULL, vertices, 6, NULL, 0);
-  // Render lines with adjusted fadeAmount
-  fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
-  SDL_RenderDrawLines(renderer, transformed, 5);
-
-  // Face 3 (always front)
-  cubeI = faceOrder[4] * 5;
-
-  color = cubeColorFront;
-  // Cache cube points and transformed points
-  transformed = &transformedCube[cubeI];
-
-  // Precompute z and fadeAmount
-  faceIndexMult = faceOrder[4] << 2;
-  cubePoint = cube.points[faceIndexMult];
-  z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
-  fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
-  fadeAmount = fminf(fadeAmount, 1.0f);
-
-  color.a = (Uint8)(255 - fadeAmount * 255);
-
-  vertices[0].color = color;
-  vertices[1].color = color;
-  vertices[2].color = color;
-  vertices[3].color = color;
-  vertices[4].color = color;
-  vertices[5].color = color;
-  vertices[0].position.x = (float)transformed[0].x;
-  vertices[0].position.y = (float)transformed[0].y;
-  vertices[1].position.x = (float)transformed[1].x;
-  vertices[1].position.y = (float)transformed[1].y;
-  vertices[2].position.x = (float)transformed[2].x;
-  vertices[2].position.y = (float)transformed[2].y;
-  vertices[3].position.x = (float)transformed[2].x;
-  vertices[3].position.y = (float)transformed[2].y;
-  vertices[4].position.x = (float)transformed[3].x;
-  vertices[4].position.y = (float)transformed[3].y;
-  vertices[5].position.x = (float)transformed[4].x;
-  vertices[5].position.y = (float)transformed[4].y;
-
-  // Render triangles
-  SDL_RenderGeometry(renderer, NULL, vertices, 6, NULL, 0);
-  // Render lines with adjusted fadeAmount
-  fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
-  SDL_RenderDrawLines(renderer, transformed, 5);
+    // Render lines with adjusted fadeAmount
+    fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
+    SDL_RenderDrawLines(renderer, transformed, 5);
+  }
 }
 
 static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
