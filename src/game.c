@@ -30,7 +30,7 @@ Sint16 movementMagnitudeY;
 bool debugMode = false;
 
 #if defined(GAMECUBE)
-float cubeBounds = 8.3f;
+float cubeBounds = 8.8f; // 60 FPS
 #elif defined(WII)
 float cubeBounds = 10.5f;
 #elif defined(WII_U)

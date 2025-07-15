@@ -136,6 +136,9 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 #if defined(THREEDS) || defined(PSP)
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse framerate");
+#elif defined(GAMECUBE)
+	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
+	setOptionChoice(renderer, &optionPage_Game, 1, 0, "Normal", "Change the size of the incoming obstacles.", "WARNING: Sizes other than Normal can lead", "to graphical bugs on a real GameCube!");
 #else
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
