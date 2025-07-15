@@ -38,11 +38,11 @@ float cubeBounds = 8.3f;
 #elif defined(SWITCH)
 float cubeBounds = 8.5f;
 #elif defined(THREEDS)
-float cubeBounds = 4.8f; // 39-60 FPS on New 3DS, 12-20 FPS on Old 3DS
+float cubeBounds = 4.8f; // ~40-60 FPS on New 3DS, 12-20 FPS on Old 3DS
 #elif defined(PSP)
-float cubeBounds = 2.5f;
+float cubeBounds = 3.5f; // ~22-45 FPS
 #elif defined(VITA)
-float cubeBounds = 8.1f;
+float cubeBounds = 8.5f; // 45-60 FPS without overclock, 60 FPS with 444 MHz overclock
 #elif defined(ANDROID)
 float cubeBounds = 10.0f;
 #else
@@ -146,8 +146,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
     if (dirHeld_Right()) {
       xDiff = -turnSpeed;
     }
-  }
-  else {
+  } else {
     float turnSpeed = (BASE_TURN_SPEED_TYPE_B + playerSpeed / 50) * deltaTimeDiv / 32767;
     xDiff = turnSpeed * -movementMagnitudeX;
     yDiff = turnSpeed * -movementMagnitudeY;

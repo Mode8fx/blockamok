@@ -123,23 +123,17 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.numLines = OPTION_PAGE_GAME_NUM_LINES;
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
-#if defined(PSP)
-	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 3, 1, STAY, true);
-#else
 	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
-#endif
-#if defined(THREEDS)
+#if defined(THREEDS) || defined(PSP)
 	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse framerate", EMPTY);
 #else
 	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
 #endif
 	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Medium", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
-#if !defined(PSP)
 	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
-#endif
-#if defined(THREEDS)
+#if defined(THREEDS) || defined(PSP)
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse framerate");
 #else
@@ -189,7 +183,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	} else {
 		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
-	setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
+	if (compactView) {
+		setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
+	} else {
+		setOptionPageLine(renderer, &optionPage_Visual, 3, "Transparency", 2, 0, STAY, true);
+	}
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);

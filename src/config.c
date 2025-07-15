@@ -236,7 +236,9 @@ void readSaveData() {
     fread(&OPTION_FRAME_RATE, sizeof(OPTION_FRAME_RATE), 1, file);
     fclose(file);
   } else {
+    forceIndexReset = true;
     writeSaveData();
+    forceIndexReset = false;
   }
 }
 
