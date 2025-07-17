@@ -32,15 +32,15 @@ bool debugMode = false;
 #if defined(GAMECUBE)
 float cubeBounds = 8.8f; // 60 FPS
 #elif defined(WII)
-float cubeBounds = 10.5f;
+float cubeBounds = 11.5f; // 60 FPS
 #elif defined(WII_U)
-float cubeBounds = 8.3f;
+float cubeBounds = 7.5f; // 30-60 FPS (about half the difficulty settings hit 60 or close)
 #elif defined(SWITCH)
 float cubeBounds = 8.5f;
 #elif defined(THREEDS)
-float cubeBounds = 4.8f; // ~40-60 FPS on New 3DS, 12-20 FPS on Old 3DS
+float cubeBounds = 4.8f; // 40-60 FPS on New 3DS, 12-20 FPS on Old 3DS
 #elif defined(PSP)
-float cubeBounds = 3.5f; // ~22-45 FPS
+float cubeBounds = 3.5f; // 22-45 FPS
 #elif defined(VITA)
 float cubeBounds = 8.5f; // 45-60 FPS without overclock, 60 FPS with 444 MHz overclock
 #elif defined(ANDROID)

@@ -31,7 +31,7 @@ INCLUDES	:=	src src/fonts src/audio
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= `$(PREFIX)pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer freetype2` -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DWII -DNINTENDO_LAYOUT
+CFLAGS	= `$(PREFIX)pkg-config --cflags sdl2 SDL2_ttf SDL2_mixer freetype2` -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DWII -DFORCE_DRAW_BG -DFORCE_DRAW_OVERLAY
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map

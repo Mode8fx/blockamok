@@ -135,6 +135,11 @@ void initFilePaths() {
 #elif defined(WII)
   snprintf(rootDir, sizeof(rootDir), "sd:/apps/BlockamokRemix/");
 #elif defined(GAMECUBE)
+  for (int i = 1; i < 4; i++) {
+    if (gc_initFAT(i)) {
+      break;
+    }
+  }
   const char *devices[] = { "sda", "sdb", "sdc" };
   for (int i = 0; i < 3; i++) {
     snprintf(rootDir, sizeof(rootDir), "%s:/BlockamokRemix/", devices[i]);
