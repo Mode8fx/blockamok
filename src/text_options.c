@@ -124,7 +124,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
 	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
-#if defined(THREEDS) || defined(PSP)
+#if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
 	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse framerate", EMPTY);
 #else
 	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
@@ -133,12 +133,9 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
-#if defined(THREEDS) || defined(PSP)
+#if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse framerate");
-#elif defined(GAMECUBE)
-	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
-	setOptionChoice(renderer, &optionPage_Game, 1, 0, "Normal", "Change the size of the incoming obstacles.", "WARNING: Sizes other than Normal can lead", "to graphical bugs on a real GameCube!");
 #else
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
@@ -411,6 +408,7 @@ void optionCallback_All() {
 	optionCallback_CubeFrequency(renderer);
 	optionCallback_CubeSize();
 	optionCallback_BackgroundColor();
+	saveBackgroundAsTexture(renderer);
 	optionCallback_CubeColor();
 	optionCallback_OverlayColor();
 	optionCallback_FrameRate();

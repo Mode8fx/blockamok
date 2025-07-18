@@ -56,7 +56,7 @@ bool useNew3DSClockSpeed = true;
 #endif
 
 static void handleWindowResize(SDL_Event *event) {
-#if defined(PC)
+#if defined(PC) || defined(SWITCH)
   WINDOW_WIDTH = event->window.data1;
   WINDOW_HEIGHT = event->window.data2;
   bool needsReset = false;
@@ -70,8 +70,7 @@ static void handleWindowResize(SDL_Event *event) {
   if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * fmax(WINDOW_WIDTH, WINDOW_HEIGHT)) {
     if (WINDOW_WIDTH > WINDOW_HEIGHT) {
       WINDOW_WIDTH = WINDOW_HEIGHT;
-    }
-    else {
+    } else {
       WINDOW_HEIGHT = WINDOW_WIDTH;
     }
     needsReset = true;
@@ -103,7 +102,7 @@ static void init() {
 #if defined(PSP)
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-#elif defined(PC)
+#elif defined(PC) || defined(SWITCH)
   window = SDL_CreateWindow("Blockamok Remix", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 #elif defined(THREEDS)
