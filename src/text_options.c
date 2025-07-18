@@ -184,9 +184,9 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 		setOptionChoice(renderer, &optionPage_Visual, 2, 6, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
 	if (compactView) {
-		setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
-	} else {
 		setOptionPageLine(renderer, &optionPage_Visual, 3, "Transparency", 2, 0, STAY, true);
+	} else {
+		setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
 	}
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
