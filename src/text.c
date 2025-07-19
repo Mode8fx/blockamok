@@ -91,10 +91,16 @@ inline void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSi
 #else
   SDL_Surface *textSurface = TTF_RenderText_Solid(font, message->text, textColor);
 #endif
-  message->text_rect.w = (int)(textSurface->w * sizeMult);
-  message->text_rect.h = (int)(textSurface->h * sizeMult);
-  message->text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+#if defined(WII_U)
+  SDL_Surface *convertedSurface = SDL_ConvertSurfaceFormat(textSurface, SDL_PIXELFORMAT_RGBA8888, 0);
+#else
+  SDL_Surface *convertedSurface = SDL_ConvertSurfaceFormat(textSurface, SDL_PIXELFORMAT_RGBA5551, 0);
+#endif
   SDL_FreeSurface(textSurface);
+  message->text_rect.w = (int)(convertedSurface->w * sizeMult);
+  message->text_rect.h = (int)(convertedSurface->h * sizeMult);
+  message->text_texture = SDL_CreateTextureFromSurface(renderer, convertedSurface);
+  SDL_FreeSurface(convertedSurface);
 }
 
 inline void renderMessage(SDL_Renderer *renderer, Message *message) {

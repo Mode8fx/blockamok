@@ -84,6 +84,8 @@ static void handleWindowResize(SDL_Event *event) {
   }
   setScalingVals();
   initStaticMessages(renderer);
+  readSaveData(); // fixes menu options sometimes being reset to defaults
+  optionCallback_All(); // fixes menu options sometimes being reset to defaults
   saveBackgroundAsTexture(renderer);
   drawOverlayOnThisFrame = true;
 #endif

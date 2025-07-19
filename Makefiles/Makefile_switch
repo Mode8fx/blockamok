@@ -44,7 +44,7 @@ DATA		:=
 INCLUDES	:=	src src/fonts src/audio
 # ROMFS		:=	romfs
 
-APP_TITLE   := BlockamokRemix
+APP_TITLE   := Blockamok Remix
 APP_AUTHOR  := Mode8fx
 APP_VERSION := 2.1
 ICON        := release-resources/logo_icon_switch.jpg

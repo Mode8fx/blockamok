@@ -3,8 +3,11 @@
 #include <string.h>
 #if defined(_WIN32)
 #include <windows.h>
-#elif defined(LINUX) || defined(GAMECUBE)
+#elif defined(LINUX) || defined(GAMECUBE) || defined(THREEDS)
 #include <sys/stat.h>
+#endif
+#if defined(WII_U)
+#include "./general.h"
 #endif
 
 #include "./config.h"
@@ -131,7 +134,11 @@ static bool gc_initFAT(int device) {
 void initFilePaths() {
 #if defined(VITA)
   snprintf(rootDir, sizeof(rootDir), "ux0:data/BlockamokRemix/");
-  mkdir(rootDir, 0777);
+#elif defined(WII_U)
+  WHBMountSdCard();
+  WHBGetSdCardMountPath();
+  const char *sdPathStart = WHBGetSdCardMountPath();
+  snprintf(rootDir, sizeof(rootDir), "%s/wiiu/apps/BlockamokRemix/", sdPathStart);
 #elif defined(WII)
   snprintf(rootDir, sizeof(rootDir), "sd:/apps/BlockamokRemix/");
 #elif defined(GAMECUBE)
@@ -147,6 +154,8 @@ void initFilePaths() {
       break;
     }
   }
+#elif defined(THREEDS)
+  snprintf(rootDir, sizeof(rootDir), "sdmc:/3ds/BlockamokRemix/");
 #elif defined(_WIN32)
   char *exeDir = getExeDirectory();
   if (exeDir) {
@@ -186,7 +195,7 @@ void initFilePaths() {
 }
 
 void writeSaveData() {
-#if defined(LINUX) || defined(VITA)
+#if defined(LINUX) || defined(VITA) || defined(THREEDS)
   mkdir(rootDir, 0777);
 #endif
   FILE *file = fopen(saveFile, "wb");

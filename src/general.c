@@ -3,16 +3,7 @@
 #include "./general.h"
 
 void systemSpecificOpen() {
-#if defined(WII_U)
-	/* Set SD Card Mount Path */
-	WHBMountSdCard();
-	WHBGetSdCardMountPath();
-	char sdPathStr[256];
-	const char *sdPathStart = WHBGetSdCardMountPath();
-	snprintf(sdPathStr, sizeof(sdPathStr), "%s/wiiu/apps/BlockamokRemix", sdPathStart);
-	const char *sdPath = sdPathStr;
-	chdir(sdPath);
-#elif defined(VITA)
+#if defined(VITA)
 	/* Disable rear touch pad */
 	SDL_setenv("VITA_DISABLE_TOUCH_BACK", "1", 1);
 #elif defined(SWITCH)

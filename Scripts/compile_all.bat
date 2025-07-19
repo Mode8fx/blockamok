@@ -14,7 +14,7 @@ set REPO_DKP=/d/GitHub/blockamok
 set REPO_WSL=/mnt%REPO_DKP%
 set REPO_MSYS=%REPO_DKP%
 set OUTPUT_DIR=%REPO%/dist/new_version/BlockamokRemix
-set RELEASE_RESOURCES=%REPO%
+set RELEASE_RESOURCES=%REPO%/release-resources
 set MAKEFILE_DEFAULT=%REPO%/Makefile
 set MAKEFILE_DEFAULT=%MAKEFILE_DEFAULT:/=\%
 
@@ -68,8 +68,8 @@ set OUTPUT_SWITCH=%OUTPUT_DIR%-switch/switch/BlockamokRemix/BlockamokRemix.nro
 
 :: Makefile: 3DS
 set MAKEFILE_DKP_3DS=%MAKEFILES_DKP%/Makefile_3ds
-set OUTPUT_3DS=%OUTPUT_DIR%-3ds/3ds/BlockamokRemix/BlockamokRemix.3dsx
-set OUTPUT_3DS_CIA=%OUTPUT_DIR%-3ds-cia/cias/BlockamokRemix.cia
+set OUTPUT_3DS=%OUTPUT_DIR%-3dsx/3ds/BlockamokRemix/BlockamokRemix.3dsx
+set OUTPUT_3DS_CIA=%OUTPUT_DIR%-3ds.cia
 
 :: Makefile: PSP
 set MAKEFILE_WSL_PSP=%MAKEFILES_WSL%/Makefile_psp
@@ -185,9 +185,9 @@ start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; sh %MAKEFILE_DKP_WI
 sleep %SLEEP_COMPILE_LONG%
 sleep 10
 echo Wii U: Moving compiled rpx to %OUTPUT_WII_U%...
-mv %REPO%/build_wii_u/blockamokremix.rpx %OUTPUT_WII_U%
+mv %REPO%/build_wii_u/BlockamokRemix.rpx %OUTPUT_WII_U%
 echo Wii U WHUB: Creating WUHB in %OUTPUT_WII_U_WUHB%...
-start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %REPO%/build_wii_u_whub/blockamokremix.rpx %OUTPUT_WII_U_WUHB% --name=\"Blockamok Remix\" --short-name=\"Blockamok Remix\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_128.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
+start /wait "" %DEVKITPRO% /usr/bin/bash -lc "wuhbtool %REPO%/build_wii_u_whub/BlockamokRemix.rpx %OUTPUT_WII_U_WUHB% --name=\"Blockamok Remix\" --short-name=\"Blockamok Remix\" --author=Mode8fx --icon=%RELEASE_RESOURCES%/logo_icon_128.png --tv-image=%RELEASE_RESOURCES%/splash_screen_wiiu_tv.png --drc-image=%RELEASE_RESOURCES%/splash_screen_wiiu_gamepad.png"
 sleep %SLEEP_COMPILE_SHORT%
 echo Wii U: Cleaning up...
 rm -r %REPO%/build_wii_u
@@ -219,7 +219,7 @@ sleep %SLEEP_COMPILE%
 echo 3DS: Moving compiled 3dsx to %OUTPUT_3DS%...
 mv %REPO%/blockamok.3dsx %OUTPUT_3DS%
 echo 3DS: Creating CIA in %OUTPUT_3DS_CIA%...
-%MAKEROM% -f cia -o %OUTPUT_3DS_CIA% -elf %REPO%/blockamok.elf -icon %RELEASE_RESOURCES%/release-resources/icon_3ds.smdh -banner %RELEASE_RESOURCES%/release-resources/banner_3ds.bnr -ver %VERSION_3DS% -rsf %RELEASE_RESOURCES%/release-resources/app_3ds.rsf
+%MAKEROM% -f cia -o %OUTPUT_3DS_CIA% -elf %REPO%/blockamok.elf -icon %RELEASE_RESOURCES%/icon_3ds.smdh -banner %RELEASE_RESOURCES%/banner_3ds.bnr -ver %VERSION_3DS% -rsf %RELEASE_RESOURCES%/app_3ds.rsf
 echo 3DS: Cleaning up...
 start /wait "" %DEVKITPRO% /usr/bin/bash -lc "cd %REPO_DKP%; make clean"
 sleep %SLEEP_CLEAN%
