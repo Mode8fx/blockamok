@@ -1,7 +1,7 @@
 <h1 align="center">Blockamok Remix</h1>
 
 <p align="center"><b>A CPU-only, from-scratch 3D game written in C, where you dodge blocks<br>
-Available for PC, Linux, Android, Switch, Wii U, Wii, Gamecube, 3DS, PSP, and Vita</b></p>
+Available for PC, Linux, Android, Switch, Wii U, Wii, GameCube, 3DS, PSP, and Vita</b></p>
 
 <p align="center">You accidentally fly your spaceship into a wormhole. To your shock, you find yourself in an alternate dimension filled with blocks. The throttle on your spaceship is broken and keeps increasing the speed. How far can you make it?</p>
 
@@ -26,11 +26,7 @@ This version adds many improvements including:
 
 [Check the latest release here.](https://github.com/Mode8fx/blockamok/releases)
 
-Keep in mind that due to hardware and library differences, this game runs better on some systems than others. If you only play one version, I would recommend the following order:
-
-PC/Linux = Wii > Switch > Gamecube > Vita > Wii U
-
-(Yes, the Wii version runs as well as Switch (or slightly better) and significantly better than Wii U. I don't know why.)
+Keep in mind that due to hardware and library differences, this game runs better on some systems than others, and it's not necessarily determined by the power of the system. For example, the GameCube and Wii versions both run better than Wii U.
 
 ## Can I port it to other systems?
 
@@ -55,8 +51,8 @@ Install devkitPro and switch-portlibs (which includes SDL2 for Switch), then run
 Install devkitPro, Wii U Toolkit, and SDL2 for Wii U, then build with CMake. I've included a `make_wii_u.sh` file for convenience once you have everything installed.
 #### Wii
 Install devkitPro and SDL2 for Wii, then run `make -f Makefiles/Makefile_wii`.
-#### Gamecube
-Install devkitPro and SDL2 for Gamecube, then run `make -f Makefiles/Makefile_gc`.
+#### GameCube
+Install devkitPro and SDL2 for GameCube, then run `make -f Makefiles/Makefile_gc`.
 #### 3DS
 Install devkitPro and SDL2 for 3DS, then run `make -f Makefiles/Makefile_3ds`.
 #### Vita
