@@ -1,7 +1,7 @@
 <h1 align="center">Blockamok Remix</h1>
 
 <p align="center"><b>A CPU-only, from-scratch 3D game written in C, where you dodge blocks<br>
-Available for PC, Linux, Switch, Wii U, Wii, Gamecube, and Vita</b></p>
+Available for PC, Linux, Android, Switch, Wii U, Wii, Gamecube, 3DS, PSP, and Vita</b></p>
 
 <p align="center">You accidentally fly your spaceship into a wormhole. To your shock, you find yourself in an alternate dimension filled with blocks. The throttle on your spaceship is broken and keeps increasing the speed. How far can you make it?</p>
 
@@ -20,7 +20,7 @@ This version adds many improvements including:
 - Scoring system polish
 - High score saving
 - Console ports
-- Technical optimizations for weaker hardware
+- Performance improvements for weaker hardware [(see performance metrics here)](https://github.com/Mode8fx/blockamok/blob/main/Console%20Performance%20Metrics%20v1.0%20to%20v1.1.png)
 
 ## How can I play it?
 
@@ -40,12 +40,14 @@ This game is made using SDL2. Controller and keyboard input are handled through 
 
 ## How to Compile
 
-#### PC
+#### PC (Visual Studio)
 1. Download the latest SDL2 development libraries (VC versions):
 - [SDL2](https://github.com/libsdl-org/SDL/releases)
 - [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases)
 - [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases)
 2. Extract the above ZIP files into a folder called SDL2, which should be located in the Blockamok directory.
+#### PC (MSYS2)
+Install MSYS2 and the latest SDL2 development libraries (along with mixer and TTF), open MSYS2 MINGW64 (64-bit) or MSYS2 MINGW32 (32-bit), and run `make -f Makefiles/Makefile_pc` (or `make -f Makefiles/Makefile_pc_x86` for 32-bit).
 3. From there, use the Visual Studio project file from the repo with Visual Studio 2022.
 #### Switch
 Install devkitPro and switch-portlibs (which includes SDL2 for Switch), then run `make -f Makefiles/Makefile_switch`.
@@ -55,11 +57,12 @@ Install devkitPro, Wii U Toolkit, and SDL2 for Wii U, then build with CMake. I'v
 Install devkitPro and SDL2 for Wii, then run `make -f Makefiles/Makefile_wii`.
 #### Gamecube
 Install devkitPro and SDL2 for Gamecube, then run `make -f Makefiles/Makefile_gc`.
+#### 3DS
+Install devkitPro and SDL2 for 3DS, then run `make -f Makefiles/Makefile_3ds`.
 #### Vita
 Install VitaSDK, then build with CMake. I've included a `make_vita.sh` file for convenience once you have everything installed.
-#### PSP*
-Install [the PSPDEV toolchain](https://pspdev.github.io/), which should also come with SDL2, SDL2_ttf, and SDL2_mixer (Linux or WSL is strongly recommended), then run `make -f Makefiles/Makefile_psp`.<br>
-\* The PSP version is experimental and only runs in emulator.
+#### PSP
+Install [the PSPDEV toolchain](https://pspdev.github.io/), which should also come with SDL2, SDL2_ttf, and SDL2_mixer (Linux or WSL is strongly recommended), then run `make -f Makefiles/Makefile_psp`.
 
 ## License
 
