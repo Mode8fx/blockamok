@@ -34,6 +34,11 @@ Go ahead! Just make sure you appropriately follow the MIT License.
 
 This game is made using SDL2. Controller and keyboard input are handled through SDL_GameController and keyboard state respectively, and there aren't many system-specific defines. Depending on the system, you probably want to use the Linux Makefile as a base along with the `LINUX` define (and possibly `PC` as well).
 
+The following additional defines exist and may be needed:
+- `FORCE_DRAW_OVERLAY`: This makes the game redraw the overlay (colored side bars) on every frame. Enable this if the overlay has a visual issue such as flickering, or if the thin black bars on the inside edge of the overlay do not render.
+- `FORCE_DRAW_BG`: This makes the game redraw the transparent background triangles on every frame instead of drawing them once and saving+rendering as a texture. Enable this if the background is rendering incorrectly.
+- `LOW_SPEC_BG` - Enable this to replace the background with a flat color. This looks the worst visually, so only use it if `FORCE_DRAW_BG` results in poor performance. Do not use `FORCE_DRAW_BG` and `LOW_SPEC_BG` together.
+
 ## How to Compile
 
 #### PC (Visual Studio)
