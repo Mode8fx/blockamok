@@ -20,7 +20,7 @@ This version adds many improvements including:
 - Scoring system polish
 - High score saving
 - Console ports
-- Performance improvements for weaker hardware [(see performance metrics here)](https://github.com/Mode8fx/blockamok/blob/main/Console%20Performance%20Metrics%20v1.0%20to%20v1.1.png)
+- Performance improvements for weaker hardware [(see performance metrics comparing Remix v1.0 to v1.1 here)](https://github.com/Mode8fx/blockamok/blob/main/Console%20Performance%20Metrics%20v1.0%20to%20v1.1.png)
 
 ## How can I play it?
 
