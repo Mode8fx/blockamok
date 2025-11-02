@@ -447,7 +447,7 @@ void drawGameText(SDL_Renderer *renderer) {
   drawTextFromChars(renderer, 0.5f, 0.03f);
   if (debugMode) {
     usedDebugMode = true;
-    snprintf(valStr, TEXT_LINE_SIZE, "LWC %.1f %d", cubeBounds, cubeAmount);
+    snprintf(valStr, TEXT_LINE_SIZE, "LWC %.1f %d", cubeBoundsBase, cubeAmount);
     drawTextFromChars(renderer, 0.5f, 0.90f);
   }
 

@@ -52,7 +52,9 @@ extern bool usedDebugMode;
 
 // Weaker systems need to handle fewer cubes, and smaller bounds balance this out
 #define DEFAULT_CUBE_BOUNDS 12.0f
+extern float cubeBoundsBase;
 extern float cubeBounds;
+#define SPAWN_AREA_MODIFIER (1.0f + ((OPTION_SPAWN_AREA - 3) * 0.1f))
 #define CUBE_LIMIT_MULT ((cubeBounds * cubeBounds) / (DEFAULT_CUBE_BOUNDS * DEFAULT_CUBE_BOUNDS))
 #define CUBE_LIMIT_MAX (Sint16)(800 * CUBE_LIMIT_MULT)
 

@@ -74,6 +74,7 @@ extern OptionPage optionPage_Empty;
 #define OPTION_CUBE_SIZE optionPage_Game.optionLines[1].index
 #define OPTION_LIVES optionPage_Game.optionLines[2].index
 #define OPTION_CONTROL_TYPE optionPage_Game.optionLines[3].index
+#define OPTION_SPAWN_AREA optionPage_Game.optionLines[4].index
 
 #define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
 #define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index

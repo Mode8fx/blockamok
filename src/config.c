@@ -215,11 +215,13 @@ void writeSaveData() {
     fwrite(&OPTION_SFX_VOLUME, sizeof(OPTION_SFX_VOLUME), 1, file);
     fwrite(&OPTION_SIMPLE_CUBES, sizeof(OPTION_SIMPLE_CUBES), 1, file);
     fwrite(&OPTION_FRAME_RATE, sizeof(OPTION_FRAME_RATE), 1, file);
+    fwrite(&OPTION_SPAWN_AREA, sizeof(OPTION_SPAWN_AREA), 1, file);
 
     Uint8 numBytesUsed = sizeof(highScoreVal)
       + sizeof(OPTION_CUBE_FREQUENCY) + sizeof(OPTION_CUBE_SIZE) + sizeof(OPTION_LIVES) + sizeof(OPTION_CONTROL_TYPE)
       + sizeof(OPTION_BACKGROUND_COLOR) + sizeof(OPTION_CUBE_COLOR) + sizeof(OPTION_OVERLAY_COLOR) + sizeof(OPTION_SPEEDOMETER) + sizeof(OPTION_FULLSCREEN)
-      + sizeof(OPTION_MUSIC) + sizeof(OPTION_MUSIC_VOLUME) + sizeof(OPTION_SFX_VOLUME) + sizeof(OPTION_SIMPLE_CUBES) + sizeof(OPTION_FRAME_RATE);
+      + sizeof(OPTION_MUSIC) + sizeof(OPTION_MUSIC_VOLUME) + sizeof(OPTION_SFX_VOLUME) + sizeof(OPTION_SIMPLE_CUBES) + sizeof(OPTION_FRAME_RATE)
+      + sizeof(OPTION_SPAWN_AREA);
     Uint8 emptyBytesSize = 255 - numBytesUsed; // In case I want to add more to the save data in a future update
     if (emptyBytesSize > 0) {
       char *emptyBytes = (char *)calloc(emptyBytesSize, sizeof(char));
@@ -248,6 +250,7 @@ void readSaveData() {
     fread(&OPTION_SFX_VOLUME, sizeof(OPTION_SFX_VOLUME), 1, file);
     fread(&OPTION_SIMPLE_CUBES, sizeof(OPTION_SIMPLE_CUBES), 1, file);
     fread(&OPTION_FRAME_RATE, sizeof(OPTION_FRAME_RATE), 1, file);
+    fread(&OPTION_SPAWN_AREA, sizeof(OPTION_SPAWN_AREA), 1, file);
     fclose(file);
   } else {
     forceIndexReset = true;

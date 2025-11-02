@@ -33,7 +33,7 @@ OptionPage optionPage_Main;
 OptionLine optionPage_Main_Lines[OPTION_PAGE_MAIN_NUM_LINES];
 
 OptionPage optionPage_Game;
-#define OPTION_PAGE_GAME_NUM_LINES 4
+#define OPTION_PAGE_GAME_NUM_LINES 5
 OptionLine optionPage_Game_Lines[OPTION_PAGE_GAME_NUM_LINES];
 
 OptionPage optionPage_Visual;
@@ -148,8 +148,16 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "2", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 2, 2, "3", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Game, 3, "Stick Controls", 2, 1, STAY, false);
-	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Cardinal", "Up/Down and Left/Right movement", "are independent, so diagonal is", "faster.");
-	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "True Analog", "Speed is the same", "regardless of direction.", "More analog stick-friendly.");
+	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Cardinal", "Up/Down and Left/Right movement", "are independent, so diagonal is faster.", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "True Analog", "Speed is the same regardless of direction.", "More analog stick-friendly.", EMPTY);
+	setOptionPageLine(renderer, &optionPage_Game, 4, "Spawn Area", 7, 3, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change the spawn area of blocks.", "Default is recommended, but a smaller area", "could improve framerate on weak devices.");
+	setOptionChoice(renderer,   &optionPage_Game, 4, 1, "Very Low", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 2, "Low", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 3, "Default", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 4, "High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 5, "Very High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 6, "Highest", EMPTY, EMPTY, EMPTY);
 
 	optionPage_Visual.pageID = 3;
 	optionPage_Visual.numLines = OPTION_PAGE_VISUAL_NUM_LINES;
@@ -251,6 +259,7 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 }
 
 void optionCallback_CubeFrequency(SDL_Renderer *renderer) {
+	cubeBounds = cubeBoundsBase * SPAWN_AREA_MODIFIER;
 	switch (OPTION_CUBE_FREQUENCY) {
 	case 0:
 		cubeAmount = (Sint16)(400 * CUBE_LIMIT_MULT);
@@ -451,6 +460,7 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 	case 2:
 		switch (page->index) {
 		case 0:
+		case 4:
 			optionCallback_CubeFrequency(renderer);
 			break;
 		case 1:

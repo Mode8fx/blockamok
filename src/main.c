@@ -30,7 +30,7 @@ Uint32 invinceStart = 0;
 Uint32 deltaTime = 0;
 Uint32 credits_startTime = 0;
 
-Cube cubes[1000];
+Cube cubes[1620]; // this can be lowered depending on max cube bounds (but debug mode allows up to 13.1 everywhere)
 
 float scoreVal;
 #define DEFAULT_HIGH_SCORE 1000
@@ -356,12 +356,12 @@ int main(int arg, char *argv[]) {
 
       case GAME_STATE_PAUSED:
         if (debugMode) {
-          if (dirPressedLeft() && cubeBounds > 2.5f && invincibilityResetIndex < 6) {
-            cubeBounds -= 0.1f;
+          if (dirPressedLeft() && cubeBoundsBase > 2.5f && invincibilityResetIndex < 6) {
+            cubeBoundsBase -= 0.1f;
             optionCallback_CubeFrequency(renderer);
             prepareGame();
-          } else if (dirPressedRight() && cubeBounds < 15.0f && invincibilityResetIndex < 6) {
-            cubeBounds += 0.1f;
+          } else if (dirPressedRight() && cubeBoundsBase < 13.1f && invincibilityResetIndex < 6) {
+            cubeBoundsBase += 0.1f;
             optionCallback_CubeFrequency(renderer);
             prepareGame();
           }

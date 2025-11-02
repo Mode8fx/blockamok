@@ -31,24 +31,26 @@ bool debugMode = false;
 bool usedDebugMode = false;
 
 #if defined(GAMECUBE)
-float cubeBounds = 9.2f; // 60 FPS
+float cubeBoundsBase = 9.2f; // 60 FPS
 #elif defined(WII)
-float cubeBounds = DEFAULT_CUBE_BOUNDS; // 60 FPS
+float cubeBoundsBase = DEFAULT_CUBE_BOUNDS; // 60 FPS
 #elif defined(WII_U)
-float cubeBounds = 7.5f; // 31-60 FPS (about half the difficulty settings hit 60 or close)
+float cubeBoundsBase = 7.5f; // 31-60 FPS (about half the difficulty settings hit 60 or close)
 #elif defined(SWITCH)
-float cubeBounds = 8.7f; // 60 FPS
+float cubeBoundsBase = 8.7f; // 60 FPS
 #elif defined(THREEDS)
-float cubeBounds = 4.8f; // 40-60 FPS on New 3DS, 12-20 FPS on Old 3DS
+float cubeBoundsBase = 4.8f; // 40-60 FPS on New 3DS, 12-20 FPS on Old 3DS
 #elif defined(PSP)
-float cubeBounds = 3.5f; // 23-48 FPS without overclock, 46-58 FPS with 333 MHz (full) overclock
+float cubeBoundsBase = 3.5f; // 23-48 FPS without overclock, 46-58 FPS with 333 MHz (full) overclock
 #elif defined(VITA)
-float cubeBounds = 8.5f; // 45-60 FPS without overclock, 60 FPS with 444 MHz (partial) overclock
+float cubeBoundsBase = 8.5f; // 45-60 FPS without overclock, 60 FPS with 444 MHz (partial) overclock
 #elif defined(ANDROID)
-float cubeBounds = 10.0f;
+float cubeBoundsBase = 10.0f;
 #else
-float cubeBounds = DEFAULT_CUBE_BOUNDS;
+float cubeBoundsBase = DEFAULT_CUBE_BOUNDS;
 #endif
+
+float cubeBounds = 0;
 
 void gameInit(Cube cubes[]) {
   playerSpeed = PLAYER_INITIAL_SPEED;
