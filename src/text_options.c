@@ -156,16 +156,16 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Visual.optionLines = optionPage_Visual_Lines;
 	optionPage_Visual.prevState = GAME_STATE_OPTIONS_MAIN;
 	if (compactView) {
-		setOptionPageLine(renderer, &optionPage_Visual, 0, "BG Color", 8, 0, STAY, true);
+		setOptionPageLine(renderer, &optionPage_Visual, 0, "BG Color", 8, 3, STAY, true);
 	} else {
-		setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 8, 0, STAY, true);
+		setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 8, 3, STAY, true);
 	}
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Electric Green", "Change the background color.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Lava Red", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Harvest Orange", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 5, "Golden Brass", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Lava Red", "Change the background color.", EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Space Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 0, 5, "Ocean Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 0, 7, "Void Black", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 1, "Block Color", 6, 0, STAY, true);
@@ -175,13 +175,13 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 5, "Stone", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 10, 5, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Electric Green", "Change the overlay color", "on non-square displays.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Ocean Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Lava Red", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Harvest Orange", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 5, "Golden Brass", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 10, 8, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Lava Red", "Change the overlay color", "on non-square displays.", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Space Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 5, "Ocean Blue", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 7, "Void Black", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 8, "Pitch Black", EMPTY, EMPTY, EMPTY);
@@ -301,22 +301,22 @@ static void optionCallback_CubeSize() {
 void optionCallback_OverlayColor() {
 	switch (OPTION_OVERLAY_COLOR) {
 	case 0:
-		overlayColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
-		break;
-	case 1:
-		overlayColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
-		break;
-	case 2:
-		overlayColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
-		break;
-	case 3:
 		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
 		break;
-	case 5:
+	case 1:
+		overlayColor = (SDL_Color){ .r = 255, .g = 140, .b = 30 };
+		break;
+	case 2:
 		overlayColor = (SDL_Color){ .r = 255, .g = 210, .b = 90 };
 		break;
+	case 3:
+		overlayColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
+		break;
 	case 4:
-		overlayColor = (SDL_Color){ .r = 255, .g = 140, .b = 30 };
+		overlayColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		break;
+	case 5:
+		overlayColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
 		break;
 	case 6:
 		overlayColor = (SDL_Color){ .r = 100, .g = 50, .b = 180 };
@@ -337,22 +337,22 @@ void optionCallback_OverlayColor() {
 static void optionCallback_BackgroundColor() {
 	switch (OPTION_BACKGROUND_COLOR) {
 	case 0:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
-		break;
-	case 1:
-		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
-		break;
-	case 2:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
-		break;
-	case 3:
 		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
 		break;
-	case 5:
+	case 1:
+		backgroundColor = (SDL_Color){ .r = 255, .g = 140, .b = 30 };
+		break;
+	case 2:
 		backgroundColor = (SDL_Color){ .r = 255, .g = 210, .b = 90 };
 		break;
+	case 3:
+		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
+		break;
 	case 4:
-		backgroundColor = (SDL_Color){ .r = 255, .g = 140, .b = 30 };
+		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		break;
+	case 5:
+		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
 		break;
 	case 6:
 		backgroundColor = (SDL_Color){ .r = 100, .g = 50, .b = 180 };
