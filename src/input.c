@@ -254,7 +254,7 @@ static inline void gameSpecificInputBehavior() {
 #if !(defined(PSP) || defined(GAMECUBE) || defined(WII))
 static inline void mapInputToVar_SDL2(Uint16 varBtn, SDL_GameControllerButton inputBtn) {
 	for (int i = 0; i < 4; i++) {
-		if (SDL_GameControllerGetButton(controllers[i], inputBtn)) {
+		if (controllers[i] && SDL_GameControllerGetButton(controllers[i], inputBtn)) {
 			heldKeys |= varBtn;
 		}
 	}
@@ -385,7 +385,7 @@ static void handleAllCurrentInputs() {
 	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_KP_ENTER);
 	mapInputToVar_Keyboard(state, INPUT_SELECT, SDL_SCANCODE_BACKSPACE);
 #if defined(ANDROID)
-	mapInputToVar_Keyboard(state, INPUT_START, SDLK_AC_BACK);
+	mapInputToVar_Keyboard(state, INPUT_START, SDL_SCANCODE_AC_BACK);
 #endif
 #endif
 
