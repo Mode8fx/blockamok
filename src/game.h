@@ -48,6 +48,7 @@ extern float cubeSizeLimit;
 extern Sint8 numLives;
 
 extern bool debugMode;
+extern bool usedDebugMode;
 
 // Weaker systems need to handle fewer cubes, and smaller bounds balance this out
 #define DEFAULT_CUBE_BOUNDS 12.0f

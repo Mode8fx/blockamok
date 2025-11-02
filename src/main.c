@@ -356,11 +356,11 @@ int main(int arg, char *argv[]) {
 
       case GAME_STATE_PAUSED:
         if (debugMode) {
-          if (dirPressedLeft() && cubeBounds > 2.5f) {
+          if (dirPressedLeft() && cubeBounds > 2.5f && invincibilityResetIndex < 6) {
             cubeBounds -= 0.1f;
             optionCallback_CubeFrequency(renderer);
             prepareGame();
-          } else if (dirPressedRight() && cubeBounds < 15.0f) {
+          } else if (dirPressedRight() && cubeBounds < 15.0f && invincibilityResetIndex < 6) {
             cubeBounds += 0.1f;
             optionCallback_CubeFrequency(renderer);
             prepareGame();
@@ -381,6 +381,7 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_GAME_OVER:
         if (keyPressed(INPUT_START)) {
           newHighScore = false;
+          usedDebugMode = false;
           prepareGame();
           gameState = GAME_STATE_TITLE_SCREEN;
         }

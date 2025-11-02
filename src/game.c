@@ -28,6 +28,7 @@ Sint16 movementMagnitudeX;
 Sint16 movementMagnitudeY;
 
 bool debugMode = false;
+bool usedDebugMode = false;
 
 #if defined(GAMECUBE)
 float cubeBounds = 9.2f; // 60 FPS
@@ -210,9 +211,11 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
           }
           scoreVal += zSpeed;
           if (scoreVal > highScoreVal) {
-            highScoreVal = (int)scoreVal;
             newHighScore = true;
-            writeSaveData();
+            if (!usedDebugMode) {
+              highScoreVal = (int)scoreVal;
+              writeSaveData();
+            }
           }
           qsort(cubes, cubeAmount, sizeof(Cube), compareSize);
           return GAME_STATE_GAME_OVER;

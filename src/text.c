@@ -446,6 +446,7 @@ void drawGameText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LWC %d", (int)scoreVal);
   drawTextFromChars(renderer, 0.5f, 0.03f);
   if (debugMode) {
+    usedDebugMode = true;
     snprintf(valStr, TEXT_LINE_SIZE, "LWC %.1f %d", cubeBounds, cubeAmount);
     drawTextFromChars(renderer, 0.5f, 0.90f);
   }
@@ -566,8 +567,13 @@ void drawCursor(SDL_Renderer *renderer) {
 void drawGameOverText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_gameover);
   if (newHighScore) {
-    snprintf(valStr, TEXT_LINE_SIZE, "LoC New High Score!");
-    drawTextFromChars(renderer, 0.5f, 0.75f);
+    if (usedDebugMode) {
+      snprintf(valStr, TEXT_LINE_SIZE, "LoC Now try it without debug mode!");
+      drawTextFromChars(renderer, 0.5f, 0.75f);
+    } else {
+      snprintf(valStr, TEXT_LINE_SIZE, "LoC New High Score!");
+      drawTextFromChars(renderer, 0.5f, 0.75f);
+    }
   }
 }
 
