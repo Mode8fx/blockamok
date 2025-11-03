@@ -183,8 +183,8 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 5, "Stone", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay Color", 10, 8, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Lava Red", "Change the overlay color", "on non-square displays.", EMPTY);
+	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay", 11, 9, STAY, true);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
@@ -193,10 +193,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 7, "Void Black", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 8, "Pitch Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Visual, 2, 9, "Off", EMPTY, EMPTY, EMPTY);
 	if (compactView) {
-		setOptionChoice(renderer, &optionPage_Visual, 2, 9, "Match BG", EMPTY, EMPTY, EMPTY);
+		setOptionChoice(renderer, &optionPage_Visual, 2, 10, "Match BG", EMPTY, EMPTY, EMPTY);
 	} else {
-		setOptionChoice(renderer, &optionPage_Visual, 2, 9, "Match Background", EMPTY, EMPTY, EMPTY);
+		setOptionChoice(renderer, &optionPage_Visual, 2, 10, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
 	if (compactView) {
 		setOptionPageLine(renderer, &optionPage_Visual, 3, "Transparency", 2, 0, STAY, true);
@@ -336,11 +337,12 @@ void optionCallback_OverlayColor() {
 	case 8:
 		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0 };
 		break;
+	case 9:
+		break;
 	default:
 		overlayColor = backgroundColor;
 		break;
 	}
-	drawOverlayOnThisFrame = true;
 }
 
 static void optionCallback_BackgroundColor() {
@@ -531,9 +533,9 @@ static inline void drawOptionTextFromChars(SDL_Renderer *renderer, Message messa
 
 static inline void drawLineFromChars(SDL_Renderer *renderer, OptionLine *line, OptionChoice *choice) {
 	Uint8 numChars = (Uint8)strlen(line->name);
-	drawOptionTextFromChars(renderer, message_characters_white_38, line->name, numChars, (int)(LINE_X * GAME_WIDTH), line->y);
+	drawOptionTextFromChars(renderer, message_characters_white_38, line->name, numChars, (int)(LINE_X * GAME_WIDTH + gameOffsetX), line->y);
 	numChars = (Uint8)strlen(choice->name);
-	drawOptionTextFromChars(renderer, message_characters_gray_38, choice->name, numChars, (int)(CHOICE_X * GAME_WIDTH), choice->y);
+	drawOptionTextFromChars(renderer, message_characters_gray_38, choice->name, numChars, (int)(CHOICE_X * GAME_WIDTH + gameOffsetX), choice->y);
 }
 
 static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choice) {

@@ -11,7 +11,6 @@ extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
 #define GAME_WIDTH WINDOW_HEIGHT // square
 #define GAME_HEIGHT WINDOW_HEIGHT
-extern SDL_Rect gameViewport;
 extern SDL_Rect leftBar;
 extern SDL_Rect rightBar;
 extern SDL_Rect leftBorder;
@@ -23,7 +22,6 @@ extern SDL_Color backgroundColor;
 extern SDL_Color cubeColorFront;
 extern SDL_Color cubeColorSide;
 extern SDL_Color overlayColor;
-extern bool drawOverlayOnThisFrame;
 
 #if defined(PSP)
 #define SDL_RenderSetViewport(renderer, rect);

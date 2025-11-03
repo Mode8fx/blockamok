@@ -21,7 +21,6 @@
 SDL_Window *window = NULL;
 SDL_Renderer *renderer;
 int gameState = GAME_STATE_STARTED;
-bool drawOverlayOnThisFrame = true;
 
 Uint32 now = 0;
 Uint32 last = 0;
@@ -84,10 +83,9 @@ static void handleWindowResize(SDL_Event *event) {
   }
   setScalingVals();
   initStaticMessages(renderer);
-  readSaveData(); // fixes menu options sometimes being reset to defaults
+  readSaveData(true); // fixes menu options sometimes being reset to defaults
   optionCallback_All(); // fixes menu options sometimes being reset to defaults
   saveBackgroundAsTexture(renderer);
-  drawOverlayOnThisFrame = true;
 #endif
 }
 
@@ -174,7 +172,7 @@ static void handleInvincibility() {
 static void handleFullscreenToggle() {
 #if defined(PC)
   if (keyPressed(INPUT_RS)) {
-    OPTION_FULLSCREEN = !OPTION_FULLSCREEN;
+    OPTION_FULLSCREEN ^= 1;
     optionCallback_Fullscreen(window, &optionPage_Visual);
   }
 #endif
@@ -188,9 +186,8 @@ int main(int arg, char *argv[]) {
   loadConfig(DM.w, DM.h);
   init();
   setScalingVals();
-  SDL_RenderSetViewport(renderer, &gameViewport);
   initStaticMessages(renderer);
-  readSaveData();
+  readSaveData(false);
   optionCallback_All();
   saveBackgroundAsTexture(renderer);
   playMusicAtIndex(OPTION_MUSIC);
@@ -393,10 +390,7 @@ int main(int arg, char *argv[]) {
 
     updateLastKeys();
 
-#if defined(FORCE_DRAW_OVERLAY)
-    drawOverlayOnThisFrame = true;
-#endif
-    if (drawOverlayOnThisFrame) {
+    if (OPTION_OVERLAY_COLOR != 9) {
       SDL_RenderSetViewport(renderer, NULL);
       SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
       SDL_RenderFillRect(renderer, &leftBar);
@@ -404,8 +398,6 @@ int main(int arg, char *argv[]) {
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
       SDL_RenderFillRect(renderer, &leftBorder);
       SDL_RenderFillRect(renderer, &rightBorder);
-      SDL_RenderSetViewport(renderer, &gameViewport);
-      drawOverlayOnThisFrame = false;
     }
 
     if (showFPS) {

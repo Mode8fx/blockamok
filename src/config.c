@@ -232,7 +232,7 @@ void writeSaveData() {
   }
 }
 
-void readSaveData() {
+void readSaveData(bool skipVisualSettings) {
   FILE *file = fopen(saveFile, "rb");
   if (file != NULL) {
     fread(&highScoreVal, sizeof(highScoreVal), 1, file);
@@ -240,16 +240,26 @@ void readSaveData() {
     fread(&OPTION_CUBE_SIZE, sizeof(OPTION_CUBE_SIZE), 1, file);
     fread(&OPTION_LIVES, sizeof(OPTION_LIVES), 1, file);
     fread(&OPTION_CONTROL_TYPE, sizeof(OPTION_CONTROL_TYPE), 1, file);
-    fread(&OPTION_BACKGROUND_COLOR, sizeof(OPTION_BACKGROUND_COLOR), 1, file);
-    fread(&OPTION_CUBE_COLOR, sizeof(OPTION_CUBE_COLOR), 1, file);
-    fread(&OPTION_OVERLAY_COLOR, sizeof(OPTION_OVERLAY_COLOR), 1, file);
-    fread(&OPTION_SPEEDOMETER, sizeof(OPTION_SPEEDOMETER), 1, file);
-    fread(&OPTION_FULLSCREEN, sizeof(OPTION_FULLSCREEN), 1, file);
+    if (skipVisualSettings) {
+      fseek(file, sizeof(OPTION_BACKGROUND_COLOR) + sizeof(OPTION_CUBE_COLOR) +
+        sizeof(OPTION_OVERLAY_COLOR) + sizeof(OPTION_SPEEDOMETER) +
+        sizeof(OPTION_FULLSCREEN), SEEK_CUR);
+    } else {
+      fread(&OPTION_BACKGROUND_COLOR, sizeof(OPTION_BACKGROUND_COLOR), 1, file);
+      fread(&OPTION_CUBE_COLOR, sizeof(OPTION_CUBE_COLOR), 1, file);
+      fread(&OPTION_OVERLAY_COLOR, sizeof(OPTION_OVERLAY_COLOR), 1, file);
+      fread(&OPTION_SPEEDOMETER, sizeof(OPTION_SPEEDOMETER), 1, file);
+      fread(&OPTION_FULLSCREEN, sizeof(OPTION_FULLSCREEN), 1, file);
+    }
     fread(&OPTION_MUSIC, sizeof(OPTION_MUSIC), 1, file);
     fread(&OPTION_MUSIC_VOLUME, sizeof(OPTION_MUSIC_VOLUME), 1, file);
     fread(&OPTION_SFX_VOLUME, sizeof(OPTION_SFX_VOLUME), 1, file);
-    fread(&OPTION_SIMPLE_CUBES, sizeof(OPTION_SIMPLE_CUBES), 1, file);
-    fread(&OPTION_FRAME_RATE, sizeof(OPTION_FRAME_RATE), 1, file);
+    if (!skipVisualSettings) {
+      fseek(file, sizeof(OPTION_SIMPLE_CUBES) + sizeof(OPTION_FRAME_RATE), SEEK_CUR);
+    } else {
+      fread(&OPTION_SIMPLE_CUBES, sizeof(OPTION_SIMPLE_CUBES), 1, file);
+      fread(&OPTION_FRAME_RATE, sizeof(OPTION_FRAME_RATE), 1, file);
+    }
     fread(&OPTION_SPAWN_AREA, sizeof(OPTION_SPAWN_AREA), 1, file);
     fclose(file);
   } else {
