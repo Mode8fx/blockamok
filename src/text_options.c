@@ -256,7 +256,7 @@ void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
 	if (resetIndex) {
 		page->index = 0;
 	}
-	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
+	setMessagePosRelativeToGame_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
 void optionCallback_CubeFrequency(SDL_Renderer *renderer) {
@@ -640,7 +640,7 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 				break;
 		}
 	}
-	setMessagePosRelativeToScreen_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
+	setMessagePosRelativeToGame_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 
 	if (renderCursor) {
 		renderMessage(renderer, &message_menu_cursor);

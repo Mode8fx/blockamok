@@ -128,7 +128,7 @@ static inline void setMessagePos(Message *message, int x, int y) {
 	setMessagePosY(message, y);
 }
 
-static inline void setMessagePosRelativeToScreenX(Message *message, float x) {
+static inline void setMessagePosRelativeToGameX(Message *message, float x) {
 	setMessagePosX(message, (int)(GAME_WIDTH * x - message->text_rect.w * 0.5f));
 }
 
@@ -136,26 +136,26 @@ inline void setMessagePosRelativeToScreenY(Message *message, float y) {
 	setMessagePosY(message, (int)(GAME_HEIGHT * y - message->text_rect.h * 0.5f));
 }
 
-inline void setMessagePosRelativeToScreen(Message *message, float x, float y) {
-	setMessagePosRelativeToScreenX(message, x);
+inline void setMessagePosRelativeToGame(Message *message, float x, float y) {
+	setMessagePosRelativeToGameX(message, x);
 	setMessagePosRelativeToScreenY(message, y);
 }
 
-static inline void setMessagePosRelativeToScreenX_LeftAlign(Message *message, float x) {
+static inline void setMessagePosRelativeToGameX_LeftAlign(Message *message, float x) {
   setMessagePosX(message, (int)(GAME_WIDTH * x));
 }
 
-void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y) {
-  setMessagePosRelativeToScreenX_LeftAlign(message, x);
+void setMessagePosRelativeToGame_LeftAlign(Message *message, float x, float y) {
+  setMessagePosRelativeToGameX_LeftAlign(message, x);
   setMessagePosRelativeToScreenY(message, y);
 }
 
-static inline void setMessagePosRelativeToScreenX_RightAlign(Message *message, float x) {
+static inline void setMessagePosRelativeToGameX_RightAlign(Message *message, float x) {
   setMessagePosX(message, (int)(GAME_WIDTH * x - message->text_rect.w));
 }
 
-static inline void setMessagePosRelativeToScreen_RightAlign(Message *message, float x, float y) {
-  setMessagePosRelativeToScreenX_RightAlign(message, x);
+static inline void setMessagePosRelativeToGame_RightAlign(Message *message, float x, float y) {
+  setMessagePosRelativeToGameX_RightAlign(message, x);
   setMessagePosRelativeToScreenY(message, y);
 }
 
@@ -239,17 +239,17 @@ static void initStaticMessages_Characters() {
 static void initStaticMessages_TitleScreen() {
   snprintf(message_titlescreen_logo_1.text, MAX_MESSAGE_SIZE, "Blockamok");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_titlescreen_logo_1, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_titlescreen_logo_1, 0.5f, 0.4f);
+  setMessagePosRelativeToGame(&message_titlescreen_logo_1, 0.5f, 0.4f);
 
   snprintf(message_titlescreen_logo_2.text, MAX_MESSAGE_SIZE, "Remix");
   prepareMessage(renderer, Sans_63, outlineSize_63, &message_titlescreen_logo_2, 1, color_black, color_white);
-  setMessagePosRelativeToScreen(&message_titlescreen_logo_2, 0.5f, 0.525f);
+  setMessagePosRelativeToGame(&message_titlescreen_logo_2, 0.5f, 0.525f);
 }
 
 static void initStaticMessages_Game() {
   snprintf(message_game_cursor.text, MAX_MESSAGE_SIZE, "+");
   prepareMessage(renderer, Sans_63, outlineSize_63, &message_game_cursor, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_game_cursor, 0.5f, 0.5f);
+  setMessagePosRelativeToGame(&message_game_cursor, 0.5f, 0.5f);
   SDL_SetTextureAlphaMod(message_game_cursor.outline_texture, 64);
   SDL_SetTextureAlphaMod(message_game_cursor.text_texture, 64);
 
@@ -259,11 +259,11 @@ static void initStaticMessages_Game() {
 
   snprintf(message_gameover.text, MAX_MESSAGE_SIZE, "GAME OVER");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_gameover, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_gameover, 0.5f, 0.5f);
+  setMessagePosRelativeToGame(&message_gameover, 0.5f, 0.5f);
 
   snprintf(message_paused.text, MAX_MESSAGE_SIZE, "PAUSED");
   prepareMessage(renderer, Sans_126, outlineSize_126, &message_paused, 1, color_white, color_black);
-  setMessagePosRelativeToScreen(&message_paused, 0.5f, 0.5f);
+  setMessagePosRelativeToGame(&message_paused, 0.5f, 0.5f);
 }
 
 static void initStaticMessages_Credits() {
@@ -449,7 +449,7 @@ void drawGameText(SDL_Renderer *renderer) {
   Uint32 invinceTimer = now - invinceStart;
   if (invinceTimer > INVINCE_TIME || invinceTimer / INVINCE_BLINK_TIME % 2 == 1 || gameStart == invinceStart) {
     for (int i = 0; i < numLives; i++) {
-      setMessagePosRelativeToScreenX_LeftAlign(&message_game_life, 0.8f + 0.06f * i);
+      setMessagePosRelativeToGameX_LeftAlign(&message_game_life, 0.8f + 0.06f * i);
       renderMessage(renderer, &message_game_life);
     }
   }

@@ -96,8 +96,8 @@ extern Uint32 ticksPerFrame;
 extern void prepareMessage(SDL_Renderer *renderer, TTF_Font *font, int outlineSize, Message *message, float sizeMult, SDL_Color textColor, SDL_Color outlineColor);
 extern void renderMessage(SDL_Renderer *renderer, Message *message);
 extern void setMessagePosRelativeToScreenY(Message *message, float y);
-extern void setMessagePosRelativeToScreen(Message *message, float x, float y);
-extern void setMessagePosRelativeToScreen_LeftAlign(Message *message, float x, float y);
+extern void setMessagePosRelativeToGame(Message *message, float x, float y);
+extern void setMessagePosRelativeToGame_LeftAlign(Message *message, float x, float y);
 
 extern void initStaticMessages(SDL_Renderer *renderer);
 extern void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText);
