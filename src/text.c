@@ -192,16 +192,15 @@ static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float r
     message_characters = message_characters_white_42;
   }
   // Third character sets alignment
-  int currX;
+  int currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX);
   switch (valStr[2]) {
-  case 'L':
-    currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX);
-    break;
+  //case 'L':
+  //  break;
   case 'C':
-    currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX - (numChars * message_characters[0].text_rect.w) / 2);
+    currX -= (numChars * message_characters[0].text_rect.w) / 2;
     break;
   default: // 'R'
-    currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX - numChars * message_characters[0].text_rect.w);
+    currX -= numChars * message_characters[0].text_rect.w;
     break;
   }
 
