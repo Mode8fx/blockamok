@@ -145,6 +145,10 @@ static inline void setMessagePosRelativeToGameX_LeftAlign(Message *message, floa
   setMessagePosX(message, (int)(GAME_WIDTH * x));
 }
 
+static inline void setMessagePosRelativeToScreenX_LeftAlign(Message *message, float x) {
+  setMessagePosX(message, (int)(GAME_WIDTH * x + gameOffsetX));
+}
+
 void setMessagePosRelativeToGame_LeftAlign(Message *message, float x, float y) {
   setMessagePosRelativeToGameX_LeftAlign(message, x);
   setMessagePosRelativeToScreenY(message, y);
@@ -154,12 +158,16 @@ static inline void setMessagePosRelativeToGameX_RightAlign(Message *message, flo
   setMessagePosX(message, (int)(GAME_WIDTH * x - message->text_rect.w));
 }
 
+static inline void setMessagePosRelativeToScreenX_RightAlign(Message *message, float x) {
+  setMessagePosX(message, (int)(GAME_WIDTH * x + gameOffsetX - message->text_rect.w));
+}
+
 static inline void setMessagePosRelativeToGame_RightAlign(Message *message, float x, float y) {
   setMessagePosRelativeToGameX_RightAlign(message, x);
   setMessagePosRelativeToScreenY(message, y);
 }
 
-static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float relY) {
+static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float relY, int manualOffsetX) {
   Message *message_characters;
 
   // Initialize string if empty
@@ -187,13 +195,13 @@ static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float r
   int currX;
   switch (valStr[2]) {
   case 'L':
-    currX = (int)(relX * GAME_WIDTH + gameOffsetX);
+    currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX);
     break;
   case 'C':
-    currX = (int)(relX * GAME_WIDTH + gameOffsetX - (numChars * message_characters[0].text_rect.w) / 2);
+    currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX - (numChars * message_characters[0].text_rect.w) / 2);
     break;
   default: // 'R'
-    currX = (int)(relX * GAME_WIDTH + gameOffsetX - numChars * message_characters[0].text_rect.w);
+    currX = (int)(relX * GAME_WIDTH + gameOffsetX + manualOffsetX - numChars * message_characters[0].text_rect.w);
     break;
   }
 
@@ -429,28 +437,35 @@ void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText) {
   renderMessage(renderer, &message_titlescreen_logo_2);
   if (drawSecondaryText) {
     snprintf(valStr, TEXT_LINE_SIZE, "LWC Press %s to fly", btn_Start);
-    drawTextFromChars(renderer, 0.5f, 0.65f);
+    drawTextFromChars(renderer, 0.5f, 0.65f, 0);
     snprintf(valStr, TEXT_LINE_SIZE, "LWC Press %s for options", btn_Select);
-    drawTextFromChars(renderer, 0.5f, 0.75f);
+    drawTextFromChars(renderer, 0.5f, 0.75f, 0);
     snprintf(valStr, TEXT_LINE_SIZE, "LoC High Score: %d", highScoreVal);
-    drawTextFromChars(renderer, 0.5f, 0.9f);
+    drawTextFromChars(renderer, 0.5f, 0.9f, 0);
   }
 }
 
 void drawGameText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LWC %d", (int)scoreVal);
-  drawTextFromChars(renderer, 0.5f, 0.03f);
+  drawTextFromChars(renderer, 0.5f, 0.03f, 0);
   if (debugMode) {
     usedDebugMode = true;
     snprintf(valStr, TEXT_LINE_SIZE, "LWC %.1f %d", cubeBoundsBase, cubeAmount);
-    drawTextFromChars(renderer, 0.5f, 0.90f);
+    drawTextFromChars(renderer, 0.5f, 0.90f, 0);
   }
 
   Uint32 invinceTimer = now - invinceStart;
   if (invinceTimer > INVINCE_TIME || invinceTimer / INVINCE_BLINK_TIME % 2 == 1 || gameStart == invinceStart) {
-    for (int i = 0; i < numLives; i++) {
-      setMessagePosRelativeToGameX_LeftAlign(&message_game_life, 0.8f + 0.06f * i);
-      renderMessage(renderer, &message_game_life);
+    if (OPTION_OVERLAY_COLOR != 9) {
+      for (int i = 0; i < numLives; i++) {
+        setMessagePosRelativeToGameX_RightAlign(&message_game_life, 0.965f - 0.06f * i);
+        renderMessage(renderer, &message_game_life);
+      }
+    } else {
+      for (int i = 0; i < numLives; i++) {
+        setMessagePosRelativeToScreenX_RightAlign(&message_game_life, 0.965f - 0.06f * i);
+        renderMessage(renderer, &message_game_life);
+      }
     }
   }
 
@@ -458,33 +473,36 @@ void drawGameText(SDL_Renderer *renderer) {
     float printedSpeed = playerSpeed * (speedingUp ? SPEED_UP_MULT : 1);
     if (printedSpeed < (speedingUp ? TRUE_MAX_SPEED_INT : MAX_SPEED_INT)) {
       snprintf(valStr, TEXT_LINE_SIZE, "LWR %d MPH", (int)printedSpeed);
-      drawTextFromChars(renderer, 0.95f, 0.95f);
     } else {
       snprintf(valStr, TEXT_LINE_SIZE, "LoR %d MPH", (int)printedSpeed);
-      drawTextFromChars(renderer, 0.95f, 0.95f);
+    }
+    if (OPTION_OVERLAY_COLOR != 9) {
+      drawTextFromChars(renderer, 0.95f, 0.95f, 0);
+    } else {
+      drawTextFromChars(renderer, 0.95f, 0.95f, gameOffsetX);
     }
   }
 }
 
 void drawInstructionsText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LoC Dodge the incoming blocks!");
-  drawTextFromChars(renderer, 0.5f, 0.15f);
+  drawTextFromChars(renderer, 0.5f, 0.15f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Hold %s or %s to speed up.", btn_A, btn_B);
-  drawTextFromChars(renderer, 0.5f, 0.225f);
+  drawTextFromChars(renderer, 0.5f, 0.225f, 0);
 #if defined(PSP)
   snprintf(valStr, TEXT_LINE_SIZE, "MGC %s or %s to toggle cursor.", btn_X, btn_Y);
 #else
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Press %s or %s to toggle cursor.", btn_X, btn_Y);
 #endif
-  drawTextFromChars(renderer, 0.5f, 0.3f);
+  drawTextFromChars(renderer, 0.5f, 0.3f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Press %s to pause.", btn_Start);
-  drawTextFromChars(renderer, 0.5f, 0.375f);
+  drawTextFromChars(renderer, 0.5f, 0.375f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "MGC Press %s or %s to change music.", btn_L, btn_R);
-  drawTextFromChars(renderer, 0.5f, 0.45f);
+  drawTextFromChars(renderer, 0.5f, 0.45f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "LoC Check the Options menu");
-  drawTextFromChars(renderer, 0.5f, 0.6f);
+  drawTextFromChars(renderer, 0.5f, 0.6f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "LoC to customize your game!");
-  drawTextFromChars(renderer, 0.5f, 0.675f);
+  drawTextFromChars(renderer, 0.5f, 0.675f, 0);
 }
 
 void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
@@ -516,41 +534,41 @@ void drawCreditsText(SDL_Renderer *renderer, Uint32 now) {
 			break;
 		}
     snprintf(valStr, TEXT_LINE_SIZE, "%s", message_array_credits_text[i]);
-    drawTextFromChars(renderer, 0.5f, startPosY);
+    drawTextFromChars(renderer, 0.5f, startPosY, 0);
   }
 }
 
 void drawResetHighScoreText(SDL_Renderer *renderer) {
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Are you sure you want to");
-  drawTextFromChars(renderer, 0.5f, 0.35f);
+  drawTextFromChars(renderer, 0.5f, 0.35f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "LWC reset your high score?");
-  drawTextFromChars(renderer, 0.5f, 0.425f);
+  drawTextFromChars(renderer, 0.5f, 0.425f, 0);
   snprintf(valStr, TEXT_LINE_SIZE, "LWC If so, press");
-  drawTextFromChars(renderer, 0.5f, 0.575f);
+  drawTextFromChars(renderer, 0.5f, 0.575f, 0);
   if (!compactView) {
     snprintf(valStr, TEXT_LINE_SIZE, "MrC Up Down Left Right Up Down Left Right");
-    drawTextFromChars(renderer, 0.5f, 0.65f);
+    drawTextFromChars(renderer, 0.5f, 0.65f, 0);
   } else {
     snprintf(valStr, TEXT_LINE_SIZE, "MrC Up Down Left Right");
-    drawTextFromChars(renderer, 0.5f, 0.65f);
+    drawTextFromChars(renderer, 0.5f, 0.65f, 0);
     //snprintf(valStr, TEXT_LINE_SIZE, "Mr Up Down Left Right");
-    drawTextFromChars(renderer, 0.5f, 0.725f);
+    drawTextFromChars(renderer, 0.5f, 0.725f, 0);
   }
 }
 
 void drawQuitText(SDL_Renderer *renderer) {
 #if defined(SWITCH) || defined(WII_U)
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Quit to homebrew menu?");
-  drawTextFromChars(renderer, 0.5f, 0.45f);
+  drawTextFromChars(renderer, 0.5f, 0.45f, 0);
 #elif defined(WII)
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Quit to Homebrew Channel?");
-  drawTextFromChars(renderer, 0.5f, 0.45f);
+  drawTextFromChars(renderer, 0.5f, 0.45f, 0);
 #else
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Are you sure you want to quit?");
-  drawTextFromChars(renderer, 0.5f, 0.45f);
+  drawTextFromChars(renderer, 0.5f, 0.45f, 0);
 #endif
   snprintf(valStr, TEXT_LINE_SIZE, "MrC Press %s to quit", btn_A);
-  drawTextFromChars(renderer, 0.5f, 0.55f);
+  drawTextFromChars(renderer, 0.5f, 0.55f, 0);
 }
 
 void drawCursor(SDL_Renderer *renderer) {
@@ -564,10 +582,10 @@ void drawGameOverText(SDL_Renderer *renderer) {
   if (newHighScore) {
     if (usedDebugMode) {
       snprintf(valStr, TEXT_LINE_SIZE, "LoC Now try it without debug mode!");
-      drawTextFromChars(renderer, 0.5f, 0.75f);
+      drawTextFromChars(renderer, 0.5f, 0.75f, 0);
     } else {
       snprintf(valStr, TEXT_LINE_SIZE, "LoC New High Score!");
-      drawTextFromChars(renderer, 0.5f, 0.75f);
+      drawTextFromChars(renderer, 0.5f, 0.75f, 0);
     }
   }
 }
@@ -575,7 +593,7 @@ void drawGameOverText(SDL_Renderer *renderer) {
 void drawPausedText(SDL_Renderer *renderer) {
   renderMessage(renderer, &message_paused);
   snprintf(valStr, TEXT_LINE_SIZE, "LWC Press %s to quit", btn_Select);
-  drawTextFromChars(renderer, 0.5f, 0.65f);
+  drawTextFromChars(renderer, 0.5f, 0.65f, 0);
 }
 
 void cleanUpText() {
@@ -622,5 +640,5 @@ void printFPS() {
   int tens = ((int)(fps_frameCountLastSecond) / 10) % 10;
   int ones = (int)(fps_frameCountLastSecond) % 10;
   snprintf(valStr, TEXT_LINE_SIZE, "LWC %d%d%d", hundreds, tens, ones);
-  drawTextFromChars(renderer, 0.5f, 0.95f);
+  drawTextFromChars(renderer, 0.5f, 0.95f, 0);
 }
