@@ -46,13 +46,14 @@ float HEIGHT_NEG;
 float WIDTH_DOUBLE;
 float WIDTH_HALF;
 float WIDTH_NEG;
+int gameOffsetX;
 
 #define MIN_FADE 150
 #define FADE_DIFF 40 // 190 - MIN_FADE
 #define FOV_ANGLE 45
 
 void setScalingVals() {
-  int gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
+  gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
   gameViewport = (SDL_Rect){ .x = gameOffsetX, .y = 0, .w = GAME_WIDTH, .h = GAME_HEIGHT };
   leftBar = (SDL_Rect){ .x = 0, .y = 0, .w = gameOffsetX, .h = GAME_HEIGHT };
   rightBar = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = gameOffsetX + 10, .h = GAME_HEIGHT };
@@ -81,11 +82,9 @@ static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint tri
   triangle[0].position = trianglePoints[0];
   triangle[1].position = trianglePoints[1];
   triangle[2].position = trianglePoints[2];
-#if defined(PSP)
-  triangle[0].position.x += 104;
-  triangle[1].position.x += 104;
-  triangle[2].position.x += 104;
-#endif
+  //triangle[0].position.x += gameOffsetX;
+  //triangle[1].position.x += gameOffsetX;
+  //triangle[2].position.x += gameOffsetX;
   SDL_RenderGeometry(renderer, NULL, triangle, 3, NULL, 0);
 }
 
@@ -122,7 +121,6 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
   SDL_RenderSetViewport(renderer, NULL);
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
   SDL_RenderClear(renderer);
-  SDL_RenderSetViewport(renderer, &gameViewport);
   drawBackground(renderer);
   SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, GAME_WIDTH, GAME_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
   SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
@@ -134,12 +132,7 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #endif
 }
 
-#if defined(PSP)
-#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF + 104)
-#else
-#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF)
-#endif
-
+#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF + gameOffsetX)
 #define screenY(y) (y * GAME_HEIGHT + HEIGHT_HALF)
 
 static bool isPointOutsideFront(int f, int frontI) {

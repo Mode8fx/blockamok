@@ -11,6 +11,6 @@ void fadeInFromBlack(SDL_Renderer *renderer) {
   Uint8 alpha = 255 - (255 * elapsedTime / INIT_FADE_LENGTH);
 
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
-  SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
+  SDL_Rect rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
   SDL_RenderFillRect(renderer, &rect);
 }

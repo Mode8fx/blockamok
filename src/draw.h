@@ -16,6 +16,7 @@ extern SDL_Rect leftBar;
 extern SDL_Rect rightBar;
 extern SDL_Rect leftBorder;
 extern SDL_Rect rightBorder;
+extern int gameOffsetX;
 
 extern SDL_Texture *backgroundTexture;
 extern SDL_Color backgroundColor;

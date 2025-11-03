@@ -114,9 +114,7 @@ inline void renderMessage(SDL_Renderer *renderer, Message *message) {
 
 static inline void setMessagePosX(Message *message, int x) {
   message->text_rect.x = x;
-#if defined(PSP)
-  message->text_rect.x += 104;
-#endif
+  message->text_rect.x += gameOffsetX;
   message->outline_rect.x = message->text_rect.x - (message->outline_rect.w - message->text_rect.w) / 2;
 }
 
@@ -143,7 +141,7 @@ inline void setMessagePosRelativeToScreen(Message *message, float x, float y) {
 	setMessagePosRelativeToScreenY(message, y);
 }
 
-static inline void setMessagePosRelativeToScreenX_LeftAlign(Message* message, float x) {
+static inline void setMessagePosRelativeToScreenX_LeftAlign(Message *message, float x) {
   setMessagePosX(message, (int)(GAME_WIDTH * x));
 }
 
@@ -189,18 +187,15 @@ static inline void drawTextFromChars(SDL_Renderer *renderer, float relX, float r
   int currX;
   switch (valStr[2]) {
   case 'L':
-    currX = (int)(relX * GAME_WIDTH);
+    currX = (int)(relX * GAME_WIDTH + gameOffsetX);
     break;
   case 'C':
-    currX = (int)(relX * GAME_WIDTH - (numChars * message_characters[0].text_rect.w) / 2);
+    currX = (int)(relX * GAME_WIDTH + gameOffsetX - (numChars * message_characters[0].text_rect.w) / 2);
     break;
   default: // 'R'
-    currX = (int)(relX * GAME_WIDTH - numChars * message_characters[0].text_rect.w);
+    currX = (int)(relX * GAME_WIDTH + gameOffsetX - numChars * message_characters[0].text_rect.w);
     break;
   }
-#if defined(PSP)
-  currX += 104;
-#endif
 
   // The fourth character is a delimiter (it does nothing), while the actual string starts at the fifth character
   // Render all outlines, then all text

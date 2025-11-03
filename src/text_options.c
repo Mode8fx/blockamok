@@ -514,9 +514,6 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 }
 
 static inline void drawOptionTextFromChars(SDL_Renderer *renderer, Message message_characters[], char text[], Uint8 numChars, int startingX, float relY) {
-#if defined(PSP)
-	startingX += 104;
-#endif
 	// Render all outlines, then all text
 	for (int i = 0; i < numChars; i++) {
 		Uint8 chr = text[i] - FIRST_PRINTABLE_CHAR;
@@ -549,26 +546,26 @@ static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choic
 	switch (numDescLines) {
 	case 1:
 		numChars = (Uint8)strlen(choice->descLine1);
-		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
 		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_3);
 		break;
 	case 2:
 		numChars = (Uint8)strlen(choice->descLine1);
-		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
 		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_2);
 		numChars = (Uint8)strlen(choice->descLine2);
-		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
 		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine2, numChars, startingX, DESC_LINE_Y_POS_4);
 		break;
 	default:
 		numChars = (Uint8)strlen(choice->descLine1);
-		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
 		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_1);
 		numChars = (Uint8)strlen(choice->descLine2);
-		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
 		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine2, numChars, startingX, DESC_LINE_Y_POS_3);
 		numChars = (Uint8)strlen(choice->descLine3);
-		startingX = (int)(0.5f * GAME_WIDTH - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
 		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine3, numChars, startingX, DESC_LINE_Y_POS_5);
 		break;
 	}
@@ -577,11 +574,7 @@ static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choic
 void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor) {
 	if (page->pageID != 3) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
-#if defined(PSP)
-		SDL_Rect rect = { 0, 0, GAME_WIDTH + 104, GAME_HEIGHT };
-#else
-		SDL_Rect rect = { 0, 0, GAME_WIDTH, GAME_HEIGHT };
-#endif
+		SDL_Rect rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
 		SDL_RenderFillRect(renderer, &rect);
 	}
 
