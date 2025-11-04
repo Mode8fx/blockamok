@@ -53,28 +53,36 @@ int gameOffsetX;
 
 void setScalingVals() {
   gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
+  
+  int borderWidth = GAME_HEIGHT / 100;
+  int rightBarX = gameOffsetX + GAME_WIDTH;
+  
   leftBar = (SDL_Rect){ .x = 0, .y = 0, .w = gameOffsetX, .h = GAME_HEIGHT };
-  rightBar = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = gameOffsetX + 10, .h = GAME_HEIGHT };
-  leftBorder = (SDL_Rect){ .x = 0, .y = 0, .w = GAME_HEIGHT / 100, .h = GAME_HEIGHT };
-  leftBorder.x = gameOffsetX - leftBorder.w;
-  rightBorder = (SDL_Rect){ .x = gameOffsetX + GAME_WIDTH, .y = 0, .w = GAME_HEIGHT / 100, .h = GAME_HEIGHT };
+  rightBar = (SDL_Rect){ .x = rightBarX, .y = 0, .w = gameOffsetX + 10, .h = GAME_HEIGHT };
+  leftBorder = (SDL_Rect){ .x = gameOffsetX - borderWidth, .y = 0, .w = borderWidth, .h = GAME_HEIGHT };
+  rightBorder = (SDL_Rect){ .x = rightBarX, .y = 0, .w = borderWidth, .h = GAME_HEIGHT };
 
-  HEIGHT_DOUBLE = GAME_HEIGHT * 2.0f;
-  HEIGHT_HALF = GAME_HEIGHT * 0.5f;
-  HEIGHT_NEG = -(float)GAME_HEIGHT;
-  WIDTH_DOUBLE = GAME_WIDTH * 2.0f;
-  WIDTH_HALF = GAME_WIDTH * 0.5f;
-  WIDTH_NEG = -(float)GAME_WIDTH;
+  float gameHeightF = (float)GAME_HEIGHT;
+  float gameWidthF = (float)GAME_WIDTH;
+  
+  HEIGHT_DOUBLE = gameHeightF * 2.0f;
+  HEIGHT_HALF = gameHeightF * 0.5f;
+  HEIGHT_NEG = -gameHeightF;
+  WIDTH_DOUBLE = gameWidthF * 2.0f;
+  WIDTH_HALF = gameWidthF * 0.5f;
+  WIDTH_NEG = -gameWidthF;
 
-  HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) / 2;
+  HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) * 0.5f;
   HALF_FOV_ANGLE_RADIANS_TAN = tanf(HALF_FOV_ANGLE_RADIANS);
 
-  triangle[0].color = bgVertexColor1;
-  triangle[1].color = bgVertexColor2;
-  triangle[2].color = bgVertexColor1;
+  SDL_Color color1 = bgVertexColor1;
+  SDL_Color color2 = bgVertexColor2;
+  triangle[0].color = color1;
+  triangle[1].color = color2;
+  triangle[2].color = color1;
 }
 
-static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint trianglePoints[]) {
+static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint *trianglePoints) {
   triangle[0].position = trianglePoints[0];
   triangle[1].position = trianglePoints[1];
   triangle[2].position = trianglePoints[2];
@@ -86,19 +94,18 @@ static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint tri
 
 inline static void drawBackground(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
-  SDL_FPoint triangle1Points[] = {
-		{WIDTH_NEG, HEIGHT_HALF},
-		{WIDTH_HALF, HEIGHT_NEG},
-		{WIDTH_DOUBLE, HEIGHT_HALF}
-  };
-  SDL_FPoint triangle2Points[] = {
+  SDL_RenderClear(renderer);
+  
+  SDL_FPoint trianglePoints[3] = {
     {WIDTH_NEG, HEIGHT_HALF},
-    {WIDTH_HALF, HEIGHT_DOUBLE},
+    {WIDTH_HALF, HEIGHT_NEG},
     {WIDTH_DOUBLE, HEIGHT_HALF}
   };
-  SDL_RenderClear(renderer);
-  drawBackgroundTriangle(renderer, triangle1Points);
-  drawBackgroundTriangle(renderer, triangle2Points);
+  drawBackgroundTriangle(renderer, trianglePoints);
+  
+  trianglePoints[1].x = WIDTH_HALF;
+  trianglePoints[1].y = HEIGHT_DOUBLE;
+  drawBackgroundTriangle(renderer, trianglePoints);
 }
 
 inline void draw(SDL_Renderer *renderer) {
@@ -115,11 +122,11 @@ inline void draw(SDL_Renderer *renderer) {
 void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #if !(defined(LOW_SPEC_BG) || defined(FORCE_DRAW_BG))
   SDL_RenderSetViewport(renderer, NULL);
-  SDL_SetRenderDrawColor(renderer, backgroundColor.r, backgroundColor.g, backgroundColor.b, 255);
-  SDL_RenderClear(renderer);
   drawBackground(renderer);
+  
   SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, GAME_WIDTH, GAME_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
   SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
+  
   if (backgroundTexture != NULL) {
     SDL_DestroyTexture(backgroundTexture);
   }
@@ -131,75 +138,30 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #define screenX(x) (x * GAME_WIDTH + WIDTH_HALF + gameOffsetX)
 #define screenY(y) (y * GAME_HEIGHT + HEIGHT_HALF)
 
-static bool isPointOutsideFront(int f, int frontI) {
-  //int x = transformedCube[f].x;
-  //int y = transformedCube[f].y;
-  //int frontStartX = transformedCube[frontI].x;
-  //int frontEndX = transformedCube[frontI + 2].x;
-  //int frontStartY = transformedCube[frontI].y;
-  //int frontEndY = transformedCube[frontI + 2].y;
-
-  //return (x < frontStartX || x > frontEndX || y < frontStartY || y > frontEndY);
-
-  return transformedCube[f].x < transformedCube[frontI].x || transformedCube[f].x > transformedCube[frontI + 2].x
-    || transformedCube[f].y < transformedCube[frontI].y || transformedCube[f].y > transformedCube[frontI + 2].y;
-}
-
-static inline float transform3Dto2D(float xy, float z) {
-  return xy / ((z)*HALF_FOV_ANGLE_RADIANS_TAN);
+static inline bool isPointOutsideFront(int f, int frontI) {
+  SDL_Point *point = &transformedCube[f];
+  SDL_Point *frontStart = &transformedCube[frontI];
+  SDL_Point *frontEnd = &transformedCube[frontI + 2];
+  
+  return point->x < frontStart->x || point->x > frontEnd->x
+      || point->y < frontStart->y || point->y > frontEnd->y;
 }
 
 static void drawCube(SDL_Renderer *renderer, Cube cube) {
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[p];
-    // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
-
-    point = cube.points[4 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[5 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
-
-    point = cube.points[8 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[10 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
-
-    point = cube.points[12 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[15 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
-
-    point = cube.points[16 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[20 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
+  // Transform all 20 points from 3D to 2D
+  Point *points = cube.points;
+  const int destOffsets[5] = {0, 5, 10, 15, 20};
+  
+  for (int face = 0; face < 5; face++) {
+    int srcOffset = face * 4;
+    int destOffset = destOffsets[face];
+    
+    for (int p = 0; p < 4; p++) {
+      Point *point = &points[srcOffset + p];
+      float invZ = 1.0f / (point->z * HALF_FOV_ANGLE_RADIANS_TAN);
+      transformedCube[destOffset + p].x = (int)screenX(point->x * invZ);
+      transformedCube[destOffset + p].y = (int)screenY(point->y * invZ);
+    }
   }
 
   // Close the faces by connecting the last points to the first
@@ -210,58 +172,43 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
   transformedCube[24] = transformedCube[20];
 
   // If a half has at least two points outside of front, it gets to be drawn last
-
   int lastI = 4;
   int firstI = 0;
-
   faceOrder[lastI--] = FRONT;  // Front always gets to be last
 
-  if (isPointOutsideFront(0, FRONT_I) && isPointOutsideFront(1, FRONT_I)) {
-    faceOrder[lastI--] = 0;
-  } else {
-    faceOrder[firstI++] = 0;
-  }
-  if (isPointOutsideFront(5, FRONT_I) && isPointOutsideFront(6, FRONT_I)) {
-    faceOrder[lastI--] = 1;
-  } else {
-    faceOrder[firstI++] = 1;
-  }
-  if (isPointOutsideFront(10, FRONT_I) && isPointOutsideFront(11, FRONT_I)) {
-    faceOrder[lastI--] = 2;
-  } else {
-    faceOrder[firstI++] = 2;
-  }
-  if (isPointOutsideFront(15, FRONT_I) && isPointOutsideFront(16, FRONT_I)) {
-    faceOrder[lastI--] = 3;
-  } else {
-    faceOrder[firstI++] = 3;
+  const int faceIndices[4] = {0, 5, 10, 15};
+  for (int i = 0; i < 4; i++) {
+    int idx = faceIndices[i];
+    if (isPointOutsideFront(idx, FRONT_I) && isPointOutsideFront(idx + 1, FRONT_I)) {
+      faceOrder[lastI--] = i;
+    } else {
+      faceOrder[firstI++] = i;
+    }
   }
 
   // No need to draw the first 2 faces. They are hidden behind the front
   for (int f = 2; f < 5; f++) {
-    Sint8 cubeI = faceOrder[f] * 5;
-
-    SDL_Color color = (f == FRONT) ? cubeColorFront : cubeColorSide;
-    // Cache cube points and transformed points
+    int cubeI = faceOrder[f] * 5;
     SDL_Point *transformed = &transformedCube[cubeI];
 
-    // Precompute z and fadeAmount
-    Sint8 faceIndexMult = faceOrder[f] << 2;
-    Point cubePoint = cube.points[faceIndexMult];
-    float z = cubePoint.z + fabsf(cubePoint.x) * 7 + fabsf(cubePoint.y) * 7;
-    float fadeAmount = (z < MIN_FADE) ? 0 : (z - MIN_FADE) / FADE_DIFF;
-    fadeAmount = fminf(fadeAmount, 1.0f);
+    // Select color
+    SDL_Color color = (faceOrder[f] == FRONT) ? cubeColorFront : cubeColorSide;
 
-    color.a = (Uint8)(255 - fadeAmount * 255);
+    // Calculate fade amount
+    int faceIndexMult = faceOrder[f] << 2;
+    Point *cubePoint = &points[faceIndexMult];
+    float z = cubePoint->z + fabsf(cubePoint->x) * 7.0f + fabsf(cubePoint->y) * 7.0f;
+    float fadeAmount = (z < MIN_FADE) ? 0.0f : fminf((z - MIN_FADE) / FADE_DIFF, 1.0f);
+    
+    color.a = (Uint8)(255.0f - fadeAmount * 255.0f);
 
+    // Build vertices (two triangles)
     SDL_Vertex vertices[6];
-    vertices[0].color = color;
-    vertices[1].color = color;
-    vertices[2].color = color;
-    vertices[3].color = color;
-    vertices[4].color = color;
-    vertices[5].color = color;
-
+    for (int i = 0; i < 6; i++) {
+      vertices[i].color = color;
+    }
+    
+    // First triangle
     vertices[0].position.x = (float)transformed[0].x;
     vertices[0].position.y = (float)transformed[0].y;
     vertices[1].position.x = (float)transformed[1].x;
@@ -269,6 +216,7 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
     vertices[2].position.x = (float)transformed[2].x;
     vertices[2].position.y = (float)transformed[2].y;
 
+    // Second triangle
     vertices[3].position.x = (float)transformed[2].x;
     vertices[3].position.y = (float)transformed[2].y;
     vertices[4].position.x = (float)transformed[3].x;
@@ -281,62 +229,26 @@ static void drawCube(SDL_Renderer *renderer, Cube cube) {
 
     // Render lines with adjusted fadeAmount
     fadeAmount = fminf(fadeAmount * 1.5f, 1.0f);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255 - fadeAmount * 255));
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, (Uint8)(255.0f - fadeAmount * 255.0f));
     SDL_RenderDrawLines(renderer, transformed, 5);
   }
 }
 
 static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
-  for (int p = 0; p < 4; p++) {
-    Point point = cube.points[p];
-    // Transform the 3D point to 2D
-    float transformedX = transform3Dto2D(point.x, point.z);
-    float transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
+  // Transform all 20 points from 3D to 2D
+  Point *points = cube.points;
+  const int destOffsets[5] = {0, 5, 10, 15, 20};
 
-    point = cube.points[4 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[5 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
+  for (int face = 0; face < 5; face++) {
+    int srcOffset = face * 4;
+    int destOffset = destOffsets[face];
 
-    point = cube.points[8 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[10 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
-
-    point = cube.points[12 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[15 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
-
-    point = cube.points[16 + p];
-    // Transform the 3D point to 2D
-    transformedX = transform3Dto2D(point.x, point.z);
-    transformedY = transform3Dto2D(point.y, point.z);
-    // Convert to screen coordinates
-    transformedCube[20 + p] = (SDL_Point){
-        (int)screenX(transformedX),
-        (int)screenY(transformedY)
-    };
+    for (int p = 0; p < 4; p++) {
+      Point* point = &points[srcOffset + p];
+      float invZ = 1.0f / (point->z * HALF_FOV_ANGLE_RADIANS_TAN);
+      transformedCube[destOffset + p].x = (int)screenX(point->x * invZ);
+      transformedCube[destOffset + p].y = (int)screenY(point->y * invZ);
+    }
   }
 
   // Close the faces by connecting the last points to the first
@@ -347,49 +259,36 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
   transformedCube[24] = transformedCube[20];
 
   // If a half has at least two points outside of front, it gets to be drawn last
-
   int lastI = 4;
   int firstI = 0;
-
   faceOrder[lastI--] = FRONT;  // Front always gets to be last
 
-  if (isPointOutsideFront(0, FRONT_I) && isPointOutsideFront(1, FRONT_I)) {
-    faceOrder[lastI--] = 0;
-  } else {
-    faceOrder[firstI++] = 0;
-  }
-  if (isPointOutsideFront(5, FRONT_I) && isPointOutsideFront(6, FRONT_I)) {
-    faceOrder[lastI--] = 1;
-  } else {
-    faceOrder[firstI++] = 1;
-  }
-  if (isPointOutsideFront(10, FRONT_I) && isPointOutsideFront(11, FRONT_I)) {
-    faceOrder[lastI--] = 2;
-  } else {
-    faceOrder[firstI++] = 2;
-  }
-  if (isPointOutsideFront(15, FRONT_I) && isPointOutsideFront(16, FRONT_I)) {
-    faceOrder[lastI--] = 3;
-  } else {
-    faceOrder[firstI++] = 3;
+  const int faceIndices[4] = { 0, 5, 10, 15 };
+  for (int i = 0; i < 4; i++) {
+    int idx = faceIndices[i];
+    if (isPointOutsideFront(idx, FRONT_I) && isPointOutsideFront(idx + 1, FRONT_I)) {
+      faceOrder[lastI--] = i;
+    }
+    else {
+      faceOrder[firstI++] = i;
+    }
   }
 
   // No need to draw the first 2 faces. They are hidden behind the front
   for (int f = 2; f < 5; f++) {
-    Sint8 cubeI = faceOrder[f] * 5;
-
-    SDL_Color color = (f == FRONT) ? cubeColorFront : cubeColorSide;
-    // Cache cube points and transformed points
+    int cubeI = faceOrder[f] * 5;
     SDL_Point *transformed = &transformedCube[cubeI];
 
-    SDL_Vertex vertices[6];
-    vertices[0].color = color;
-    vertices[1].color = color;
-    vertices[2].color = color;
-    vertices[3].color = color;
-    vertices[4].color = color;
-    vertices[5].color = color;
+    // Select color
+    SDL_Color color = (faceOrder[f] == FRONT) ? cubeColorFront : cubeColorSide;
 
+    // Build vertices (two triangles)
+    SDL_Vertex vertices[6];
+    for (int i = 0; i < 6; i++) {
+      vertices[i].color = color;
+    }
+
+    // First triangle
     vertices[0].position.x = (float)transformed[0].x;
     vertices[0].position.y = (float)transformed[0].y;
     vertices[1].position.x = (float)transformed[1].x;
@@ -397,6 +296,7 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
     vertices[2].position.x = (float)transformed[2].x;
     vertices[2].position.y = (float)transformed[2].y;
 
+    // Second triangle
     vertices[3].position.x = (float)transformed[2].x;
     vertices[3].position.y = (float)transformed[2].y;
     vertices[4].position.x = (float)transformed[3].x;

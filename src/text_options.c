@@ -152,11 +152,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "True Analog", "Speed is the same regardless of direction.", "More analog stick-friendly.", EMPTY);
 	setOptionPageLine(renderer, &optionPage_Game, 4, "Spawn Area", 7, 3, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change the spawn area of blocks.", "Default is recommended, but a smaller area", "could improve framerate on weak devices.");
-	setOptionChoice(renderer,   &optionPage_Game, 4, 1, "Very Low", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 1, "Lower", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 2, "Low", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 3, "Default", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 4, "High", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 5, "Very High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 4, 5, "Higher", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 6, "Highest", EMPTY, EMPTY, EMPTY);
 
 	optionPage_Visual.pageID = 3;
@@ -539,37 +539,30 @@ static inline void drawLineFromChars(SDL_Renderer *renderer, OptionLine *line, O
 }
 
 static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choice) {
-	Uint8 numChars;
-	int startingX;
+	const char *descLines[3] = { choice->descLine1, choice->descLine2, choice->descLine3 };
+	const float lineYPositions[3][3] = {
+		{ DESC_LINE_Y_POS_3, 0, 0 },
+		{ DESC_LINE_Y_POS_2, DESC_LINE_Y_POS_4, 0 },
+		{ DESC_LINE_Y_POS_1, DESC_LINE_Y_POS_3, DESC_LINE_Y_POS_5 }
+	};
+	
 	Sint8 numDescLines = 0;
-	if (strcmp(choice->descLine1, EMPTY) != 0) numDescLines++;
-	if (strcmp(choice->descLine2, EMPTY) != 0) numDescLines++;
-	if (strcmp(choice->descLine3, EMPTY) != 0) numDescLines++;
-	switch (numDescLines) {
-	case 1:
-		numChars = (Uint8)strlen(choice->descLine1);
-		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
-		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_3);
-		break;
-	case 2:
-		numChars = (Uint8)strlen(choice->descLine1);
-		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
-		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_2);
-		numChars = (Uint8)strlen(choice->descLine2);
-		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
-		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine2, numChars, startingX, DESC_LINE_Y_POS_4);
-		break;
-	default:
-		numChars = (Uint8)strlen(choice->descLine1);
-		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
-		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine1, numChars, startingX, DESC_LINE_Y_POS_1);
-		numChars = (Uint8)strlen(choice->descLine2);
-		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
-		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine2, numChars, startingX, DESC_LINE_Y_POS_3);
-		numChars = (Uint8)strlen(choice->descLine3);
-		startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
-		drawOptionTextFromChars(renderer, message_characters_white_38, choice->descLine3, numChars, startingX, DESC_LINE_Y_POS_5);
-		break;
+	for (Sint8 i = 0; i < 3; i++) {
+		if (strcmp(descLines[i], EMPTY) != 0) {
+			numDescLines++;
+		}
+	}
+	
+	if (numDescLines == 0) return;
+	
+	Sint8 lineIndex = 0;
+	for (Sint8 i = 0; i < 3; i++) {
+		if (strcmp(descLines[i], EMPTY) != 0) {
+			Uint8 numChars = (Uint8)strlen(descLines[i]);
+			int startingX = (int)(0.5f * GAME_WIDTH + gameOffsetX - (numChars * message_characters_gray_38[0].text_rect.w) / 2);
+			drawOptionTextFromChars(renderer, message_characters_white_38, descLines[i], numChars, startingX, lineYPositions[numDescLines - 1][i]);
+			lineIndex++;
+		}
 	}
 }
 
@@ -583,23 +576,18 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 	// Handle Up/Down input
 	if (page->numLines > 1) {
 		if (dirPressedUp()) {
-			page->index = (page->index - 1) % page->numLines;
-			if (page->index < 0) {
-				page->index = page->numLines - 1;
-			}
+			page->index = (page->index - 1 + page->numLines) % page->numLines;
 		} else if (dirPressedDown()) {
 			page->index = (page->index + 1) % page->numLines;
 		}
 	}
 
 	// Handle Left/Right input
-	bool optionChanged = false;
+	OptionLine *currentLine = &page->optionLines[page->index];
 	if (dirPressedLeft()) {
-		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index - 1 + currentLine->numChoices) % currentLine->numChoices;
 		optionCallback(window, page);
 	} else if (dirPressedRight()) {
-		OptionLine *currentLine = &page->optionLines[page->index];
 		currentLine->index = (currentLine->index + 1) % currentLine->numChoices;
 		optionCallback(window, page);
 	}
@@ -607,37 +595,48 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 	// Handle Confirm press
 	if (keyPressed(INPUT_A) || keyPressed(INPUT_START)) {
 		optionCallback(window, page);
-		if (page->optionLines[page->index].nextState != STAY) {
-			gameState = page->optionLines[page->index].nextState;
+		int nextState = currentLine->nextState;
+		if (nextState != STAY) {
+			gameState = nextState;
+			OptionPage *nextPage = NULL;
 			switch (gameState) {
 				case GAME_STATE_OPTIONS_GAME:
-					openPage(renderer, &optionPage_Game, true);
+					nextPage = &optionPage_Game;
 					break;
 				case GAME_STATE_OPTIONS_VISUAL:
-					openPage(renderer, &optionPage_Visual, true);
+					nextPage = &optionPage_Visual;
 					break;
 				case GAME_STATE_OPTIONS_AUDIO:
-					openPage(renderer, &optionPage_Audio, true);
+					nextPage = &optionPage_Audio;
 					break;
 				default:
 					break;
 			}
+			if (nextPage) {
+				openPage(renderer, nextPage, true);
+			}
 		}
 	// Handle Back press
 	} else if (keyPressed(INPUT_B) || keyPressed(INPUT_SELECT)) {
-		gameState = page->prevState;
+		int prevState = page->prevState;
+		gameState = prevState;
+		OptionPage *prevPage = NULL;
+		bool resetIndex = false;
 		switch (gameState) {
 			case GAME_STATE_OPTIONS_MAIN:
-				openPage(renderer, &optionPage_Main, false);
+				prevPage = &optionPage_Main;
 				break;
 			case GAME_STATE_OPTIONS_GAME:
-				openPage(renderer, &optionPage_Game, false);
+				prevPage = &optionPage_Game;
 				break;
 			case GAME_STATE_TITLE_SCREEN:
 				writeSaveData();
 				break;
 			default:
 				break;
+		}
+		if (prevPage) {
+			openPage(renderer, prevPage, resetIndex);
 		}
 	}
 	setMessagePosRelativeToGame_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
@@ -650,8 +649,7 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 		OptionChoice *currChoice = &currLine->optionChoices[currLine->index];
 		drawLineFromChars(renderer, currLine, currChoice);
 	}
-	OptionChoice *currChoice = &page->optionLines[page->index]
-		.optionChoices[page->optionLines[page->index].oneDesc ? 0 : page->optionLines[page->index].index];
+	OptionChoice *currChoice = &currentLine->optionChoices[currentLine->oneDesc ? 0 : currentLine->index];
 	drawDescFromChars(renderer, currChoice);
 }
 
