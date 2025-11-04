@@ -66,14 +66,14 @@ static void handleWindowResize(SDL_Event *event) {
     WINDOW_HEIGHT = MIN_WINDOW_SIZE;
     needsReset = true;
   }
-  if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * fmax(WINDOW_WIDTH, WINDOW_HEIGHT)) {
-    if (WINDOW_WIDTH > WINDOW_HEIGHT) {
-      WINDOW_WIDTH = WINDOW_HEIGHT;
-    } else {
-      WINDOW_HEIGHT = WINDOW_WIDTH;
-    }
-    needsReset = true;
-  }
+  //if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * fmax(WINDOW_WIDTH, WINDOW_HEIGHT)) {
+  //  if (WINDOW_WIDTH > WINDOW_HEIGHT) {
+  //    WINDOW_WIDTH = WINDOW_HEIGHT;
+  //  } else {
+  //    WINDOW_HEIGHT = WINDOW_WIDTH;
+  //  }
+  //  needsReset = true;
+  //}
   if (WINDOW_HEIGHT > WINDOW_WIDTH) {
     WINDOW_HEIGHT = WINDOW_WIDTH;
     needsReset = true;

@@ -18,7 +18,8 @@
 
 int WINDOW_WIDTH;
 int WINDOW_HEIGHT;
-#define DEFAULT_SCREEN_SIZE (screenHeight * 0.75)
+#define DEFAULT_SCREEN_HEIGHT (screenHeight * 0.5)
+#define DEFAULT_SCREEN_WIDTH (screenWidth * 0.5)
 
 char rootDir[256];
 
@@ -269,10 +270,11 @@ void readSaveData(bool skipVisualSettings) {
   }
 }
 
-static void writeDefaultConfig(int screenHeight) {
+static void writeDefaultConfig(int screenWidth, int screenHeight) {
   FILE *file = fopen(configFile, "w");
-  fprintf(file, "# Size must be between 240 and your screen's height\n");
-  fprintf(file, "WINDOW_SIZE=%d\n", (int)DEFAULT_SCREEN_SIZE);
+  fprintf(file, "# Width and height must be between 240 and your screen's dimensions\n");
+  fprintf(file, "WINDOW_HEIGHT=%d\n", (int)DEFAULT_SCREEN_HEIGHT);
+  fprintf(file, "WINDOW_WIDTH=%d\n", (int)DEFAULT_SCREEN_WIDTH);
   fclose(file);
 }
 
@@ -289,9 +291,9 @@ void loadConfig(int screenWidth, int screenHeight) {
 #else
   FILE *file = fopen(configFile, "r");
   if (file == NULL) {
-    writeDefaultConfig(screenHeight);
-    WINDOW_WIDTH = (int)DEFAULT_SCREEN_SIZE;
-    WINDOW_HEIGHT = (int)DEFAULT_SCREEN_SIZE;
+    writeDefaultConfig(screenWidth, screenHeight);
+    WINDOW_HEIGHT = (int)DEFAULT_SCREEN_HEIGHT;
+    WINDOW_WIDTH = (int)DEFAULT_SCREEN_WIDTH;
     return;
   }
 
@@ -300,16 +302,22 @@ void loadConfig(int screenWidth, int screenHeight) {
   bool validConfig = false;
 
   while (fgets(line, sizeof(line), file)) {
-    if (strncmp(line, "WINDOW_SIZE=", 12) == 0) {
-      width = atoi(line + 12);
-      height = atoi(line + 12);
-      break;
+    if (strncmp(line, "WINDOW_WIDTH=", 13) == 0) {
+  width = atoi(line + 13);
+} else if (strncmp(line, "WINDOW_HEIGHT=", 14) == 0) {
+      height = atoi(line + 14);
+    }
+    // Support legacy WINDOW_SIZE for backwards compatibility
+ else if (strncmp(line, "WINDOW_SIZE=", 12) == 0) {
+      int size = atoi(line + 12);
+      if (width == 0) width = size;
+    if (height == 0) height = size;
     }
   }
 
   fclose(file);
 
-  if (width >= MIN_WINDOW_SIZE && width <= screenHeight &&
+  if (width >= MIN_WINDOW_SIZE && width <= screenWidth &&
     height >= MIN_WINDOW_SIZE && height <= screenHeight) {
     WINDOW_WIDTH = width;
     WINDOW_HEIGHT = height;
@@ -318,9 +326,9 @@ void loadConfig(int screenWidth, int screenHeight) {
 
   if (!validConfig) {
     // Invalid config, create a new one with default values
-    writeDefaultConfig(screenHeight);
-    WINDOW_WIDTH = (int)DEFAULT_SCREEN_SIZE;
-    WINDOW_HEIGHT = (int)DEFAULT_SCREEN_SIZE;
+    writeDefaultConfig(screenWidth, screenHeight);
+    WINDOW_HEIGHT = (int)DEFAULT_SCREEN_HEIGHT;
+    WINDOW_WIDTH = (int)DEFAULT_SCREEN_WIDTH;
   }
 #endif
 }
