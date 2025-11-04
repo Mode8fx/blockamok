@@ -39,12 +39,14 @@ SDL_Vertex triangle[3];
 
 int faceOrder[5];
 
-float HEIGHT_DOUBLE;
 float HEIGHT_HALF;
-float HEIGHT_NEG;
-float WIDTH_DOUBLE;
 float WIDTH_HALF;
-float WIDTH_NEG;
+float WINDOW_HEIGHT_DOUBLE;
+float WINDOW_HEIGHT_HALF;
+float WINDOW_HEIGHT_NEG;
+float WINDOW_WIDTH_DOUBLE;
+float WINDOW_WIDTH_HALF;
+float WINDOW_WIDTH_NEG;
 int gameOffsetX;
 
 #define MIN_FADE 150
@@ -65,12 +67,18 @@ void setScalingVals() {
   float gameHeightF = (float)GAME_HEIGHT;
   float gameWidthF = (float)GAME_WIDTH;
   
-  HEIGHT_DOUBLE = gameHeightF * 2.0f;
   HEIGHT_HALF = gameHeightF * 0.5f;
-  HEIGHT_NEG = -gameHeightF;
-  WIDTH_DOUBLE = gameWidthF * 2.0f;
   WIDTH_HALF = gameWidthF * 0.5f;
-  WIDTH_NEG = -gameWidthF;
+
+  float windowHeightF = (float)WINDOW_HEIGHT;
+  float windowWidthF = (float)WINDOW_WIDTH;
+
+  WINDOW_HEIGHT_DOUBLE = windowHeightF * 2.0f;
+  WINDOW_HEIGHT_HALF = windowHeightF * 0.5f;
+  WINDOW_HEIGHT_NEG = -windowHeightF;
+  WINDOW_WIDTH_DOUBLE = windowWidthF * 2.0f;
+  WINDOW_WIDTH_HALF = windowWidthF * 0.5f;
+  WINDOW_WIDTH_NEG = -windowWidthF;
 
   HALF_FOV_ANGLE_RADIANS = ((FOV_ANGLE / 180.0f) * (float)M_PI) * 0.5f;
   HALF_FOV_ANGLE_RADIANS_TAN = tanf(HALF_FOV_ANGLE_RADIANS);
@@ -97,13 +105,13 @@ inline static void drawBackground(SDL_Renderer *renderer) {
   SDL_RenderClear(renderer);
   
   SDL_FPoint trianglePoints[3] = {
-    {WIDTH_NEG, HEIGHT_HALF},
-    {WIDTH_HALF, HEIGHT_NEG},
-    {WIDTH_DOUBLE, HEIGHT_HALF}
+    {WINDOW_WIDTH_NEG, WINDOW_HEIGHT_HALF},
+    {WINDOW_WIDTH_HALF, WINDOW_HEIGHT_NEG},
+    {WINDOW_WIDTH_DOUBLE, WINDOW_HEIGHT_HALF}
   };
   drawBackgroundTriangle(renderer, trianglePoints);
   
-  trianglePoints[1].y = HEIGHT_DOUBLE;
+  trianglePoints[1].y = WINDOW_HEIGHT_DOUBLE;
   drawBackgroundTriangle(renderer, trianglePoints);
 }
 
