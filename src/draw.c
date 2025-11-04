@@ -103,7 +103,6 @@ inline static void drawBackground(SDL_Renderer *renderer) {
   };
   drawBackgroundTriangle(renderer, trianglePoints);
   
-  trianglePoints[1].x = WIDTH_HALF;
   trianglePoints[1].y = HEIGHT_DOUBLE;
   drawBackgroundTriangle(renderer, trianglePoints);
 }

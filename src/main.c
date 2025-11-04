@@ -189,7 +189,6 @@ int main(int arg, char *argv[]) {
   initStaticMessages(renderer);
   readSaveData(false);
   optionCallback_All();
-  saveBackgroundAsTexture(renderer);
   playMusicAtIndex(OPTION_MUSIC);
   if (OPTION_FULLSCREEN) {
     optionCallback_Fullscreen(window, &optionPage_Visual);
