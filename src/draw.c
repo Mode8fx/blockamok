@@ -131,7 +131,7 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
   SDL_RenderSetViewport(renderer, NULL);
   drawBackground(renderer);
   
-  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, GAME_WIDTH, GAME_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
+  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, WINDOW_WIDTH, WINDOW_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
   SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
   
   if (backgroundTexture != NULL) {
