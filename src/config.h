@@ -8,3 +8,4 @@ extern void initFilePaths();
 extern void writeSaveData();
 extern void readSaveData(bool skipVisualSettings);
 extern void loadConfig(int screenWidth, int screenHeight);
+extern void writeFile(const char *filename, const char *content);

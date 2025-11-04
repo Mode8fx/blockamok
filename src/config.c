@@ -332,3 +332,14 @@ void loadConfig(int screenWidth, int screenHeight) {
   }
 #endif
 }
+
+void writeFile(const char *filename, const char *content) {
+  char filepath[512];
+  snprintf(filepath, sizeof(filepath), "%s%s", rootDir, filename);
+
+  FILE *file = fopen(filepath, "w");
+  if (file != NULL) {
+    fprintf(file, "%s", content);
+    fclose(file);
+  }
+}
