@@ -133,12 +133,21 @@ inline void draw(SDL_Renderer *renderer) {
 
 void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #if !(defined(LOW_SPEC_BG) || defined(FORCE_DRAW_BG))
-  drawBackground(renderer);
-
+  SDL_Rect currViewport;
+  SDL_RenderGetViewport(renderer, &currViewport);
   int surfaceWidth = GAME_WIDTH;
   if (OPTION_OVERLAY_COLOR == 9) {
     surfaceWidth = WINDOW_WIDTH;
+		SDL_RenderSetViewport(renderer, NULL);
+  } else {
+    SDL_RenderSetViewport(renderer, &gameViewport);
   }
+
+  if (backgroundTexture != NULL) {
+    SDL_DestroyTexture(backgroundTexture);
+  }
+
+  drawBackground(renderer);
   
 #if defined(THREEDS)
   SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, 16, SDL_PIXELFORMAT_RGB565);
@@ -148,11 +157,10 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
   SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
 #endif
   
-  if (backgroundTexture != NULL) {
-    SDL_DestroyTexture(backgroundTexture);
-  }
   backgroundTexture = SDL_CreateTextureFromSurface(renderer, screenSurface);
   SDL_FreeSurface(screenSurface);
+
+  SDL_RenderSetViewport(renderer, &currViewport);
 #endif
 }
 
