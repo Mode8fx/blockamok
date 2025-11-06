@@ -125,7 +125,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
 	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
 #if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
-	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse framerate", EMPTY);
+	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse frame rate", EMPTY);
 #else
 	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
 #endif
@@ -135,7 +135,7 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
 #if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse framerate");
+	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse frame rate");
 #else
 	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
@@ -149,9 +149,17 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Game, 2, 2, "3", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Game, 3, "Stick Controls", 2, 1, STAY, false);
 	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Cardinal", "Up/Down and Left/Right movement", "are independent, so diagonal is faster.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 3, 1, "True Analog", "Speed is the same regardless of direction.", "More analog stick-friendly.", EMPTY);
+	if (compactView) {
+		setOptionChoice(renderer, &optionPage_Game, 3, 1, "Analog", "Speed is same in all directions.", "More analog stick-friendly.", EMPTY);
+	} else {
+		setOptionChoice(renderer, &optionPage_Game, 3, 1, "True Analog", "Speed is the same regardless of direction.", "More analog stick-friendly.", EMPTY);
+	}
 	setOptionPageLine(renderer, &optionPage_Game, 4, "Spawn Area", 7, 3, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change the spawn area of blocks.", "Default is recommended, but a smaller area", "could improve framerate on weak devices.");
+	if (compactView) {
+		setOptionChoice(renderer, &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change spawn area of blocks.", "Default is preferred, but a small area", "may improve frame rate on weak devices.");
+	} else {
+		setOptionChoice(renderer, &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change the spawn area of blocks.", "Default is recommended, but a smaller area", "may improve frame rate on weak devices.");
+	}
 	setOptionChoice(renderer,   &optionPage_Game, 4, 1, "Lower", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 2, "Low", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Game, 4, 3, "Default", EMPTY, EMPTY, EMPTY);
@@ -184,7 +192,11 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 1, 5, "Stone", EMPTY, EMPTY, EMPTY);
 	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay", 11, 9, STAY, true);
+#if defined(THREEDS)
+	setOptionChoice(renderer, &optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", "Slightly improves frame rate.", EMPTY);
+#else
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", EMPTY, EMPTY);
+#endif
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
