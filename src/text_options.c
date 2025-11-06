@@ -365,28 +365,28 @@ void optionCallback_OverlayColor() {
 static void optionCallback_BackgroundColor() {
 	switch (OPTION_BACKGROUND_COLOR) {
 	case 0:
-		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
+		backgroundColor = (SDL_Color){ .r = 200, .g = 35, .b = 35, .a = 255 };
 		break;
 	case 1:
-		backgroundColor = (SDL_Color){ .r = 255, .g = 140, .b = 30 };
+		backgroundColor = (SDL_Color){ .r = 255, .g = 140, .b = 30, .a = 255 };
 		break;
 	case 2:
-		backgroundColor = (SDL_Color){ .r = 255, .g = 210, .b = 90 };
+		backgroundColor = (SDL_Color){ .r = 255, .g = 210, .b = 90, .a = 255 };
 		break;
 	case 3:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
+		backgroundColor = (SDL_Color){ .r = 15, .g = 255, .b = 155, .a = 255 };
 		break;
 	case 4:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		backgroundColor = (SDL_Color){ .r = 15, .g = 0, .b = 155, .a = 255 };
 		break;
 	case 5:
-		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
+		backgroundColor = (SDL_Color){ .r = 0, .g = 45, .b = 255, .a = 255 };
 		break;
 	case 6:
-		backgroundColor = (SDL_Color){ .r = 100, .g = 50, .b = 180 };
+		backgroundColor = (SDL_Color){ .r = 100, .g = 50, .b = 180, .a = 255 };
 		break;
 	default:
-		backgroundColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
+		backgroundColor = (SDL_Color){ .r = 15, .g = 15, .b = 15, .a = 255 };
 		break;
 	}
 	optionCallback_OverlayColor();
@@ -442,7 +442,7 @@ void optionCallback_FrameRate() {
 	ticksPerFrame = (Uint32)(1000 / frameRate);
 }
 
-void optionCallback_Fullscreen(SDL_Window *window, OptionPage *page) {
+void optionCallback_Fullscreen(SDL_Window *window) {
 #if defined(PC)
 	SDL_SetWindowFullscreen(window, OPTION_FULLSCREEN * SDL_WINDOW_FULLSCREEN_DESKTOP);
 #endif
@@ -505,7 +505,7 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 			optionCallback_FrameRate();
 			break;
 		case 6:
-			optionCallback_Fullscreen(window, page);
+			optionCallback_Fullscreen(window);
 			break;
 		default:
 			break;
@@ -532,7 +532,7 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 	}
 }
 
-static inline void drawOptionTextFromChars(SDL_Renderer *renderer, Message message_characters[], char text[], Uint8 numChars, int startingX, float relY) {
+static inline void drawOptionTextFromChars(SDL_Renderer *renderer, Message message_characters[], const char text[], Uint8 numChars, int startingX, float relY) {
 	// Render all outlines, then all text
 	for (int i = 0; i < numChars; i++) {
 		Uint8 chr = text[i] - FIRST_PRINTABLE_CHAR;

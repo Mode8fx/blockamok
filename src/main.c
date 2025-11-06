@@ -167,7 +167,7 @@ static void handleFullscreenToggle() {
 #if defined(PC)
   if (keyPressed(INPUT_RS)) {
     OPTION_FULLSCREEN ^= 1;
-    optionCallback_Fullscreen(window, &optionPage_Visual);
+    optionCallback_Fullscreen(window);
   }
 #endif
 }
@@ -201,7 +201,7 @@ int main(int arg, char *argv[]) {
   optionCallback_All();
   playMusicAtIndex(OPTION_MUSIC);
   if (OPTION_FULLSCREEN) {
-    optionCallback_Fullscreen(window, &optionPage_Visual);
+    optionCallback_Fullscreen(window);
   }
   srand((Uint32)time(NULL));
   prepareGame();
