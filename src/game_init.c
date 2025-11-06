@@ -13,4 +13,5 @@ void fadeInFromBlack(SDL_Renderer *renderer) {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, alpha);
   SDL_Rect rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
   SDL_RenderFillRect(renderer, &rect);
+  drawOverlayOnThisFrame = true;
 }

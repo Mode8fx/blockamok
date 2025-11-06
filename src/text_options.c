@@ -309,6 +309,8 @@ static void optionCallback_CubeSize() {
 }
 
 void optionCallback_OverlayColor() {
+	visibleOffsetX = 0;
+	drawOverlayOnThisFrame = true;
 	switch (OPTION_OVERLAY_COLOR) {
 	case 0:
 		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
@@ -338,12 +340,14 @@ void optionCallback_OverlayColor() {
 		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0 };
 		break;
 	case 9:
+		visibleOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
+		drawOverlayOnThisFrame = false;
 		break;
 	default:
 		overlayColor = backgroundColor;
 		break;
 	}
-	drawOverlayOnThisFrame = true;
+	saveBackgroundAsTexture(renderer);
 }
 
 static void optionCallback_BackgroundColor() {
@@ -570,7 +574,11 @@ static inline void drawDescFromChars(SDL_Renderer *renderer, OptionChoice *choic
 void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bool renderCursor) {
 	if (page->pageID != 3) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
-		SDL_Rect rect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+		SDL_Rect rect = { gameOffsetX, 0, GAME_WIDTH, WINDOW_HEIGHT };
+		if (OPTION_OVERLAY_COLOR == 9) {
+			rect.x = 0;
+			rect.w = WINDOW_WIDTH;
+		}
 		SDL_RenderFillRect(renderer, &rect);
 	}
 

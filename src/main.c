@@ -172,6 +172,21 @@ static void handleFullscreenToggle() {
 #endif
 }
 
+static void drawOverlay() {
+#if defined(FORCE_DRAW_OVERLAY)
+  drawOverlayOnThisFrame = true;
+#endif
+  if (drawOverlayOnThisFrame && OPTION_OVERLAY_COLOR != 9) {
+    SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
+    SDL_RenderFillRect(renderer, &leftBar);
+    SDL_RenderFillRect(renderer, &rightBar);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &leftBorder);
+    SDL_RenderFillRect(renderer, &rightBorder);
+    drawOverlayOnThisFrame = false;
+  }
+}
+
 int main(int arg, char *argv[]) {
   SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS);
   SDL_GetCurrentDisplayMode(0, &DM);
@@ -180,7 +195,7 @@ int main(int arg, char *argv[]) {
   loadConfig(DM.w, DM.h);
   init();
   setScalingVals();
-  //SDL_RenderSetViewport(renderer, &gameViewport);
+  SDL_RenderSetViewport(renderer, NULL);
   initStaticMessages(renderer);
   readSaveData(false);
   optionCallback_All();
@@ -228,6 +243,7 @@ int main(int arg, char *argv[]) {
       case GAME_STATE_STARTED:
         drawEssentials(renderer, cubes, cubeAmount);
         drawTitleScreenText(renderer, false);
+        drawOverlay();
         fadeInFromBlack(renderer);
         if (now - startingTick > INIT_FADE_LENGTH) {
           SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
@@ -249,6 +265,7 @@ int main(int arg, char *argv[]) {
         }
         drawEssentials(renderer, cubes, cubeAmount);
         drawTitleScreenText(renderer, true);
+        drawOverlay();
         break;
 
       case GAME_STATE_OPTIONS_MAIN:
@@ -271,27 +288,32 @@ int main(int arg, char *argv[]) {
         }
 				drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Main, true);
+        drawOverlay();
 				break;
 
       case GAME_STATE_OPTIONS_GAME:
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Game, true);
+        drawOverlay();
         break;
 
       case GAME_STATE_OPTIONS_VISUAL:
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Visual, true);
+        drawOverlay();
         break;
 
       case GAME_STATE_OPTIONS_AUDIO:
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Audio, true);
+        drawOverlay();
         break;
 
       case GAME_STATE_INSTRUCTIONS:
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawInstructionsText(renderer);
+        drawOverlay();
         break;
 
 			case GAME_STATE_CREDITS:
@@ -308,6 +330,7 @@ int main(int arg, char *argv[]) {
           osSetSpeedupEnable(useNew3DSClockSpeed);
         }
 #endif
+        drawOverlay();
         break;
 
       case GAME_STATE_RESET_HIGH_SCORE:
@@ -315,6 +338,7 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawResetHighScoreText(renderer);
+        drawOverlay();
         break;
 
       case GAME_STATE_QUIT:
@@ -325,6 +349,7 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         handlePage(renderer, window, &optionPage_Empty, false);
         drawQuitText(renderer);
+        drawOverlay();
         break;
 
       case GAME_STATE_PLAYING:
@@ -343,6 +368,7 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         drawGameText(renderer);
         drawCursor(renderer);
+        drawOverlay();
         break;
 
       case GAME_STATE_PAUSED:
@@ -367,6 +393,7 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         drawGameText(renderer);
         drawPausedText(renderer);
+        drawOverlay();
         break;
 
       case GAME_STATE_GAME_OVER:
@@ -379,25 +406,11 @@ int main(int arg, char *argv[]) {
         drawEssentials(renderer, cubes, cubeAmount);
         drawGameText(renderer);
         drawGameOverText(renderer);
+        drawOverlay();
         break;
     }
 
     updateLastKeys();
-
-#if defined(FORCE_DRAW_OVERLAY)
-    drawOverlayOnThisFrame = true;
-#endif
-    if (OPTION_OVERLAY_COLOR != 9) {
-      //SDL_RenderSetViewport(renderer, NULL);
-      SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
-      SDL_RenderFillRect(renderer, &leftBar);
-      SDL_RenderFillRect(renderer, &rightBar);
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-      SDL_RenderFillRect(renderer, &leftBorder);
-      SDL_RenderFillRect(renderer, &rightBorder);
-      //SDL_RenderSetViewport(renderer, &gameViewport);
-      drawOverlayOnThisFrame = false;
-    }
 
     if (showFPS) {
       printFPS();

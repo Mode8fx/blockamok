@@ -49,6 +49,7 @@ float WINDOW_WIDTH_DOUBLE;
 float WINDOW_WIDTH_HALF;
 float WINDOW_WIDTH_NEG;
 int gameOffsetX;
+int visibleOffsetX;
 
 #define MIN_FADE 150
 #define FADE_DIFF 40 // 190 - MIN_FADE
@@ -132,14 +133,18 @@ inline void draw(SDL_Renderer *renderer) {
 
 void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #if !(defined(LOW_SPEC_BG) || defined(FORCE_DRAW_BG))
-  SDL_RenderSetViewport(renderer, NULL);
   drawBackground(renderer);
+
+  int surfaceWidth = GAME_WIDTH;
+  if (OPTION_OVERLAY_COLOR == 9) {
+    surfaceWidth = WINDOW_WIDTH;
+  }
   
 #if defined(THREEDS)
-  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, WINDOW_WIDTH, WINDOW_HEIGHT, 16, SDL_PIXELFORMAT_RGB565);
+  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, 16, SDL_PIXELFORMAT_RGB565);
   SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB565, screenSurface->pixels, screenSurface->pitch);
 #else
-  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, WINDOW_WIDTH, WINDOW_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
+  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
   SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
 #endif
   
@@ -151,7 +156,7 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 #endif
 }
 
-#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF + gameOffsetX)
+#define screenX(x) (x * GAME_WIDTH + WIDTH_HALF + visibleOffsetX)
 #define screenY(y) (y * GAME_HEIGHT + HEIGHT_HALF)
 
 static inline bool isPointOutsideFront(int f, int frontI) {
@@ -260,7 +265,7 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
     int destOffset = destOffsets[face];
 
     for (int p = 0; p < 4; p++) {
-      Point* point = &points[srcOffset + p];
+      Point *point = &points[srcOffset + p];
       float invZ = 1.0f / (point->z * HALF_FOV_ANGLE_RADIANS_TAN);
       transformedCube[destOffset + p].x = (int)screenX(point->x * invZ);
       transformedCube[destOffset + p].y = (int)screenY(point->y * invZ);
@@ -330,6 +335,10 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 }
 
 void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
+  if (OPTION_OVERLAY_COLOR != 9) {
+    SDL_RenderSetViewport(renderer, &gameViewport);
+  }
+
   draw(renderer);
 
   if (OPTION_SIMPLE_CUBES) {
@@ -340,5 +349,9 @@ void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
     for (int i = 0; i < cubesLength; i++) {
       drawCube(renderer, cubes[i]);
     }
+  }
+
+  if (OPTION_OVERLAY_COLOR != 9) {
+    SDL_RenderSetViewport(renderer, NULL);
   }
 }
