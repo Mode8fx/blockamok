@@ -343,6 +343,7 @@ void optionCallback_OverlayColor() {
 		overlayColor = backgroundColor;
 		break;
 	}
+	drawOverlayOnThisFrame = true;
 }
 
 static void optionCallback_BackgroundColor() {

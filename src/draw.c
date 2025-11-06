@@ -7,6 +7,7 @@
 
 SDL_DisplayMode DM;
 
+SDL_Rect gameViewport;
 SDL_Rect leftBar;
 SDL_Rect rightBar;
 SDL_Rect leftBorder;
@@ -55,6 +56,7 @@ int gameOffsetX;
 
 void setScalingVals() {
   gameOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
+  gameViewport = (SDL_Rect){ .x = gameOffsetX, .y = 0, .w = GAME_WIDTH, .h = GAME_HEIGHT };
   
   int borderWidth = GAME_HEIGHT / 100;
   int rightBarX = gameOffsetX + GAME_WIDTH;
@@ -88,6 +90,8 @@ void setScalingVals() {
   triangle[0].color = color1;
   triangle[1].color = color2;
   triangle[2].color = color1;
+
+  drawOverlayOnThisFrame = true;
 }
 
 static inline void drawBackgroundTriangle(SDL_Renderer *renderer, SDL_FPoint *trianglePoints) {

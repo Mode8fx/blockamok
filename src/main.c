@@ -21,6 +21,7 @@
 SDL_Window *window = NULL;
 SDL_Renderer *renderer;
 int gameState = GAME_STATE_STARTED;
+bool drawOverlayOnThisFrame = true;
 
 Uint32 now = 0;
 Uint32 last = 0;
@@ -66,14 +67,6 @@ static void handleWindowResize(SDL_Event *event) {
     WINDOW_HEIGHT = MIN_WINDOW_SIZE;
     needsReset = true;
   }
-  //if (abs(WINDOW_WIDTH - WINDOW_HEIGHT) <= 0.06 * fmax(WINDOW_WIDTH, WINDOW_HEIGHT)) {
-  //  if (WINDOW_WIDTH > WINDOW_HEIGHT) {
-  //    WINDOW_WIDTH = WINDOW_HEIGHT;
-  //  } else {
-  //    WINDOW_HEIGHT = WINDOW_WIDTH;
-  //  }
-  //  needsReset = true;
-  //}
   if (WINDOW_HEIGHT > WINDOW_WIDTH) {
     WINDOW_HEIGHT = WINDOW_WIDTH;
     needsReset = true;
@@ -86,6 +79,7 @@ static void handleWindowResize(SDL_Event *event) {
   readSaveData(true); // fixes menu options sometimes being reset to defaults
   optionCallback_All(); // fixes menu options sometimes being reset to defaults
   saveBackgroundAsTexture(renderer);
+  drawOverlayOnThisFrame = true;
 #endif
 }
 
@@ -186,6 +180,7 @@ int main(int arg, char *argv[]) {
   loadConfig(DM.w, DM.h);
   init();
   setScalingVals();
+  //SDL_RenderSetViewport(renderer, &gameViewport);
   initStaticMessages(renderer);
   readSaveData(false);
   optionCallback_All();
@@ -389,14 +384,19 @@ int main(int arg, char *argv[]) {
 
     updateLastKeys();
 
+#if defined(FORCE_DRAW_OVERLAY)
+    drawOverlayOnThisFrame = true;
+#endif
     if (OPTION_OVERLAY_COLOR != 9) {
-      SDL_RenderSetViewport(renderer, NULL);
+      //SDL_RenderSetViewport(renderer, NULL);
       SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
       SDL_RenderFillRect(renderer, &leftBar);
       SDL_RenderFillRect(renderer, &rightBar);
       SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
       SDL_RenderFillRect(renderer, &leftBorder);
       SDL_RenderFillRect(renderer, &rightBorder);
+      //SDL_RenderSetViewport(renderer, &gameViewport);
+      drawOverlayOnThisFrame = false;
     }
 
     if (showFPS) {
