@@ -24,10 +24,10 @@ const int FRONT = 4;
 const int FRONT_I = 20; // FRONT * 5
 
 SDL_Texture *backgroundTexture;
-SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155 };
+SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155, .a = 255 };
 SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120, .a = 255 };
 SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200, .a = 255 };
-SDL_Color overlayColor = { .r = 15, .g = 255, .b = 155 };
+SDL_Color overlayColor = { .r = 15, .g = 255, .b = 155, .a = 255 };
 
 //int TRANSFORMED_FRONT_I = FRONT * 5;
 

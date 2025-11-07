@@ -15,12 +15,12 @@ TTF_Font *Sans_42 = NULL;
 int outlineSize_42;
 TTF_Font *Sans_38 = NULL;
 int outlineSize_38;
-SDL_Color color_black = {0, 0, 0};
-SDL_Color color_white = {255, 255, 255};
-SDL_Color color_gray = {208, 208, 208};
-SDL_Color color_orange = {255, 160, 0};
-SDL_Color color_red = {255, 92, 92};
-SDL_Color color_blue = {128, 128, 255};
+SDL_Color color_black = {0, 0, 0, 255};
+SDL_Color color_white = {255, 255, 255, 255};
+SDL_Color color_gray = {208, 208, 208, 255};
+SDL_Color color_orange = {255, 160, 0, 255};
+SDL_Color color_red = {255, 92, 92, 255};
+SDL_Color color_blue = {128, 128, 255, 255};
 
 char valStr[TEXT_LINE_SIZE];
 Message message_characters_white_42[NUM_PRINTABLE_CHARS];

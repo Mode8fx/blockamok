@@ -112,8 +112,8 @@ extern void drawPausedText(SDL_Renderer *renderer);
 extern void cleanUpText();
 
 extern void initStaticMessages_Options(SDL_Renderer *renderer);
-extern void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex);
-extern void optionCallback_CubeFrequency(SDL_Renderer *renderer);
+extern void openPage(OptionPage *page, bool resetIndex);
+extern void optionCallback_CubeFrequency();
 extern void optionCallback_Fullscreen(SDL_Window *window);
 extern void optionCallback_OverlayColor();
 extern void optionCallback_All();

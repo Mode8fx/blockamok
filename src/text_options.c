@@ -57,7 +57,7 @@ Uint16 frameRate = 60;
 Uint16 displayRefreshRate;
 Uint32 ticksPerFrame;
 
-static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
+static void setOptionPageLine(OptionPage *page, int lineIndex, char text[], Sint8 numChoices, Sint8 choiceIndex, int nextState, bool oneDesc) {
 	OptionLine *currLine = &page->optionLines[lineIndex];
 	currLine->y = LINE_Y;
 	snprintf(currLine->name, TEXT_LINE_SIZE, "%s", text);
@@ -75,7 +75,7 @@ static void setOptionPageLine(SDL_Renderer *renderer, OptionPage *page, int line
 	currLine->oneDesc = oneDesc;
 }
 
-static void setOptionChoice(SDL_Renderer *renderer, OptionPage *page, int lineIndex, int choiceIndex, char name[], char descLine1[], char descLine2[], char descLine3[]) {
+static void setOptionChoice(OptionPage *page, int lineIndex, int choiceIndex, char name[], char descLine1[], char descLine2[], char descLine3[]) {
 	OptionChoice *currChoice = &page->optionLines[lineIndex].optionChoices[choiceIndex];
 	currChoice->y = CHOICE_Y;
 	snprintf(currChoice->name, TEXT_LINE_SIZE, "%s", name);
@@ -94,184 +94,184 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	optionPage_Main.numLines = OPTION_PAGE_MAIN_NUM_LINES;
 	optionPage_Main.optionLines = optionPage_Main_Lines;
 	optionPage_Main.prevState = GAME_STATE_TITLE_SCREEN;
-	setOptionPageLine(renderer, &optionPage_Main, 0, "Game Options", 1, 0, GAME_STATE_OPTIONS_GAME, true);
-	setOptionChoice(renderer,   &optionPage_Main, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 1, "Visuals", 1, 0, GAME_STATE_OPTIONS_VISUAL, true);
-	setOptionChoice(renderer,   &optionPage_Main, 1, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 2, "Audio", 1, 0, GAME_STATE_OPTIONS_AUDIO, true);
-	setOptionChoice(renderer,   &optionPage_Main, 2, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 3, "Instructions", 1, 0, GAME_STATE_INSTRUCTIONS, true);
-	setOptionChoice(renderer,   &optionPage_Main, 3, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 4, "Credits", 1, 0, GAME_STATE_CREDITS, true);
-	setOptionChoice(renderer,   &optionPage_Main, 4, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 5, "Reset High Score", 1, 0, GAME_STATE_RESET_HIGH_SCORE, true);
-	setOptionChoice(renderer,   &optionPage_Main, 5, 0, EMPTY, EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Main, 6, "Reset Settings", 1, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Main, 6, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 0, "Game Options", 1, 0, GAME_STATE_OPTIONS_GAME, true);
+	setOptionChoice(&optionPage_Main, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 1, "Visuals", 1, 0, GAME_STATE_OPTIONS_VISUAL, true);
+	setOptionChoice(&optionPage_Main, 1, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 2, "Audio", 1, 0, GAME_STATE_OPTIONS_AUDIO, true);
+	setOptionChoice(&optionPage_Main, 2, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 3, "Instructions", 1, 0, GAME_STATE_INSTRUCTIONS, true);
+	setOptionChoice(&optionPage_Main, 3, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 4, "Credits", 1, 0, GAME_STATE_CREDITS, true);
+	setOptionChoice(&optionPage_Main, 4, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 5, "Reset High Score", 1, 0, GAME_STATE_RESET_HIGH_SCORE, true);
+	setOptionChoice(&optionPage_Main, 5, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 6, "Reset Settings", 1, 0, STAY, true);
+	setOptionChoice(&optionPage_Main, 6, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 #if !defined(NO_QUIT)
-	setOptionPageLine(renderer, &optionPage_Main, 7, "Quit", 1, 0, GAME_STATE_QUIT, true);
-	setOptionChoice(renderer,   &optionPage_Main, 7, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Main, 7, "Quit", 1, 0, GAME_STATE_QUIT, true);
+	setOptionChoice(&optionPage_Main, 7, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 #endif
 
 	optionPage_Empty.pageID = 1;
 	optionPage_Empty.optionLines = optionPage_Empty_Lines;
 	optionPage_Empty.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Empty, 0, EMPTY, 1, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Empty, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Empty, 0, EMPTY, 1, 0, STAY, true);
+	setOptionChoice(&optionPage_Empty, 0, 0, EMPTY, EMPTY, EMPTY, EMPTY);
 
 	optionPage_Game.pageID = 2;
 	optionPage_Game.numLines = OPTION_PAGE_GAME_NUM_LINES;
 	optionPage_Game.optionLines = optionPage_Game_Lines;
 	optionPage_Game.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
+	setOptionPageLine(&optionPage_Game, 0, "Block Frequency", 5, 1, STAY, true);
 #if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
-	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse frame rate", EMPTY);
+	setOptionChoice(&optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", "NOTE: High frequency = worse frame rate", EMPTY);
 #else
-	setOptionChoice(renderer,   &optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 0, 0, "Low", "Change the number of obstacles.", EMPTY, EMPTY);
 #endif
-	setOptionChoice(renderer,   &optionPage_Game, 0, 1, "Medium", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 0, 1, "Medium", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
 #if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
-	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse frame rate");
+	setOptionPageLine(&optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
+	setOptionChoice(&optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse frame rate");
 #else
-	setOptionPageLine(renderer, &optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
+	setOptionPageLine(&optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
+	setOptionChoice(&optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
 #endif
-	setOptionChoice(renderer,   &optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 2, "Very Large", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 1, 3, "Giant", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Game, 2, "Lives", 3, 2, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Game, 2, 0, "1", "Change how many hits you can take.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 2, 1, "2", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 2, 2, "3", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Game, 3, "Stick Controls", 2, 1, STAY, false);
-	setOptionChoice(renderer,   &optionPage_Game, 3, 0, "Cardinal", "Up/Down and Left/Right movement", "are independent, so diagonal is faster.", EMPTY);
+	setOptionChoice(&optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 1, 2, "Very Large", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 1, 3, "Giant", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Game, 2, "Lives", 3, 2, STAY, true);
+	setOptionChoice(&optionPage_Game, 2, 0, "1", "Change how many hits you can take.", EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 2, 1, "2", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 2, 2, "3", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Game, 3, "Stick Controls", 2, 1, STAY, false);
+	setOptionChoice(&optionPage_Game, 3, 0, "Cardinal", "Up/Down and Left/Right movement", "are independent, so diagonal is faster.", EMPTY);
 	if (compactView) {
-		setOptionChoice(renderer, &optionPage_Game, 3, 1, "Analog", "Speed is same in all directions.", "More analog stick-friendly.", EMPTY);
+		setOptionChoice(&optionPage_Game, 3, 1, "Analog", "Speed is same in all directions.", "More analog stick-friendly.", EMPTY);
 	} else {
-		setOptionChoice(renderer, &optionPage_Game, 3, 1, "True Analog", "Speed is the same regardless of direction.", "More analog stick-friendly.", EMPTY);
+		setOptionChoice(&optionPage_Game, 3, 1, "True Analog", "Speed is the same regardless of direction.", "More analog stick-friendly.", EMPTY);
 	}
-	setOptionPageLine(renderer, &optionPage_Game, 4, "Spawn Area", 7, 3, STAY, true);
+	setOptionPageLine(&optionPage_Game, 4, "Spawn Area", 7, 3, STAY, true);
 	if (compactView) {
-		setOptionChoice(renderer, &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change spawn area of blocks.", "Default is preferred, but a small area", "may improve frame rate on weak devices.");
+		setOptionChoice(&optionPage_Game, 4, 0, "Lowest", "[Advanced] Change spawn area of blocks.", "Default is preferred, but a small area", "may improve frame rate on weak devices.");
 	} else {
-		setOptionChoice(renderer, &optionPage_Game, 4, 0, "Lowest", "[Advanced] Change the spawn area of blocks.", "Default is recommended, but a smaller area", "may improve frame rate on weak devices.");
+		setOptionChoice(&optionPage_Game, 4, 0, "Lowest", "[Advanced] Change the spawn area of blocks.", "Default is recommended, but a smaller area", "may improve frame rate on weak devices.");
 	}
-	setOptionChoice(renderer,   &optionPage_Game, 4, 1, "Lower", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 2, "Low", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 3, "Default", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 4, "High", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 5, "Higher", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Game, 4, 6, "Highest", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 4, 1, "Lower", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 4, 2, "Low", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 4, 3, "Default", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 4, 4, "High", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 4, 5, "Higher", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Game, 4, 6, "Highest", EMPTY, EMPTY, EMPTY);
 
 	optionPage_Visual.pageID = 3;
 	optionPage_Visual.numLines = OPTION_PAGE_VISUAL_NUM_LINES;
 	optionPage_Visual.optionLines = optionPage_Visual_Lines;
 	optionPage_Visual.prevState = GAME_STATE_OPTIONS_MAIN;
 	if (compactView) {
-		setOptionPageLine(renderer, &optionPage_Visual, 0, "BG Color", 8, 3, STAY, true);
+		setOptionPageLine(&optionPage_Visual, 0, "BG Color", 8, 3, STAY, true);
 	} else {
-		setOptionPageLine(renderer, &optionPage_Visual, 0, "Background Color", 8, 3, STAY, true);
+		setOptionPageLine(&optionPage_Visual, 0, "Background Color", 8, 3, STAY, true);
 	}
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 0, "Lava Red", "Change the background color.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 4, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 5, "Ocean Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 0, 7, "Void Black", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 1, "Block Color", 6, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 1, 0, "Lightning", "Change the color of obstacles.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 1, 1, "Plant", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 1, 5, "Stone", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 2, "Overlay", 11, 9, STAY, true);
+	setOptionChoice(&optionPage_Visual, 0, 0, "Lava Red", "Change the background color.", EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 4, "Space Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 5, "Ocean Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 0, 7, "Void Black", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Visual, 1, "Block Color", 6, 0, STAY, true);
+	setOptionChoice(&optionPage_Visual, 1, 0, "Lightning", "Change the color of obstacles.", EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 1, 1, "Plant", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 1, 2, "Charcoal", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 1, 3, "Snow", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 1, 4, "Fire", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 1, 5, "Stone", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Visual, 2, "Overlay", 11, 9, STAY, true);
 #if defined(THREEDS)
-	setOptionChoice(renderer, &optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", "Slightly improves frame rate.", EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", "Slightly improves frame rate.", EMPTY);
 #else
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 0, "Lava Red", "Enable the overlay and set its color.", EMPTY, EMPTY);
 #endif
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 4, "Space Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 5, "Ocean Blue", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 7, "Void Black", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 8, "Pitch Black", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 2, 9, "Off", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 1, "Harvest Orange", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 2, "Golden Brass", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 3, "Electric Green", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 4, "Space Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 5, "Ocean Blue", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 6, "Royal Violet", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 7, "Void Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 8, "Pitch Black", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 2, 9, "Off", EMPTY, EMPTY, EMPTY);
 	if (compactView) {
-		setOptionChoice(renderer, &optionPage_Visual, 2, 10, "Match BG", EMPTY, EMPTY, EMPTY);
+		setOptionChoice(&optionPage_Visual, 2, 10, "Match BG", EMPTY, EMPTY, EMPTY);
 	} else {
-		setOptionChoice(renderer, &optionPage_Visual, 2, 10, "Match Background", EMPTY, EMPTY, EMPTY);
+		setOptionChoice(&optionPage_Visual, 2, 10, "Match Background", EMPTY, EMPTY, EMPTY);
 	}
 	if (compactView) {
-		setOptionPageLine(renderer, &optionPage_Visual, 3, "Transparency", 2, 0, STAY, true);
+		setOptionPageLine(&optionPage_Visual, 3, "Transparency", 2, 0, STAY, true);
 	} else {
-		setOptionPageLine(renderer, &optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
+		setOptionPageLine(&optionPage_Visual, 3, "Block Transparency", 2, 0, STAY, true);
 	}
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 4, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 4, 1, "On", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Visual, 5, "Frame Rate Cap", 5, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 0, "Uncapped", "Set the max frame rate.",
+	setOptionChoice(&optionPage_Visual, 3, 0, "On", "Toggle the fade-in transparency", "effect on distant blocks.", EMPTY);
+	setOptionChoice(&optionPage_Visual, 3, 1, "Off", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Visual, 4, "Speedometer", 2, 1, STAY, true);
+	setOptionChoice(&optionPage_Visual, 4, 0, "Off", "Show your speed in the", "bottom-right corner of the screen.", EMPTY);
+	setOptionChoice(&optionPage_Visual, 4, 1, "On", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Visual, 5, "Frame Rate Cap", 5, 0, STAY, true);
+	setOptionChoice(&optionPage_Visual, 5, 0, "Uncapped", "Set the max frame rate.",
 #if defined(WII) || defined(SWITCH) || defined(PC)
 		"(Though you can just keep it", "uncapped on this system)");
 #else
 		"Useful if you want to", "prioritize consistent visuals.");
 #endif
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 1, "30 FPS", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 2, "40 FPS", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 3, "50 FPS", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 5, 4, "60 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 5, 1, "30 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 5, 2, "40 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 5, 3, "50 FPS", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 5, 4, "60 FPS", EMPTY, EMPTY, EMPTY);
 #if defined(PC)
-	setOptionPageLine(renderer, &optionPage_Visual, 6, "Fullscreen", 2, 0, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Visual, 6, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Visual, 6, 1, "On", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Visual, 6, "Fullscreen", 2, 0, STAY, true);
+	setOptionChoice(&optionPage_Visual, 6, 0, "Off", "Display the game in fullscreen.", EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Visual, 6, 1, "On", EMPTY, EMPTY, EMPTY);
 #endif
 
 	optionPage_Audio.pageID = 4;
 	optionPage_Audio.numLines = OPTION_PAGE_AUDIO_NUM_LINES;
 	optionPage_Audio.optionLines = optionPage_Audio_Lines;
 	optionPage_Audio.prevState = GAME_STATE_OPTIONS_MAIN;
-	setOptionPageLine(renderer, &optionPage_Audio, 0, "Music", 5, 0, STAY, false);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 0, "#1", "Raina ft. Coaxcable", "\"Spaceranger 50k\"", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 1, "#2", "Cobburn and Monty", "\"Falling Up\"", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 2, "#3", "Diomatic", "\"Falling People\"", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 3, "#4", "mano and ske", "\"Darkness in da Night\"", EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 0, 4, "#5", "Diablo", "\"Dance 2 Insanity\"", EMPTY);
-	setOptionPageLine(renderer, &optionPage_Audio, 1, "Music Volume", 6, 5, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Audio, 1, 0, "0", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 1, 1, "1", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 1, 2, "2", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 1, 3, "3", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 1, 4, "4", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 1, 5, "5", EMPTY, EMPTY, EMPTY);
-	setOptionPageLine(renderer, &optionPage_Audio, 2, "SFX Volume", 6, 5, STAY, true);
-	setOptionChoice(renderer,   &optionPage_Audio, 2, 0, "0", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 2, 1, "1", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 2, 2, "2", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 2, 3, "3", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 2, 4, "4", EMPTY, EMPTY, EMPTY);
-	setOptionChoice(renderer,   &optionPage_Audio, 2, 5, "5", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Audio, 0, "Music", 5, 0, STAY, false);
+	setOptionChoice(&optionPage_Audio, 0, 0, "#1", "Raina ft. Coaxcable", "\"Spaceranger 50k\"", EMPTY);
+	setOptionChoice(&optionPage_Audio, 0, 1, "#2", "Cobburn and Monty", "\"Falling Up\"", EMPTY);
+	setOptionChoice(&optionPage_Audio, 0, 2, "#3", "Diomatic", "\"Falling People\"", EMPTY);
+	setOptionChoice(&optionPage_Audio, 0, 3, "#4", "mano and ske", "\"Darkness in da Night\"", EMPTY);
+	setOptionChoice(&optionPage_Audio, 0, 4, "#5", "Diablo", "\"Dance 2 Insanity\"", EMPTY);
+	setOptionPageLine(&optionPage_Audio, 1, "Music Volume", 6, 5, STAY, true);
+	setOptionChoice(&optionPage_Audio, 1, 0, "0", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 1, 1, "1", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 1, 2, "2", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 1, 3, "3", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 1, 4, "4", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 1, 5, "5", EMPTY, EMPTY, EMPTY);
+	setOptionPageLine(&optionPage_Audio, 2, "SFX Volume", 6, 5, STAY, true);
+	setOptionChoice(&optionPage_Audio, 2, 0, "0", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 2, 1, "1", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 2, 2, "2", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 2, 3, "3", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 2, 4, "4", EMPTY, EMPTY, EMPTY);
+	setOptionChoice(&optionPage_Audio, 2, 5, "5", EMPTY, EMPTY, EMPTY);
 }
 
-void openPage(SDL_Renderer *renderer, OptionPage *page, bool resetIndex) {
+void openPage(OptionPage *page, bool resetIndex) {
 	if (resetIndex) {
 		page->index = 0;
 	}
 	setMessagePosRelativeToGame_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);
 }
 
-void optionCallback_CubeFrequency(SDL_Renderer *renderer) {
+void optionCallback_CubeFrequency() {
 	cubeBounds = cubeBoundsBase * SPAWN_AREA_MODIFIER;
 	switch (OPTION_CUBE_FREQUENCY) {
 	case 0:
@@ -325,31 +325,31 @@ void optionCallback_OverlayColor() {
 	drawOverlayOnThisFrame = true;
 	switch (OPTION_OVERLAY_COLOR) {
 	case 0:
-		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35 };
+		overlayColor = (SDL_Color){ .r = 200, .g = 35, .b = 35, .a = 255 };
 		break;
 	case 1:
-		overlayColor = (SDL_Color){ .r = 255, .g = 140, .b = 30 };
+		overlayColor = (SDL_Color){ .r = 255, .g = 140, .b = 30, .a = 255 };
 		break;
 	case 2:
-		overlayColor = (SDL_Color){ .r = 255, .g = 210, .b = 90 };
+		overlayColor = (SDL_Color){ .r = 255, .g = 210, .b = 90, .a = 255 };
 		break;
 	case 3:
-		overlayColor = (SDL_Color){ .r = 15, .g = 255, .b = 155 };
+		overlayColor = (SDL_Color){ .r = 15, .g = 255, .b = 155, .a = 255 };
 		break;
 	case 4:
-		overlayColor = (SDL_Color){ .r = 15, .g = 0, .b = 155 };
+		overlayColor = (SDL_Color){ .r = 15, .g = 0, .b = 155, .a = 255 };
 		break;
 	case 5:
-		overlayColor = (SDL_Color){ .r = 0, .g = 45, .b = 255 };
+		overlayColor = (SDL_Color){ .r = 0, .g = 45, .b = 255, .a = 255 };
 		break;
 	case 6:
-		overlayColor = (SDL_Color){ .r = 100, .g = 50, .b = 180 };
+		overlayColor = (SDL_Color){ .r = 100, .g = 50, .b = 180, .a = 255 };
 		break;
 	case 7:
-		overlayColor = (SDL_Color){ .r = 15, .g = 15, .b = 15 };
+		overlayColor = (SDL_Color){ .r = 15, .g = 15, .b = 15, .a = 255 };
 		break;
 	case 8:
-		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0 };
+		overlayColor = (SDL_Color){ .r = 0, .g = 0, .b = 0, .a = 255 };
 		break;
 	case 9:
 		visibleOffsetX = (WINDOW_WIDTH - GAME_WIDTH) / 2;
@@ -462,7 +462,7 @@ static void optionCallback_SFXVolume() {
 
 void optionCallback_All() {
 	// Fullscreen and Music callbacks are omitted
-	optionCallback_CubeFrequency(renderer);
+	optionCallback_CubeFrequency();
 	optionCallback_CubeSize();
 	optionCallback_BackgroundColor();
 	saveBackgroundAsTexture(renderer);
@@ -480,7 +480,7 @@ static void optionCallback(SDL_Window *window, OptionPage *page) {
 		switch (page->index) {
 		case 0:
 		case 4:
-			optionCallback_CubeFrequency(renderer);
+			optionCallback_CubeFrequency();
 			break;
 		case 1:
 			optionCallback_CubeSize();
@@ -634,7 +634,7 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 					break;
 			}
 			if (nextPage) {
-				openPage(renderer, nextPage, true);
+				openPage(nextPage, true);
 			}
 		}
 	// Handle Back press
@@ -657,7 +657,7 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 				break;
 		}
 		if (prevPage) {
-			openPage(renderer, prevPage, resetIndex);
+			openPage(prevPage, resetIndex);
 		}
 	}
 	setMessagePosRelativeToGame_LeftAlign(&message_menu_cursor, CURSOR_X, CURSOR_Y);

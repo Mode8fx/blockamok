@@ -138,7 +138,7 @@ static void handleResetHighScore() {
 			playSFX(SFX_THUNK);
       highScoreResetIndex = 0;
       gameState = GAME_STATE_OPTIONS_MAIN;
-      openPage(renderer, &optionPage_Main, false);
+      openPage(&optionPage_Main, false);
     }
 	} else if (pressedKeys != 0) {
     highScoreResetIndex = 0;
@@ -260,7 +260,7 @@ int main(int arg, char *argv[]) {
           invinceStart = gameStart;
           gameState = GAME_STATE_PLAYING;
         } else if (keyPressed(INPUT_SELECT)) {
-          openPage(renderer, &optionPage_Main, true);
+          openPage(&optionPage_Main, true);
           gameState = GAME_STATE_OPTIONS_MAIN;
         }
         drawEssentials(renderer, cubes, cubeAmount);
@@ -375,11 +375,11 @@ int main(int arg, char *argv[]) {
         if (debugMode) {
           if (dirPressedLeft() && cubeBoundsBase > 2.5f && invincibilityResetIndex < 6) {
             cubeBoundsBase -= 0.1f;
-            optionCallback_CubeFrequency(renderer);
+            optionCallback_CubeFrequency();
             prepareGame();
           } else if (dirPressedRight() && cubeBoundsBase < 13.1f && invincibilityResetIndex < 6) {
             cubeBoundsBase += 0.1f;
-            optionCallback_CubeFrequency(renderer);
+            optionCallback_CubeFrequency();
             prepareGame();
           }
         }
