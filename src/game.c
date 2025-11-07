@@ -163,8 +163,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
 
   for (int i = 0; i < cubeAmount; i++) {
     Point *points = cubes[i].points;
-    float z0 = points[0].z;
-    bool shouldResetCube = (z0 - zSpeed) < CUBE_REMOVAL_DEPTH;
+    bool shouldResetCube = (points[0].z - zSpeed) < CUBE_REMOVAL_DEPTH;
 
     flipCubeIfOutOfBounds(cubes, i);
 
@@ -180,7 +179,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
       points[8 + p] = points[pointMapping[p]];
     }
 
-    if (z0 < 2.0f) {
+    if (points[0].z < 2) {
       // left edge of cube on cursor is cubeSize/2, right edge is -cubeSize/2
       float x0 = points[0].x;
       float x2 = points[2].x;
@@ -209,7 +208,7 @@ int gameFrame(Uint32 deltaTime, Cube cubes[]) {
           invinceStart = SDL_GetTicks();
         } else {
           if (shouldResetCube) {
-            float depthDiff = CUBE_REMOVAL_DEPTH - z0;
+            float depthDiff = CUBE_REMOVAL_DEPTH - points[0].z;
             for (int p = 0; p < 20; p++) {
               points[p].z += depthDiff;
             }
