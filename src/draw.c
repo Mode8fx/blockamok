@@ -138,7 +138,7 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
   SDL_Rect currViewport;
   SDL_RenderGetViewport(renderer, &currViewport);
   int surfaceWidth = GAME_WIDTH;
-  if (OPTION_OVERLAY_COLOR == 9) {
+  if (GAME_IS_WIDESCREEN) {
     surfaceWidth = WINDOW_WIDTH;
     SDL_RenderSetViewport(renderer, NULL);
   } else {
@@ -347,7 +347,7 @@ static void drawCubeSimple(SDL_Renderer *renderer, Cube cube) {
 }
 
 void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
-  if (OPTION_OVERLAY_COLOR != 9) {
+  if (GAME_IS_NOT_WIDESCREEN) {
     SDL_RenderSetViewport(renderer, &gameViewport);
   }
 #if defined(WII) || defined(GC)
@@ -372,11 +372,11 @@ void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
   }
 
 #if defined(WII) || defined(GC)
-  if (OPTION_OVERLAY_COLOR == 9) {
+  if (GAME_IS_WIDESCREEN) {
     SDL_RenderSetClipRect(renderer, NULL);
   }
 #endif
-  if (OPTION_OVERLAY_COLOR != 9) {
+  if (GAME_IS_NOT_WIDESCREEN) {
     SDL_RenderSetViewport(renderer, NULL);
   }
 }

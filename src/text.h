@@ -79,6 +79,8 @@ extern OptionPage optionPage_Empty;
 #define OPTION_BACKGROUND_COLOR optionPage_Visual.optionLines[0].index
 #define OPTION_CUBE_COLOR optionPage_Visual.optionLines[1].index
 #define OPTION_OVERLAY_COLOR optionPage_Visual.optionLines[2].index
+#define GAME_IS_NOT_WIDESCREEN (OPTION_OVERLAY_COLOR != 9)
+#define GAME_IS_WIDESCREEN (OPTION_OVERLAY_COLOR == 9)
 #define OPTION_SIMPLE_CUBES optionPage_Visual.optionLines[3].index
 #define OPTION_SPEEDOMETER optionPage_Visual.optionLines[4].index
 #define OPTION_FRAME_RATE optionPage_Visual.optionLines[5].index

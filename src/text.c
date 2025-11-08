@@ -455,7 +455,7 @@ void drawGameText(SDL_Renderer *renderer) {
 
   Uint32 invinceTimer = now - invinceStart;
   if (invinceTimer > INVINCE_TIME || invinceTimer / INVINCE_BLINK_TIME % 2 == 1 || gameStart == invinceStart) {
-    if (OPTION_OVERLAY_COLOR != 9) {
+    if (GAME_IS_NOT_WIDESCREEN) {
       for (int i = 0; i < numLives; i++) {
         setMessagePosRelativeToGameX_RightAlign(&message_game_life, 0.965f - 0.06f * i);
         renderMessage(renderer, &message_game_life);
@@ -475,7 +475,7 @@ void drawGameText(SDL_Renderer *renderer) {
     } else {
       snprintf(valStr, TEXT_LINE_SIZE, "LoR %d MPH", (int)printedSpeed);
     }
-    if (OPTION_OVERLAY_COLOR != 9) {
+    if (GAME_IS_NOT_WIDESCREEN) {
       drawTextFromChars(renderer, 0.95f, 0.95f, 0);
     } else {
       drawTextFromChars(renderer, 0.95f, 0.95f, gameOffsetX);

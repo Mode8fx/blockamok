@@ -176,7 +176,7 @@ static void drawOverlay() {
 #if defined(FORCE_DRAW_OVERLAY)
   drawOverlayOnThisFrame = true;
 #endif
-  if (drawOverlayOnThisFrame && OPTION_OVERLAY_COLOR != 9) {
+  if (drawOverlayOnThisFrame && GAME_IS_NOT_WIDESCREEN) {
     SDL_SetRenderDrawColor(renderer, overlayColor.r, overlayColor.g, overlayColor.b, 255);
     SDL_RenderFillRect(renderer, &leftBar);
     SDL_RenderFillRect(renderer, &rightBar);

@@ -587,7 +587,7 @@ void handlePage(SDL_Renderer *renderer, SDL_Window *window, OptionPage *page, bo
 	if (page->pageID != 3) {
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 64);
 		SDL_Rect rect = { gameOffsetX, 0, GAME_WIDTH, WINDOW_HEIGHT };
-		if (OPTION_OVERLAY_COLOR == 9) {
+		if (GAME_IS_WIDESCREEN) {
 			rect.x = 0;
 			rect.w = WINDOW_WIDTH;
 		}
