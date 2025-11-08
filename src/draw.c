@@ -150,12 +150,18 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
   drawBackground(renderer);
   
 #if defined(THREEDS)
-  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, 16, SDL_PIXELFORMAT_RGB565);
-  SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB565, screenSurface->pixels, screenSurface->pitch);
+  int bitDepth = 16;
+  Uint32 pixelFormat = SDL_PIXELFORMAT_RGB565;
 #else
-  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, 24, SDL_PIXELFORMAT_RGB888);
-  SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGB888, screenSurface->pixels, screenSurface->pitch);
+  int bitDepth = 24;
+  Uint32 pixelFormat = SDL_PIXELFORMAT_RGB888;
 #endif
+  SDL_Rect gameRect = { .x = 0, .y = 0, .w = surfaceWidth, .h = GAME_HEIGHT };
+  if (OPTION_OVERLAY_COLOR != 9) {
+    gameRect.x = gameOffsetX;
+  }
+  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, bitDepth, pixelFormat);
+  SDL_RenderReadPixels(renderer, &gameRect, pixelFormat, screenSurface->pixels, screenSurface->pitch);
   
   backgroundTexture = SDL_CreateTextureFromSurface(renderer, screenSurface);
   SDL_FreeSurface(screenSurface);
