@@ -350,6 +350,14 @@ void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
   if (OPTION_OVERLAY_COLOR != 9) {
     SDL_RenderSetViewport(renderer, &gameViewport);
   }
+#if defined(WII) || defined(GC)
+  else {
+    // When overlay is disabled, explicitly set clip rect to prevent
+    // geometry from rendering outside screen bounds when visibleOffsetX is used
+    SDL_Rect clipRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+    SDL_RenderSetClipRect(renderer, &clipRect);
+  }
+#endif
 
   draw(renderer);
 
@@ -363,6 +371,11 @@ void drawEssentials(SDL_Renderer *renderer, Cube cubes[], int cubesLength) {
     }
   }
 
+#if defined(WII) || defined(GC)
+  if (OPTION_OVERLAY_COLOR == 9) {
+    SDL_RenderSetClipRect(renderer, NULL);
+  }
+#endif
   if (OPTION_OVERLAY_COLOR != 9) {
     SDL_RenderSetViewport(renderer, NULL);
   }

@@ -45,7 +45,7 @@ float cubeBoundsBase = 3.5f; // 23-48 FPS without overclock, 46-58 FPS with 333 
 #elif defined(VITA)
 float cubeBoundsBase = 8.5f; // 45-60 FPS without overclock, 60 FPS with 444 MHz (partial) overclock
 #elif defined(ANDROID)
-float cubeBoundsBase = 10.0f;
+float cubeBoundsBase = DEFAULT_CUBE_BOUNDS;
 #else
 float cubeBoundsBase = DEFAULT_CUBE_BOUNDS;
 #endif
