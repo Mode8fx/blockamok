@@ -23,7 +23,7 @@ const int RIGHT = 3;
 const int FRONT = 4;
 const int FRONT_I = 20; // FRONT * 5
 
-SDL_Texture *backgroundTexture;
+SDL_Texture *backgroundTexture = NULL;
 SDL_Color backgroundColor = { .r = 15, .g = 255, .b = 155, .a = 255 };
 SDL_Color cubeColorFront = { .r = 200, .g = 250, .b = 120, .a = 255 };
 SDL_Color cubeColorSide = { .r = 100, .g = 100, .b = 200, .a = 255 };
@@ -127,7 +127,9 @@ inline void draw(SDL_Renderer *renderer) {
 #elif defined(FORCE_DRAW_BG)
   drawBackground(renderer);
 #else
-  SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+  if (backgroundTexture != NULL) {
+    SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+  }
 #endif
 }
 
@@ -138,33 +140,29 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
   int surfaceWidth = GAME_WIDTH;
   if (OPTION_OVERLAY_COLOR == 9) {
     surfaceWidth = WINDOW_WIDTH;
-		SDL_RenderSetViewport(renderer, NULL);
+    SDL_RenderSetViewport(renderer, NULL);
   } else {
     SDL_RenderSetViewport(renderer, &gameViewport);
   }
 
   if (backgroundTexture != NULL) {
     SDL_DestroyTexture(backgroundTexture);
+    backgroundTexture = NULL;
   }
 
-  drawBackground(renderer);
-  
 #if defined(THREEDS)
-  int bitDepth = 16;
   Uint32 pixelFormat = SDL_PIXELFORMAT_RGB565;
 #else
-  int bitDepth = 24;
   Uint32 pixelFormat = SDL_PIXELFORMAT_RGB888;
 #endif
-  SDL_Rect gameRect = { .x = 0, .y = 0, .w = surfaceWidth, .h = GAME_HEIGHT };
-  if (OPTION_OVERLAY_COLOR != 9) {
-    gameRect.x = gameOffsetX;
+
+  backgroundTexture = SDL_CreateTexture(renderer, pixelFormat, SDL_TEXTUREACCESS_TARGET, surfaceWidth, GAME_HEIGHT);
+
+  if (backgroundTexture != NULL) {
+    SDL_SetRenderTarget(renderer, backgroundTexture);
+    drawBackground(renderer);
+    SDL_SetRenderTarget(renderer, NULL);
   }
-  SDL_Surface *screenSurface = SDL_CreateRGBSurfaceWithFormat(0, surfaceWidth, GAME_HEIGHT, bitDepth, pixelFormat);
-  SDL_RenderReadPixels(renderer, &gameRect, pixelFormat, screenSurface->pixels, screenSurface->pitch);
-  
-  backgroundTexture = SDL_CreateTextureFromSurface(renderer, screenSurface);
-  SDL_FreeSurface(screenSurface);
 
   SDL_RenderSetViewport(renderer, &currViewport);
 #endif
