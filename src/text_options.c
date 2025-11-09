@@ -359,6 +359,9 @@ void optionCallback_OverlayColor() {
 		overlayColor = backgroundColor;
 		break;
 	}
+#if defined(PSP)
+	visibleOffsetX = 104;
+#endif
 	saveBackgroundAsTexture(renderer);
 }
 

@@ -36,8 +36,8 @@ This game is made using SDL2. Controller and keyboard input are handled through 
 
 The following additional defines exist and may be needed:
 - `FORCE_DRAW_OVERLAY`: This makes the game redraw the overlay (colored side bars) on every frame. Enable this if the overlay has a visual issue such as flickering, or if the thin black bars on the inside edge of the overlay do not render.
-- `FORCE_DRAW_BG`: This makes the game redraw the transparent background triangles on every frame instead of drawing them once and saving+rendering as a texture. Enable this if the background is rendering incorrectly.
-- `LOW_SPEC_BG` - Enable this to replace the background with a flat color. This looks the worst visually, so only use it if `FORCE_DRAW_BG` results in poor performance. Do not use `FORCE_DRAW_BG` and `LOW_SPEC_BG` together.
+- `FORCE_DRAW_BG`: This makes the game redraw the transparent background triangles on every frame instead of drawing them once and saving+rendering as a texture. Enabling this may increase or decrease performance depending on the device.
+- `LOW_SPEC_BG` - Enable this to replace the background with a flat color. This looks the worst visually, so only use it if the other background options result in poor performance. Do not use `FORCE_DRAW_BG` and `LOW_SPEC_BG` together.
 
 ## How to Compile
 

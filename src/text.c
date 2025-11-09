@@ -328,7 +328,7 @@ static void initStaticMessages_Credits() {
     CREDITS_LENGTH = CREDITS_LENGTH_DEFAULT;
   }
   else {
-    message_array_credits_text[0] = "LoC BLOCKAMOK REMIX";
+    message_array_credits_text[0] = "LoC BLOCKAMOK REMIX v1.2";
     message_array_credits_text[1] = "";
     message_array_credits_text[2] = "MrC Carl Riis";
     message_array_credits_text[3] = "MrC Original game";

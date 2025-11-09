@@ -103,7 +103,7 @@ extern void setMessagePosRelativeToGame_LeftAlign(Message *message, float x, flo
 
 extern void initStaticMessages(SDL_Renderer *renderer);
 extern void drawTitleScreenText(SDL_Renderer *renderer, bool drawSecondaryText);
-extern void drawInstructionsText(SDL_Renderer* renderer);
+extern void drawInstructionsText(SDL_Renderer *renderer);
 extern void drawCreditsText(SDL_Renderer *renderer, Uint32 timer);
 extern void drawResetHighScoreText(SDL_Renderer *renderer);
 extern void drawQuitText(SDL_Renderer *renderer);
