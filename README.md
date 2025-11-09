@@ -12,6 +12,7 @@ Available for PC, Linux, Android, Switch, Wii U, Wii, GameCube, 3DS, PSP, and Vi
 Blockamok Remix is a significant update to [Blockamok](https://github.com/carltheperson/blockamok), a game originally made by Carl Riis to _"challenge [himself] to create a 3D game without any pre-made 3D engine or utilities"_.
 
 This version adds many improvements including:
+- Widescreen
 - Customizable gameplay settings
 - Controller support + a new control scheme
 - New visual settings
