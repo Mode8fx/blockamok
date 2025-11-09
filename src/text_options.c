@@ -133,11 +133,10 @@ void initStaticMessages_Options(SDL_Renderer *renderer) {
 	setOptionChoice(&optionPage_Game, 0, 2, "High", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(&optionPage_Game, 0, 3, "Very High", EMPTY, EMPTY, EMPTY);
 	setOptionChoice(&optionPage_Game, 0, 4, "Intense", EMPTY, EMPTY, EMPTY);
-#if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
 	setOptionPageLine(&optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
+#if defined(THREEDS) || defined(PSP) || defined(WII_U) || defined(VITA)
 	setOptionChoice(&optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", "NOTE: Large size = worse frame rate");
 #else
-	setOptionPageLine(&optionPage_Game, 1, "Block Size", 4, 0, STAY, true);
 	setOptionChoice(&optionPage_Game, 1, 0, "Normal", "Change the size of the", "incoming obstacles.", EMPTY);
 #endif
 	setOptionChoice(&optionPage_Game, 1, 1, "Large", EMPTY, EMPTY, EMPTY);
