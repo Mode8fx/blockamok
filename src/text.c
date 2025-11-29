@@ -275,7 +275,11 @@ static void initStaticMessages_Game() {
 
 static void initStaticMessages_Credits() {
   if (!compactView) {
+#if defined(SWITCH)
+    message_array_credits_text[0] = "LoC BLOCKAMOK REMIX v1.21";
+#else
     message_array_credits_text[0] = "LoC BLOCKAMOK REMIX v1.2";
+#endif
     message_array_credits_text[1] = "";
     message_array_credits_text[2] = "MrC Carl Riis";
     message_array_credits_text[3] = "MrC Original game";
@@ -326,9 +330,12 @@ static void initStaticMessages_Credits() {
     message_array_credits_text[48] = "MGC old and new. Play it everywhere!";
     message_array_credits_text[49] = "MWC https://github.com/Mode8fx/blockamok";
     CREDITS_LENGTH = CREDITS_LENGTH_DEFAULT;
-  }
-  else {
+  } else {
+#if defined(SWITCH)
+    message_array_credits_text[0] = "LoC BLOCKAMOK REMIX v1.21";
+#else
     message_array_credits_text[0] = "LoC BLOCKAMOK REMIX v1.2";
+#endif
     message_array_credits_text[1] = "";
     message_array_credits_text[2] = "MrC Carl Riis";
     message_array_credits_text[3] = "MrC Original game";

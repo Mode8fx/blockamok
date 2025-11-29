@@ -46,7 +46,7 @@ INCLUDES	:=	src src/fonts src/audio
 
 APP_TITLE   := Blockamok Remix
 APP_AUTHOR  := Mode8fx
-APP_VERSION := 2.2
+APP_VERSION := 2.21
 ICON        := release-resources/logo_icon_switch.jpg
 
 #---------------------------------------------------------------------------------
