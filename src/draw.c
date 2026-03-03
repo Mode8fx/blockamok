@@ -152,6 +152,8 @@ void saveBackgroundAsTexture(SDL_Renderer *renderer) {
 
 #if defined(THREEDS)
   Uint32 pixelFormat = SDL_PIXELFORMAT_RGB565;
+#elif defined(__PS2__)
+  Uint32 pixelFormat = SDL_PIXELFORMAT_RGB555;
 #else
   Uint32 pixelFormat = SDL_PIXELFORMAT_RGB888;
 #endif

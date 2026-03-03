@@ -65,6 +65,8 @@ Install devkitPro and SDL2 for 3DS, then run `make -f Makefiles/Makefile_3ds`.
 Install VitaSDK, then build with CMake. I've included a `make_vita.sh` file for convenience once you have everything installed.
 #### PSP
 Install [the PSPDEV toolchain](https://pspdev.github.io/), which should also come with SDL2, SDL2_ttf, and SDL2_mixer (Linux or WSL is strongly recommended), then run `make -f Makefiles/Makefile_psp`.
+##### PS2
+Install [the PS2DEV toolchain](https://ps2dev.github.io/), which should also come with SDL2, SDL2_ttf, and SDL2_mixer (Linux or WSL is strongly recommended), then run sh `Makefiles/make_ps2.sh`.
 
 ## License
 
