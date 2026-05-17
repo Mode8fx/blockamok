@@ -26,9 +26,6 @@ extern SDL_Color cubeColorSide;
 extern SDL_Color overlayColor;
 extern bool drawOverlayOnThisFrame;
 
-#if defined(PSP)
-#define SDL_RenderSetViewport(renderer, rect);
-#endif
 #define MAX_DEPTH 150.0f
 extern float HALF_FOV_ANGLE_RADIANS;
 extern float HALF_FOV_ANGLE_RADIANS_TAN;
