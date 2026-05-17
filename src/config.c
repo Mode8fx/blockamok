@@ -3,7 +3,7 @@
 #include <string.h>
 #if defined(_WIN32)
 #include <windows.h>
-#elif defined(LINUX) || defined(GAMECUBE) || defined(THREEDS)
+#elif defined(LINUX) || defined(THREEDS)
 #include <sys/stat.h>
 #endif
 #if defined(WII_U)
@@ -79,57 +79,6 @@ char* getExeDirectory(void) {
 #include <gccore.h>
 #include <dirent.h>
 #include <fat.h>
-#include <sdcard/gcsd.h>
-
-static bool directoryExists(const char *path) {
-  struct stat info;
-  if (stat(path, &info) != 0) {
-    // Path does not exist or cannot be accessed
-    return false;
-  }
-  return (info.st_mode & S_IFDIR) != 0; // Check if it's a directory
-}
-
-#define DEV_GCSDA 1
-#define DEV_GCSDB 2
-#define DEV_GCSDC 3
-
-static bool gc_initFAT(int device) {
-	switch (device) {
-	case DEV_GCSDA:
-		__io_gcsda.startup();
-		if (!__io_gcsda.isInserted()) {
-			return false;
-		}
-		if (!fatMountSimple("sda", &__io_gcsda)) {
-			return false;
-		}
-		break;
-	case DEV_GCSDB:
-		__io_gcsdb.startup();
-		if (!__io_gcsdb.isInserted()) {
-			return false;
-		}
-		if (!fatMountSimple("sdb", &__io_gcsdb)) {
-			return false;
-		}
-		break;
-	case DEV_GCSDC:
-		__io_gcsd2.startup();
-		if (!__io_gcsd2.isInserted()) {
-			return false;
-		}
-		if (!fatMountSimple("sdc", &__io_gcsd2)) {
-			return false;
-		}
-		break;
-	default:
-		return false;
-		break;
-	}
-
-	return true;
-}
 #endif
 
 void initFilePaths() {
@@ -143,18 +92,7 @@ void initFilePaths() {
 #elif defined(WII)
   snprintf(rootDir, sizeof(rootDir), "sd:/apps/BlockamokRemix/");
 #elif defined(GAMECUBE)
-  for (int i = 1; i < 4; i++) {
-    if (gc_initFAT(i)) {
-      break;
-    }
-  }
-  const char *devices[] = { "sda", "sdb", "sdc" };
-  for (int i = 0; i < 3; i++) {
-    snprintf(rootDir, sizeof(rootDir), "%s:/BlockamokRemix/", devices[i]);
-    if (directoryExists(rootDir)) {
-      break;
-    }
-  }
+  snprintf(rootDir, sizeof(rootDir), "/BlockamokRemix/");
 #elif defined(THREEDS)
   snprintf(rootDir, sizeof(rootDir), "sdmc:/3ds/BlockamokRemix/");
 #elif defined(_WIN32)

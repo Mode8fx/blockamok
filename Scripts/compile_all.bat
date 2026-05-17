@@ -33,7 +33,7 @@ set MAKEFILES_WSL=/mnt%MAKEFILES_DKP%
 :: Path: 3DS CIA Utilities
 set BANNERTOOL="D:/Utilities/3DS CIA Creation/bannertool"
 set MAKEROM="D:/Utilities/3DS CIA Creation/makerom-v0.18.3-win_x86_64/makerom.exe"
-set VERSION_3DS=288
+set VERSION_3DS=290
 
 
 
@@ -51,7 +51,7 @@ set OUTPUT_LINUX=%OUTPUT_DIR%-linux/BlockamokRemix
 
 :: Makefile: Gamecube
 set MAKEFILE_DKP_GC=%MAKEFILES_DKP%/Makefile_gc
-set OUTPUT_GC=%OUTPUT_DIR%-gamecube/BlockamokRemix/boot.dol
+set OUTPUT_GC=%OUTPUT_DIR%-gamecube/BlockamokRemix/BlockamokRemix.dol
 
 :: Makefile: Wii
 set MAKEFILE_DKP_WII=%MAKEFILES_DKP%/Makefile_wii

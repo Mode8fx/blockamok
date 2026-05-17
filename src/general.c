@@ -9,7 +9,7 @@ void systemSpecificOpen() {
 #elif defined(SWITCH)
 	/* Set SD Card mount path */
 	chdir("/switch/BlockamokRemix");
-#elif defined(WII)
+#elif defined(WII) || defined(GAMECUBE)
 	/* Initialize SD Card */
 	fatInitDefault();
 	/* Initialize Controller */
