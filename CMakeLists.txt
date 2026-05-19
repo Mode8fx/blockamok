@@ -130,6 +130,12 @@ elseif (RG35XX)
 	INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS} ${SDL2MIXER_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
 	TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES})
 
+
+elseif(PS2)
+	set(CMAKE_EXECUTABLE_SUFFIX .elf)
+	include_directories("${PS2SDK}/ports/include/SDL2")
+	target_link_libraries(blockamokremix ps2_drivers patches audsrv SDL2main SDL2_mixer freetype png z SDL2_ttf pad modplug xmp SDL2 atomic gskit dma dmakit debug  
+	config draw stdc++ m c)
 else()
 	if (LINUX)
 		add_definitions(-DLINUX)

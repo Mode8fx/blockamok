@@ -40,7 +40,7 @@ float cubeBoundsBase = 7.5f; // 31-60 FPS (about half the difficulty settings hi
 float cubeBoundsBase = 8.8f; // 60 FPS
 #elif defined(THREEDS)
 float cubeBoundsBase = 4.8f; // 40-60 FPS on New 3DS, 12-22 FPS on Old 3DS; with widescreen, 36-60 and 11-20
-#elif defined(PSP)
+#elif defined(PSP) || defined(__PS2__)
 float cubeBoundsBase = 3.5f; // 23-48 FPS without overclock, 48-59 FPS with 333 MHz (full) overclock
 #elif defined(VITA)
 float cubeBoundsBase = 8.5f; // 52-60 FPS without overclock, 60 FPS with 444 MHz (partial) overclock

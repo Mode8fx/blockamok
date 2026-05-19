@@ -540,7 +540,7 @@ static void handleAllCurrentInputs() {
 	const char *btn_RS = "?";
 	const char *btn_Start = "+/Start";
 	const char *btn_Select = "-/Z";
-#elif defined(PSP) | defined(VITA)
+#elif defined(PSP) || defined(VITA) || defined(__PS2__)
 	const char *btn_Up = "Up";
 	const char *btn_Down = "Down";
 	const char *btn_Left = "Left";
